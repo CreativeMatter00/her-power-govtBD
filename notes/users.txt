@@ -1,0 +1,107 @@
+Common pass: Pa$$w0rd!
+----------------------
+
+Student Users
+-------------
+1   Name: Arif Hossain
+    Email: nomay36405@cironex.com
+    Role: Student
+    ref_user_pid: U241100000189
+    student_pid: S241100000074
+
+2   Name: Salma Khatun
+    Email: yipaxe2361@edectus.com
+    Role: Student
+    ref_user_pid: U241100000195
+    student_pid: S241100000075
+
+3   Name: Mahmudul Hasan
+    Email: keralaj602@edectus.com
+    Role: Student
+    ref_user_pid: U241100000191
+    student_pid: S241100000076
+
+4   Name: Afsana Rahman
+    Email: mesilef643@gianes.com
+    Role: Student
+    ref_user_pid: U241100000192
+    student_pid: S241100000078
+
+5   Name: Farhan Kabir
+    Email: nikedo3847@gianes.com
+    Role: Student
+    ref_user_pid: U241100000193
+    student_pid: S241100000082
+
+
+Course Provider Users
+---------------------
+6   Name: Rafiq Ahmed
+    Email: weneji9877@gianes.com - done
+    Role: Course Provider
+
+7   Name: Nusrat Jahan
+    Email: kiyana6697@anypng.com - done
+    Role: Course Provider
+
+8   Name: Zakir Hossain
+    Email: wesapo2186@gianes.com - done
+    Role: Course Provider
+
+9   Name: Faria Tasnim
+    Email: figoroh953@cironex.com - done
+    Role: Course Provider
+
+10  Name: Rashedul Islam
+    Email: henepe2576@cironex.com - done
+    Role: Course Provider
+
+
+-----------------------------------------
+
+
+ ---- provider ----
+
+Email : wadejaj809@edectus.com
+
+----- course provider -----
+
+Email: setorir164@gianes.com
+
+------ student -------
+Email : hifip41218@edectus.com
+
+------- customer ----------
+Email : hafede9172@cironex.com
+
+
+
+////--- seller account -------
+email : sohakow690@edectus.com
+password : 123456
+
+////-----  customer account -------
+email: wibex25222@edectus.com
+password : 123456
+
+////----- job provider account -----
+email: fawib78461@cironex.com
+password : 123456
+
+////-----  course provider account -----
+email: fawib78461@cironex.com
+password : 123456
+
+////------- job seeker ------
+email: vacekic130@anypng.com
+password : 123456
+email: xipam16027@cashbn.com
+password: 123456
+
+////----- Organizer account -----
+email: gameji6279@gitated.com
+password : Pa$$w0rd!
+
+////------- course student ------
+email: vacekic130@anypng.com
+password : 123456

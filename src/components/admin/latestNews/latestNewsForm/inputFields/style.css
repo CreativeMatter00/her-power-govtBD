@@ -1,0 +1,56 @@
+.ql-size-small {
+	font-size: 0.875rem; /* 14px */
+	line-height: 1.25rem; /* 20px */
+}
+
+.ql-size-large {
+	font-size: 1.125rem; /* 18px */
+	line-height: 1.75rem; /* 28px */
+}
+
+.ql-size-huge {
+	font-size: 1.25rem; /* 20px */
+	line-height: 1.75rem; /* 28px */
+}
+
+ul li {
+	list-style-type: disc;
+}
+
+ol li {
+	list-style-type: numeric;
+}
+
+.ql-toolbar {
+	@apply bg-[#F6F9F8] p-2 rounded-t-xl border-b-0 border border-[#EEDDF5] text-[#2D0C3E] !important;
+}
+.ql-container {
+	@apply border border-[#EEDDF5] rounded-b-xl p-2 h-96 !important;
+}
+
+/* Use current text color */
+/* Change icon color */
+.ql-toolbar .ql-formats button .ql-stroke {
+	stroke: currentColor;
+}
+
+/* Use current text color */
+/* Change icon color */
+.ql-toolbar .ql-formats button .ql-fill {
+	fill: currentColor;
+}
+
+/* FOR TEXT SIZE PART ON TOOLBAR */
+/* Change color of dropdown label */
+.ql-toolbar .ql-picker-label {
+	@apply text-[#2D0C3E];
+}
+
+/* Change color of dropdown items */
+.ql-toolbar .ql-picker-item {
+	@apply text-[#2D0C3E];
+}
+
+.ql-container .ql-editor::placeholder {
+	@apply not-italic; /* Apply Tailwind utility to remove italic style */
+}

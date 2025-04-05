@@ -1,0 +1,81 @@
+"use client";
+import Link from "next/link";
+import { BsArrowRight } from "react-icons/bs";
+import BlogCard from "../meetPartneresComponents/BlogCard";
+import { useQuery } from "@tanstack/react-query";
+import { getHomeBlogs } from "@/api/api";
+import CareerLoader from "@/components/shared/loader/CareerLoader";
+import { useTranslations } from "next-intl";
+function BlogPosts() {
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["getHomeBlogs"],
+    queryFn: () => getHomeBlogs(),
+  });
+
+  // console.log(data);
+  const t = useTranslations("meetHome");
+
+  if (error)
+    return (
+      <div className="text-center text-xl font-md py-8">{t("loading")}</div>
+    );
+  return (
+    <section className="mt-6 w-full">
+      {/* heading */}
+      <div className="w-full flex flex-col">
+        {/* texts */}
+        <div className="flex flex-col">
+          <h1 className="text-brandDs text-3xl font-normal">
+            {t("BlogPosts")}
+          </h1>
+          <p className="max-w-[1024px] w-full text-[1rem] leading-6 text-[#000000]">
+            {t("BlogDis")}
+          </p>
+        </div>
+        {/* border */}
+        <p className="w-full h-[2px] bg-brandLsPrimary my-6"></p>
+      </div>
+
+      {/* cards */}
+      {isLoading ? (
+        <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="mx-auto">
+              <CareerLoader />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 lg:gap-x-4 gap-y-8 my-6">
+            {data &&
+              data?.data?.map((blogPost: any) => (
+                <div key={blogPost.bpost_pid}>
+                  <BlogCard
+                    id={blogPost.bpost_pid}
+                    title={blogPost?.title}
+                    userName={blogPost?.user_pid}
+                    publishDate={blogPost?.cre_date}
+                    description={blogPost?.description}
+                    image={blogPost?.thumbnail_file_url}
+                  />
+                </div>
+              ))}
+          </div>
+        </>
+      )}
+
+      {/* see all btn  */}
+      <div className="w-full flex justify-end text-brandPrimary mb-10">
+        <Link href={`meet-partners/blogs/all-blogs`}>
+          <div className="flex items-center gap-2 text-brandPrimary cursor-pointer">
+            <p className="text-base">{t("seeAll")}</p>
+            <BsArrowRight className="w-5 h-5" />
+          </div>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+export default BlogPosts;

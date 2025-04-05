@@ -1,0 +1,64 @@
+{
+    customer_pid: 'C240800000015',
+    order_date: '2024-09-15 10:46:34',
+    total_amount: 2080,
+    shiping_location: 
+      'Nulla quia ullam max, Esse sint perspicia, Esse odio mollit quo, 71762',
+    order_id: 72,
+    fname: 'cus8',
+    lname: 'cus8',
+    mobile_no: '0147444444344',
+    email: 'customer8@mail.com',
+    order_pid: 'PO240900000072'
+  }
+
+
+
+
+
+
+
+
+
+{
+    user_pid: 'U240800000063',
+    customer_pid: 'C240800000015',
+    enterpenure_pid: null,
+    fname: 'cus8',
+    lname: 'cus8',
+    email: 'customer8@mail.com',
+    mobile_no: '0147444444344',
+    name: 'customer8',
+    address_line: null,
+    cutomer_house_number: 'House No:7',
+    cutomer_area_name: 'Uttara',
+    cutomer_city_name: 'Dhaka',
+    cutomer_zip_postal_code: '1209',
+    shop_name: null,
+    business_name: null,
+    seller_address_line: null,
+    seller_area_name: null,
+    seller_city_name: null,
+    seller_zip_postal_code: null,
+    bank_name: null,
+    bank_code: null,
+    account_holder_name: null,
+    account_number: null,
+    profile_photo: 
+      'http://163.47.146.233:3010/her-power-api/public/attachments/profile_photo/20240818/66c1df0ebaf76-cus8.jpg',
+    nidimage_front_side: 'http://163.47.146.233:3010/her-power-api/public/',
+    nidimage_back_side: 'http://163.47.146.233:3010/her-power-api/public/',
+    tin_certificate_image: 'http://163.47.146.233:3010/her-power-api/public/',
+    signature_image: 'http://163.47.146.233:3010/her-power-api/public/',
+    trade_license_image: 'http://163.47.146.233:3010/her-power-api/public/',
+    tax_id_image: 'http://163.47.146.233:3010/her-power-api/public/',
+    vat_id_image: 'http://163.47.146.233:3010/her-power-api/public/',
+    sell_other_websites: null,
+    sell_other_ecommerce: null,
+    own_ecommerce_site: null,
+    product_from: null,
+    annual_turnover: null,
+    number_product_sell: null,
+    active_order: 0,
+    previous_order: 0
+  }
