@@ -4,21 +4,23 @@ import CareerLoader from "@/components/shared/loader/CareerLoader";
 import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
 import Input from "./Input";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCookies } from "next-client-cookies";
 
 const BlogDetails = () => {
   const t = useTranslations("Blog");
 
+  const router = useRouter();
+  const locale = useLocale();
   const params = useParams();
-    const cookies = useCookies();
-      const user_pid = cookies.get("user_pid");
+  const cookies = useCookies();
+  const user_pid = cookies.get("user_pid");
   const { id } = params;
   const [com, setCom] = useState("");
   const [showComment, setShowComment] = useState<number>(5);
@@ -49,7 +51,11 @@ const BlogDetails = () => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    if(user_pid) formData.append("user_pid", user_pid);
+    if (user_pid){
+      formData.append("user_pid", user_pid)
+    }else{
+      router.push(`/${locale}/login`);
+    }
     formData.append("comm_text", com);
     formData.append("active_status", "1");
     formData.append("parent_comment_pid", "");
@@ -78,7 +84,6 @@ const BlogDetails = () => {
       </div>
     );
 
- 
   return (
     <>
       {/* breadcrumb */}
@@ -128,27 +133,27 @@ const BlogDetails = () => {
                 </div>
                 {/*  */}
                 <div className="flex flex-col gap-2">
-                  {!user_pid &&
-                  <div className="text-[1rem] leading-6 flex items-center gap-1">
-                    <p className="text-link hover:underline cursor-pointer ">
-                      {t("Login")}
-                    </p>
-                    <p>{t("or")}</p>
-                    <p className="text-link hover:underline cursor-pointer">
-                      {t("Register")}
-                    </p>
-                    <p>{t("tochatwithauthor")}</p>
-                  </div>
-                  }
+                  {!user_pid && (
+                    <div className="text-[1rem] leading-6 flex items-center gap-1">
+                      <p className="text-link hover:underline cursor-pointer ">
+                        {t("Login")}
+                      </p>
+                      <p>{t("or")}</p>
+                      <p className="text-link hover:underline cursor-pointer">
+                        {t("Register")}
+                      </p>
+                      <p>{t("tochatwithauthor")}</p>
+                    </div>
+                  )}
                   {/*  */}
                   <div className="bg-bgSecondary rounded-[10px] border border-brandLsPrimary p-3 text-brandPrimary mb-10">
                     {/*  */}
-                    <Input
-                      buttonName={t("comment")}
-                      value={com}
-                      handleInputChange={handleInputChange}
-                      handleSubmit={handleSubmit}
-                    />
+                      <Input
+                        buttonName={t("comment")}
+                        value={com}
+                        handleInputChange={handleInputChange}
+                        handleSubmit={handleSubmit}
+                      />
                     <div className="flex flex-col gap-5">
                       {commentData?.map((chat: any) => (
                         <Comment

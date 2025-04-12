@@ -38,11 +38,11 @@ const ShopNavbar = () => {
     ) || {
       products: [],
     };
-    setStoredCartData(numberOfProduct.products.length);
+    setStoredCartData(numberOfProduct?.products?.length);
   };
 
   const getWishListLength = () => {
-    setStoredWishListData(wishlist.products.length);
+    setStoredWishListData(wishlist?.products?.length);
   };
 
   useEffect(() => {

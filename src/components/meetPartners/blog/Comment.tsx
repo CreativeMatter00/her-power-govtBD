@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { useCookies } from "next-client-cookies";
 import { useTranslations } from "next-intl";
 
-
 const Comment = ({ data, ownerId, refetch }: any) => {
   const cookies = useCookies();
   const user_pid = cookies.get("user_pid");
@@ -32,9 +31,9 @@ const Comment = ({ data, ownerId, refetch }: any) => {
     queryKey: ["getCommentById", data?.comment_pid, showReply],
     queryFn: () => getCommentById(data?.comment_pid, showReply),
   });
-  // console.log("PM",data);
+  console.log("PM",data);
   // console.log("GGT",reply);
-  
+
   useEffect(() => {
     if (reply) {
       setReplyData(() => [...reply]);
@@ -83,7 +82,8 @@ const Comment = ({ data, ownerId, refetch }: any) => {
   };
   const handleSave = async () => {
     const formData = new FormData();
-    if(inputRef.current) formData.append("comm_text", inputRef.current.innerText);
+    if (inputRef.current)
+      formData.append("comm_text", inputRef.current.innerText);
     if (user_pid) formData.append("user_pid", user_pid);
     try {
       const response = await axios.post(
@@ -132,7 +132,7 @@ const Comment = ({ data, ownerId, refetch }: any) => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/delete-comment/${data?.comment_pid}`,
+        `${url}/api/admin/delete-comment/${data?.comment_pid}`
       );
       if (response?.data?.meta?.status === true) {
         toast.success("Comment Deleted Successfully!", {
@@ -175,7 +175,7 @@ const Comment = ({ data, ownerId, refetch }: any) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCom(event.target.value);
   };
-  const t=useTranslations("Blog")
+  const t = useTranslations("Blog");
   return (
     <div className="flex items-start gap-1 my-1 p-2 rounded-md relative">
       {data?.total_reply > 0 && (
@@ -234,9 +234,12 @@ const Comment = ({ data, ownerId, refetch }: any) => {
                   </button>
                   <button
                     className="text-brandHover font-bold"
-                    onClick={() =>{ if(inputRef.current){
-                      inputRef.current.innerText=data?.comm_text;
-                    } setEdit(false)}}
+                    onClick={() => {
+                      if (inputRef.current) {
+                        inputRef.current.innerText = data?.comm_text;
+                      }
+                      setEdit(false);
+                    }}
                   >
                     {t("Cancel")}
                   </button>
@@ -263,12 +266,14 @@ const Comment = ({ data, ownerId, refetch }: any) => {
           ) : (
             <div>
               <div className="flex gap-4 text-sm pl-1">
-                <button
-                  className="text-brandHover font-bold"
-                  onClick={() => setOpenReply((prev) => !prev)}
-                >
-                  {t("Reply")}
-                </button>
+                {user_pid && (
+                  <button
+                    className="text-brandHover font-bold"
+                    onClick={() => setOpenReply((prev) => !prev)}
+                  >
+                    {t("Reply")}
+                  </button>
+                )}
                 {data?.total_reply > 0 && <div> | </div>}
                 {data?.total_reply > 0 && (
                   <p>

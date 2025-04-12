@@ -1,17 +1,11 @@
 import axios from "axios";
 
-// local
-// export const url = `http://163.47.146.233:3010/her-power-api`;
-// export const adminEmail="minhajurrohoman9016@gmail.com"
 
-//live
-// export const url = `http://203.130.133.169/her-power-api`;
+// gov live
 export const url = `https://portal.herpower.gov.bd/api`;
 export const adminEmail = "herpowerproject@doict.gov.bd"
 
-
-
-
+// env
 // export const url = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -161,7 +155,7 @@ export const getProductByCategory = async (
 
 export const getNews = async () => {
   try {
-    const response = await axios.get(`${url}/public/api/frontend/news`);
+    const response = await axios.get(`${url}/api/frontend/news`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
