@@ -84,17 +84,6 @@ export const AllStories = () => {
       }
       </>
     )}
-      {Array.isArray(data?.data) && 
-              <div className="mb-8">
-                <EventsPagination
-                  currentPage={currentPage}
-                  hasPreviousPage={data?.current_page > 1}
-                  hasNextPage={data?.current_page < data?.last_page}
-                  onPreviousPage={handlePreviousPage}
-                  onNextPage={handleNextPage}
-                />
-              </div>
-               }
   </div>
   )
 }

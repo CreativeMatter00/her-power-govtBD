@@ -112,17 +112,6 @@ const AllDocuments = () => {
           )}
         </>
       )}
-      {Array.isArray(data?.data) && (
-        <div className="mb-8">
-          <EventsPagination
-            currentPage={currentPage}
-            hasPreviousPage={data?.current_page > 1}
-            hasNextPage={data?.current_page < data?.last_page}
-            onPreviousPage={handlePreviousPage}
-            onNextPage={handleNextPage}
-          />
-        </div>
-      )}
       <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
         <DialogTrigger asChild></DialogTrigger>
         <DialogContent className="bg-white w-[30vw]">
