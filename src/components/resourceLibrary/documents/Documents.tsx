@@ -59,18 +59,24 @@ const Documents = () => {
     <div className="mt-6">
       <h1 className="text-brandDs text-3xl font-normal">{t("documents")}</h1>
       <div className="border-b border-brandLsPrimary w-full my-6"></div>
-      <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
-        {data?.data?.map((items: any, index: number) => (
-          <DocumentCard
-            key={index}
-            cardId={items.post_pid}
-            cardTitle={items.title}
-            cardDate={items.cre_date}
-            documents={items.documents}
-            handleDelete={documentDelete}
-          />
-        ))}
-      </div>
+      {Array.isArray(data?.data) && data?.data?.length > 0 ? (
+        <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
+          {data?.data?.map((items: any, index: number) => (
+            <DocumentCard
+              key={index}
+              cardId={items.post_pid}
+              cardTitle={items.title}
+              cardDate={items.cre_date}
+              documents={items.documents}
+              handleDelete={documentDelete}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className=" py-12 flex justify-center items-center text-2xl text-gray-500">
+          {t(`No Data Available`)}
+        </div>
+      )}
       {/* =============================   SEE ALL ======================== */}
       <div className="flex justify-end mt-6">
         <Link href={`/${locale}/resource-library/documents`}>

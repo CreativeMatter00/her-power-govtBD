@@ -45,33 +45,41 @@ function Challenges() {
         </div>
       ) : (
         <>
-          <div className="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 lg:gap-x-4 gap-y-8 my-6">
-            {data &&
-              data?.data?.map((blogPost: any) => (
-                <div key={blogPost.cpost_pid}>
-                  <ChallengeCard
-                    id={blogPost.cpost_pid}
-                    title={blogPost?.title}
-                    userName={blogPost?.user_pid}
-                    publishDate={blogPost?.cre_date}
-                    description={blogPost?.description}
-                    image={blogPost?.thumbnail_file_url}
-                  />
-                </div>
-              ))}
-          </div>
+          {Array.isArray(data?.data) && data?.data?.length > 0 ? (
+            <div className="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 lg:gap-x-4 gap-y-8 my-6">
+              {data &&
+                data?.data?.map((blogPost: any) => (
+                  <div key={blogPost.cpost_pid}>
+                    <ChallengeCard
+                      id={blogPost.cpost_pid}
+                      title={blogPost?.title}
+                      userName={blogPost?.user_pid}
+                      publishDate={blogPost?.cre_date}
+                      description={blogPost?.description}
+                      image={blogPost?.thumbnail_file_url}
+                    />
+                  </div>
+                ))}
+            </div>
+          ) : (
+            <div className=" py-12 flex justify-center items-center text-2xl text-gray-500">
+              {t(`No Data Available`)}
+            </div>
+          )}
         </>
       )}
 
       {/* see all btn  */}
-      <div className="w-full flex justify-end text-brandPrimary mb-10">
-        <Link href={`challenges/challenge`}>
-          <div className="flex items-center gap-2 text-brandPrimary cursor-pointer">
-            <p className="text-base">{t("seeAll")}</p>
-            <BsArrowRight className="w-5 h-5" />
-          </div>
-        </Link>
-      </div>
+      {Array.isArray(data?.data) && data?.data?.length > 0 && (
+        <div className="w-full flex justify-end text-brandPrimary mb-10">
+          <Link href={`challenges/challenge`}>
+            <div className="flex items-center gap-2 text-brandPrimary cursor-pointer">
+              <p className="text-base">{t("seeAll")}</p>
+              <BsArrowRight className="w-5 h-5" />
+            </div>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }

@@ -32,12 +32,6 @@ const PostedTasks = () => {
     );
   }
 
-  if (error)
-    return (
-      <div className="text-center text-xl font-md py-8">
-        {t("Something_went_wrong")}
-      </div>
-    );
 
   return (
     <div className="mt-5 space-y-5">
@@ -45,7 +39,7 @@ const PostedTasks = () => {
         {t("AllPostedFreelanceServices")}
       </h1>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 ">
-        {data.map((task: TaskPost, index: number) => (
+        {data?.map((task: TaskPost, index: number) => (
           <PostedTaskCard
             key={index}
             id={task.taskpost_pid}

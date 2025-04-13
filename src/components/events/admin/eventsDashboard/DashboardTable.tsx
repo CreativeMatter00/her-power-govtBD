@@ -34,18 +34,18 @@ const DashboardTable: React.FC<Props> = ({ allEvents, refetchEvents }) => {
 				`${url}/api/admin/event/newEvent/${id}`
 			);
 
-			if (response?.data?.status === true) {
+			if (response?.data?.meta?.status === true) {
 				toast.success("Event deleted successfully", {
 					position: "bottom-left",
 					autoClose: 3000,
 				});
-				refetchEvents();
 			} else {
 				toast.error("Failed to delete. Please try again.", {
 					position: "bottom-left",
 					autoClose: 3000,
 				});
 			}
+			refetchEvents();
 		} catch (error) {
 			console.error("Error deleting event:", error);
 			toast.error("An error occurred. Please try again.", {

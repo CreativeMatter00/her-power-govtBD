@@ -91,64 +91,74 @@ export const ArticleManagement = () => {
             </div>
           ) : (
             <>
-              <div className="px-1 grid grid-cols-4 py-6 text-greyPrimary">
-                <p>{t("SLNo")}</p>
-                <p className="break-words"> {t("articles")}</p>
-                <p>{t("Posted On")}</p>
-                <p className="px-3">{t("Action")}</p>
-              </div>
-              {data.data.map((articlePost: any, index: number) => {
-                return (
-                  <div
-                    key={articlePost?.post_pid}
-                    className="px-1 grid grid-cols-4 py-6 border-t-2 border-t-[greyTertiary]"
-                  >
-                    <p>{index + 1}</p>
-                    <p className="break-words">{articlePost?.title}</p>
-                    <p>
-                      {articlePost?.cre_date
-                        .split(" ")[0]
-                        .split("-")
-                        .reverse()
-                        .join("-")}
-                    </p>
-                    <div className="flex justify-between items-center px-3">
-                      <Link
-                        href={`/${locale}/resource-library/articles/article-management/${articlePost?.post_pid}`}
-                        className="text-link"
-                      >
-                        {t("View Article")}
-                      </Link>
-                      <Link
-                        href={`/${locale}/resource-library/articles/article-management/edit-article/${articlePost?.post_pid}`}
-                        className="text-link"
-                      >
-                        {t("Edit")}
-                      </Link>
-                      <button
-                        className="text-dangerPrimary"
-                        onClick={() => {
-                          setEditModalOpen(true);
-                          setSelectedItem(articlePost?.post_pid);
-                        }}
-                      >
-                        {t("Delete Article")}
-                      </button>
-                    </div>
+              {Array.isArray(data?.data) ? (
+                <div>
+                  <div className="px-1 grid grid-cols-4 py-6 text-greyPrimary">
+                    <p>{t("SLNo")}</p>
+                    <p className="break-words"> {t("articles")}</p>
+                    <p>{t("Posted On")}</p>
+                    <p className="px-3">{t("Action")}</p>
                   </div>
-                );
-              })}
+                  {data.data.map((articlePost: any, index: number) => {
+                    return (
+                      <div
+                        key={articlePost?.post_pid}
+                        className="px-1 grid grid-cols-4 py-6 border-t-2 border-t-[greyTertiary]"
+                      >
+                        <p>{index + 1}</p>
+                        <p className="break-words">{articlePost?.title}</p>
+                        <p>
+                          {articlePost?.cre_date
+                            .split(" ")[0]
+                            .split("-")
+                            .reverse()
+                            .join("-")}
+                        </p>
+                        <div className="flex justify-between items-center px-3">
+                          <Link
+                            href={`/${locale}/resource-library/articles/article-management/${articlePost?.post_pid}`}
+                            className="text-link"
+                          >
+                            {t("View Article")}
+                          </Link>
+                          <Link
+                            href={`/${locale}/resource-library/articles/article-management/edit-article/${articlePost?.post_pid}`}
+                            className="text-link"
+                          >
+                            {t("Edit")}
+                          </Link>
+                          <button
+                            className="text-dangerPrimary"
+                            onClick={() => {
+                              setEditModalOpen(true);
+                              setSelectedItem(articlePost?.post_pid);
+                            }}
+                          >
+                            {t("Delete Article")}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+                  {t(`No Data Available`)}
+                </div>
+              )}
             </>
           )}
-          <div className="mb-8">
-            <EventsPagination
-              currentPage={currentPage}
-              hasPreviousPage={data?.current_page > 1}
-              hasNextPage={data?.current_page < data?.last_page}
-              onPreviousPage={handlePreviousPage}
-              onNextPage={handleNextPage}
-            />
-          </div>
+          {Array.isArray(data?.data) && (
+            <div className="mb-8">
+              <EventsPagination
+                currentPage={currentPage}
+                hasPreviousPage={data?.current_page > 1}
+                hasNextPage={data?.current_page < data?.last_page}
+                onPreviousPage={handlePreviousPage}
+                onNextPage={handleNextPage}
+              />
+            </div>
+          )}
         </div>
         <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
           <DialogTrigger asChild></DialogTrigger>

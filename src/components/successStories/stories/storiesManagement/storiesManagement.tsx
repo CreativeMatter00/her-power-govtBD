@@ -82,6 +82,9 @@ const StoriesManagement = () => {
             </div>
           ) : (
             <>
+            {
+              Array.isArray(data?.data) ? 
+            <div>
               <div className="px-1 grid grid-cols-4 py-6 text-greyPrimary">
                 <p>{t("SLNo")}</p>
                 <p className="break-words">{t("stories")}</p>
@@ -129,6 +132,11 @@ const StoriesManagement = () => {
                   </div>
                 );
               })}
+            </div>
+            :(
+              <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">{t(`No Data Available`)}</div>
+            )
+            }
             </>
           )}
           <div className="mb-8">

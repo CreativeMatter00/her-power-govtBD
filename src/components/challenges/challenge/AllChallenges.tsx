@@ -8,7 +8,6 @@ import CareerLoader from "@/components/shared/loader/CareerLoader";
 import { useTranslations } from "next-intl";
 import Challenge from "./Challenge";
 
-
 const AllChallenges = () => {
   const t = useTranslations("challenges");
 
@@ -60,7 +59,13 @@ const AllChallenges = () => {
             </div>
           ) : (
             <>
-              <Challenge data={data} />
+              {Array.isArray(data?.data) ? (
+                <Challenge data={data} />
+              ) : (
+                <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+                  {t(`No Data Available`)}
+                </div>
+              )}
             </>
           )}
           <div className="mb-8">

@@ -27,7 +27,7 @@ const SuccessStoriesNavbar = () => {
         href={`/${locale}/success-stories/add-stories`}
         className="cursor-pointer hover:underline underline-offset-8 decoration-2"
       >
-        {t("Add Success Stroy")}
+        {t("Add Success Story")}
       </Link>}
       {email === adminEmail&& <Link
         href={`/${locale}/success-stories/stories/stories-management`}

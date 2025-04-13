@@ -52,19 +52,39 @@ const AllVideos = () => {
         </div>
       ) : (
         <>
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-8 my-6">
-            {data?.data?.map((items: any, index: number) => (
-              <ResCard
-                key={index}
-                card_pid={items.post_pid}
-                cardImage={items.thumbnail_url}
-                cardTitle={items.title}
-                cardDate={items.cre_date}
-                cardDes={items.description}
-                title={"Videos"}
-              />
-            ))}
-          </div>
+          {Array.isArray(data?.data) ? (
+            <div>
+              <div className="grid md:grid-cols-3 grid-cols-1 gap-x-8 gap-y-8 my-6">
+                {data?.data?.map((items: any, index: number) => (
+                  <ResCard
+                    key={index}
+                    card_pid={items.post_pid}
+                    cardImage={items.thumbnail_url}
+                    cardTitle={items.title}
+                    cardDate={items.cre_date}
+                    cardDes={items.description}
+                    title={"Videos"}
+                  />
+                ))}
+              </div>
+              <div className="mb-8">
+                <EventsPagination
+                  currentPage={currentPage}
+                  hasPreviousPage={data?.current_page > 1}
+                  hasNextPage={data?.current_page < data?.last_page}
+                  onPreviousPage={handlePreviousPage}
+                  onNextPage={handleNextPage}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+              {t(`No Data Available`)}
+            </div>
+          )}
+        </>
+      )}
+        {Array.isArray(data?.data) && 
           <div className="mb-8">
             <EventsPagination
               currentPage={currentPage}
@@ -74,8 +94,7 @@ const AllVideos = () => {
               onNextPage={handleNextPage}
             />
           </div>
-        </>
-      )}
+           }
     </div>
   );
 };

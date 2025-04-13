@@ -11,8 +11,6 @@ const EventsDashboard = () => {
 	const cookies = useCookies();
 	const organizerId = cookies.get("isOrganizer_pid") || "";
 
-	// console.log(organizerId);
-
 	const {
 		isLoading,
 		error,
@@ -22,7 +20,7 @@ const EventsDashboard = () => {
 		queryKey: ["eventsByOrganizer"],
 		queryFn: () => getEventsByOrganizer(organizerId),
 	});
-	// console.log("eventsByOrganizer", eventsByOrganizer);
+
 	if (isLoading)
 		return (
 			<div className="w-screen h-screen flex justify-center items-center">

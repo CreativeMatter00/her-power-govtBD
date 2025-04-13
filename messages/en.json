@@ -35,6 +35,7 @@
     "Resource Library": "Resource Library"
   },
   "resources_Library": {
+    "No Data Available":"No Data Available",
     "Dashboard Overview": "Dashboard Overview",
     "Lesson Name": "Lesson Name",
     "Upload": "Upload",
@@ -372,6 +373,7 @@
     "Next": "Next"
   },
   "Blog": {
+    "No Data Available":"No Data Available",
     "See1": "See",
     "Somethingwentwrong": "Something went wrong. Please reload",
     "ChatwithAuthor": "Chat with Author",
@@ -959,6 +961,7 @@
     "4_5_gpa_option": "4.00/5.00"
   },
   "meetHome": {
+    "No Data Available":"No Data Available",
     "BlogPosts": "Blog Posts",
     "BlogDis": "Discover inspiring stories, innovative collaborations, and powerful connections that drive success. Explore how partnerships shape industries, spark ideas, and empower growth through teamwork and shared visions.",
     "seeAll": "See all",
@@ -1075,6 +1078,7 @@
     "Write your reply": "Write your reply"
   },
   "story": {
+    "No Data Available":"No Data Available",
     "Success Stories": "Success Stories",
     "See_all": "See all",
     "Add Story": "Add Story",
@@ -1096,6 +1100,7 @@
     "Edit Success Story": "Edit Success Story"
   },
   "challenges": {
+    "No Data Available":"No Data Available",
     "loading": "Something went wrong. Please reload",
     "Challenges": "Challenges",
     "seeAll": "See All",

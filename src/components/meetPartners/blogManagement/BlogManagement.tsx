@@ -46,19 +46,19 @@ export const BlogManagement = () => {
           draggable: true,
           progress: undefined,
           theme: "light",
-                });
+        });
       }
     } catch (error) {
       toast.error("Something went wrong! please try again", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data);
       } else {
@@ -87,7 +87,7 @@ export const BlogManagement = () => {
     );
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="mt-14 mb-2 max-w-7xl container ">
         <BreadCrumb
           title1="Blogs"
@@ -113,63 +113,73 @@ export const BlogManagement = () => {
             </div>
           ) : (
             <>
-              <div className="px-1 grid grid-cols-4 py-6 text-greyPrimary">
-                <p>{t("SlNo")}</p>
-                <p className="break-words">{t("Blogs")}</p>
-                <p>{t("PostedOn")}</p>
-                <p className="px-3">{t("Action")}</p>
-              </div>
-              {data &&
-                data?.data?.map((blogPost: any, index: number) => (
-                  <div
-                    key={blogPost?.bpost_pid}
-                    className="px-1 grid grid-cols-4 py-6 border-t-2 border-t-[greyTertiary]"
-                  >
-                    <p>{index + 1}</p>
-                    <p className="break-words">{blogPost?.title}</p>
-                    <p>
-                      {blogPost?.cre_date
-                        .split(" ")[0]
-                        .split("-")
-                        .reverse()
-                        .join("-")}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <Link
-                        href={`/${locale}/meet-partners/blogs/blog-management/${blogPost?.bpost_pid}`}
-                        className="text-link"
-                      >
-                        {t("ViewBlog")}
-                      </Link>
-                      <Link
-                        href={`/${locale}/meet-partners/blogs/blog-management/edit-blog/${blogPost?.bpost_pid}`}
-                        className="text-link"
-                      >
-                        {t("Edit")}
-                      </Link>
-                      <button
-                        className="text-dangerPrimary"
-                        onClick={() => {
-                          setEditModalOpen(true);
-                          setSelectedItem(blogPost?.bpost_pid);
-                        }}
-                      >
-                        {t("DeleteBlog")}
-                      </button>
-                    </div>
+              {Array.isArray(data?.data) ? (
+                <div>
+                  <div className="px-1 grid grid-cols-4 py-6 text-greyPrimary">
+                    <p>{t("SlNo")}</p>
+                    <p className="break-words">{t("Blogs")}</p>
+                    <p>{t("PostedOn")}</p>
+                    <p className="px-3">{t("Action")}</p>
                   </div>
-                ))}
+                  {data &&
+                    data?.data?.map((blogPost: any, index: number) => (
+                      <div
+                        key={blogPost?.bpost_pid}
+                        className="px-1 grid grid-cols-4 py-6 border-t-2 border-t-[greyTertiary]"
+                      >
+                        <p>{index + 1}</p>
+                        <p className="break-words">{blogPost?.title}</p>
+                        <p>
+                          {blogPost?.cre_date
+                            .split(" ")[0]
+                            .split("-")
+                            .reverse()
+                            .join("-")}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <Link
+                            href={`/${locale}/meet-partners/blogs/blog-management/${blogPost?.bpost_pid}`}
+                            className="text-link"
+                          >
+                            {t("ViewBlog")}
+                          </Link>
+                          <Link
+                            href={`/${locale}/meet-partners/blogs/blog-management/edit-blog/${blogPost?.bpost_pid}`}
+                            className="text-link"
+                          >
+                            {t("Edit")}
+                          </Link>
+                          <button
+                            className="text-dangerPrimary"
+                            onClick={() => {
+                              setEditModalOpen(true);
+                              setSelectedItem(blogPost?.bpost_pid);
+                            }}
+                          >
+                            {t("DeleteBlog")}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+                  {t(`No Data Available`)}
+                </div>
+              )}
             </>
           )}
-          <div className="mb-8">
-            <EventsPagination
-              currentPage={currentPage}
-              hasPreviousPage={data?.current_page > 1}
-              hasNextPage={data?.current_page < data?.last_page}
-              onPreviousPage={handlePreviousPage}
-              onNextPage={handleNextPage}
-            />
-          </div>
+          {Array.isArray(data?.data) && (
+            <div className="mb-8">
+              <EventsPagination
+                currentPage={currentPage}
+                hasPreviousPage={data?.current_page > 1}
+                hasNextPage={data?.current_page < data?.last_page}
+                onPreviousPage={handlePreviousPage}
+                onNextPage={handleNextPage}
+              />
+            </div>
+          )}
         </div>
         <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
           <DialogTrigger asChild></DialogTrigger>

@@ -68,9 +68,16 @@ const AllBlog = () => {
             </div>
           ) : (
             <>
-              <Blog data={data} />
+              {Array.isArray(data?.data) ? (
+                <Blog data={data} />
+              ) : (
+                <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+                  {t(`No Data Available`)}
+                </div>
+              )}
             </>
           )}
+           {Array.isArray(data?.data) && 
           <div className="mb-8">
             <EventsPagination
               currentPage={currentPage}
@@ -80,6 +87,7 @@ const AllBlog = () => {
               onNextPage={handleNextPage}
             />
           </div>
+           }
         </div>
       </section>
     </>

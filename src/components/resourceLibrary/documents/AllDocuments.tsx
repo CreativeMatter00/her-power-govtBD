@@ -81,28 +81,47 @@ const AllDocuments = () => {
         </div>
       ) : (
         <>
-          <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
-            {data?.data?.map((items: any, index: number) => (
-              <DocumentCard
-                key={index}
-                cardId={items.post_pid}
-                cardTitle={items.title}
-                cardDate={items.cre_date}
-                documents={items.documents}
-                handleDelete={documentDelete}
-              />
-            ))}
-          </div>
-          <div className="mb-8">
-            <EventsPagination
-              currentPage={currentPage}
-              hasPreviousPage={data?.current_page > 1}
-              hasNextPage={data?.current_page < data?.last_page}
-              onPreviousPage={handlePreviousPage}
-              onNextPage={handleNextPage}
-            />
-          </div>
+          {Array.isArray(data?.data) ? (
+            <div>
+              <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
+                {data?.data?.map((items: any, index: number) => (
+                  <DocumentCard
+                    key={index}
+                    cardId={items.post_pid}
+                    cardTitle={items.title}
+                    cardDate={items.cre_date}
+                    documents={items.documents}
+                    handleDelete={documentDelete}
+                  />
+                ))}
+              </div>
+              <div className="mb-8">
+                <EventsPagination
+                  currentPage={currentPage}
+                  hasPreviousPage={data?.current_page > 1}
+                  hasNextPage={data?.current_page < data?.last_page}
+                  onPreviousPage={handlePreviousPage}
+                  onNextPage={handleNextPage}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className=" py-32 flex justify-center items-center text-2xl text-gray-500">
+              {t(`No Data Available`)}
+            </div>
+          )}
         </>
+      )}
+      {Array.isArray(data?.data) && (
+        <div className="mb-8">
+          <EventsPagination
+            currentPage={currentPage}
+            hasPreviousPage={data?.current_page > 1}
+            hasNextPage={data?.current_page < data?.last_page}
+            onPreviousPage={handlePreviousPage}
+            onNextPage={handleNextPage}
+          />
+        </div>
       )}
       <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
         <DialogTrigger asChild></DialogTrigger>

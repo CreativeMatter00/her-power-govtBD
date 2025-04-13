@@ -27,33 +27,41 @@ const VideoHome = () => {
     <div>
       <h1 className="text-brandDs text-3xl font-normal">{t("videos")}</h1>
       <div className="border-b border-brandLsPrimary w-full my-6"></div>
-      <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
-        {/* <ResourceCards title='Videos' data={data?.data} allLink='resource-library/videos' /> */}
-        {data?.data?.map((item: any, index: number) => {
-          return (
-            <ResCard
-              key={item.post_pid}
-              title="Videos"
-              card_pid={item.post_pid}
-              cardImage={item.thumbnail_url}
-              cardTitle={item.title}
-              cardDate={item.cre_date}
-              cardDes={item.description}
-            />
-          );
-        })}
-      </div>
+      {Array.isArray(data?.data) && data?.data?.length > 0 ? (
+        <div className="grid  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-8 my-6">
+          {/* <ResourceCards title='Videos' data={data?.data} allLink='resource-library/videos' /> */}
+          {data?.data?.map((item: any, index: number) => {
+            return (
+              <ResCard
+                key={item.post_pid}
+                title="Videos"
+                card_pid={item.post_pid}
+                cardImage={item.thumbnail_url}
+                cardTitle={item.title}
+                cardDate={item.cre_date}
+                cardDes={item.description}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className=" py-12 flex justify-center items-center text-2xl text-gray-500">
+          {t(`No Data Available`)}
+        </div>
+      )}
       {/* =============================   SEE ALL ======================== */}
-      <div className="flex justify-end mt-6">
-        <Link href={`/${locale}/resource-library/videos`}>
-          <div className="flex items-center gap-2 text-brandPrimary cursor-pointer group ">
-            <p className="text-base hover:underline underline-offset-2">
-              {t("See_all")}
-            </p>
-            <IoMdArrowForward className="w-5 h-5" />
-          </div>
-        </Link>
-      </div>
+      {Array.isArray(data?.data) && data?.data?.length > 0 && (
+        <div className="flex justify-end mt-6">
+          <Link href={`/${locale}/resource-library/videos`}>
+            <div className="flex items-center gap-2 text-brandPrimary cursor-pointer group ">
+              <p className="text-base hover:underline underline-offset-2">
+                {t("See_all")}
+              </p>
+              <IoMdArrowForward className="w-5 h-5" />
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
