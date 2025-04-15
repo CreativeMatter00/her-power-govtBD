@@ -4,7 +4,7 @@ import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import EventsPagination from "@/components/shared/EventsPagination";
-import { getAllBlogs } from "@/api/api";
+import { blogsManagement} from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
 import Link from "next/link";
 import axios from "axios";
@@ -17,22 +17,24 @@ import {
 } from "@/components/ui/dialog";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCookies } from "next-client-cookies";
 export const BlogManagement = () => {
   const t = useTranslations("Blog");
-
+  const cookies = useCookies();
+  const userID=cookies.get("user_pid");
   const locale = useLocale();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const { isLoading, data, error, refetch } = useQuery({
-    queryKey: ["getAllBlogs", currentPage],
-    queryFn: () => getAllBlogs(currentPage),
+    queryKey: ["blogsManagement", currentPage],
+    queryFn: () => blogsManagement(currentPage,userID as string),
   });
 
   const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/delete-blog-post/${id}`
+        `${url}/api/admin/delete-blog-post/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

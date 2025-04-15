@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoMenuOutline } from "react-icons/io5";
+import { IoMenuOutline, IoClose } from "react-icons/io5";
 import Logo from "../../logo/Logo";
 import {
   NavigationMenu,
@@ -29,16 +29,16 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [userType, setUserType] = useState<boolean | null>(null);
   const userPid = cookies.get("user_pid");
-	const isSeller = cookies.get("isSeller");
+  const isSeller = cookies.get("isSeller");
 
-	const {
-		isLoading: isUserLoading,
-		error: userError,
-		data: userData,
-	} = useQuery({
-		queryKey: ["userInfo", userPid],
-		queryFn: () => getUserInfo(userPid as string),
-	});
+  const {
+    isLoading: isUserLoading,
+    error: userError,
+    data: userData,
+  } = useQuery({
+    queryKey: ["userInfo", userPid],
+    queryFn: () => getUserInfo(userPid as string),
+  });
   useEffect(() => {
     if (typeof window !== "undefined" && localStorage?.loginDetails) {
       const loginDetails = JSON.parse(localStorage?.loginDetails);
@@ -51,15 +51,24 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   const handleMobileSidebar = () => {
     setMobileNav(!mobileNav);
   };
-// console.log("DD",userInfo)
+  // console.log("DD",userInfo)
   return (
     <div className="flex justify-between items-center gap-3">
       <div className="flex items-center gap-3">
-        <IoMenuOutline
-          fontSize={26}
-          onClick={handleMobileSidebar}
-          className="lg:hidden"
-        />
+        {mobileNav ? (
+          <IoClose
+            fontSize={26}
+            onClick={handleMobileSidebar}
+            className="lg:hidden"
+          />
+        ) : (
+          <IoMenuOutline
+            fontSize={26}
+            onClick={handleMobileSidebar}
+            className="lg:hidden"
+          />
+        )}
+
         <Link href={`/${locale}`}>
           <Logo
             logoHeight="h-24"
@@ -155,8 +164,11 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
             <Link href={`/${locale}/shop-now/seller/dashboard`}>
               <div className="rounded-full">
                 <Image
-                alt=""
-                  src={userData && userData?.profile_photo|| "/assets/images/profile/profile.png"}
+                  alt=""
+                  src={
+                    (userData && userData?.profile_photo) ||
+                    "/assets/images/profile/profile.png"
+                  }
                   height={32}
                   width={32}
                   className="h-8 w-8 object-cover rounded-full border-2 border-brandDs z-10"
@@ -168,7 +180,10 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
               <div className="rounded-full bg-contain w-[32px] h-[32px] overflow-hidden">
                 <Image
                   // src={userInfo.profile_photo}
-                  src={userData && userData?.profile_photo || "/assets/images/profile/profile.png"}
+                  src={
+                    (userData && userData?.profile_photo) ||
+                    "/assets/images/profile/profile.png"
+                  }
                   height={32}
                   width={32}
                   className="h-8 w-8 object-cover rounded-full border-2 border-brandDs z-10"

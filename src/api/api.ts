@@ -1,11 +1,11 @@
 import axios from "axios";
 
+
 // gov live
 export const url = `https://portal.herpower.gov.bd/api`;
 export const adminEmail = "herpowerproject@doict.gov.bd"
 
-// env
-// export const url = process.env.NEXT_PUBLIC_API_URL;
+
 
 
 
@@ -1176,13 +1176,23 @@ export const getProductCategory = async () => {
     console.log(error);
   }
 };
-
 export const getAllBlogs = async (page: number) => {
   try {
     const response = await axios.get(
       `${url}/api/admin/blog-post-all-blogs?page=${page}`
     );
     return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const blogsManagement = async (page: number, userID: string) => {
+  try {
+    const response = await axios.get(
+      `${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`
+    );
+    return response.data.blogs;
   } catch (error) {
     console.log(error);
   }
@@ -1223,6 +1233,14 @@ export const getAllDocuments = async (page: number) => {
     console.log(error);
   }
 };
+export const documentsManagement = async (page: number, userID: string) => {
+  try {
+    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    return response.data.documents;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getHomeDocuments = async () => {
   try {
     const response = await axios.get(`${url}/api/admin/document-homepage`);
@@ -1240,6 +1258,16 @@ export const getAllVideos = async (page: number) => {
     console.log(error);
   }
 };
+
+export const videoManagement = async (page: number, userID: string) => {
+  try {
+    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    return response.data.videos;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getHomeVideos = async () => {
   try {
     const response = await axios.get(`${url}/api/admin/video-homepage`);
@@ -1262,6 +1290,15 @@ export const getAllArticles = async (page: number) => {
   try {
     const response = await axios.get(`${url}/api/admin/articles?page=${page}`);
     return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const articlesManagement = async (page: number, userID: string) => {
+  try {
+    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    return response.data.articles;
   } catch (error) {
     console.log(error);
   }

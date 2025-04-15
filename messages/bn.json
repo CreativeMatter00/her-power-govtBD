@@ -6,9 +6,10 @@
     "okayGotIt": "ঠিক আছে, বুঝেছি"
   },
   "Navbar": {
+    "Document Management":"ডকুমেন্ট ম্যানেজমেন্ট",
     "Blogs": "ব্লগ",
     "Success Stories Management": "সাফল্যের গল্প পরিচালনা",
-    "Add Success Stroy": "সাফল্যের গল্প যুক্ত করুন",
+    "Add Success Story": "সাফল্যের গল্প যুক্ত করুন",
     "Success Stories": "সাফল্যের গল্প",
     "home": "হোম",
     "shopNow": "কেনাকাটা",
@@ -35,6 +36,7 @@
     "Resource Library": "তথ্যের লাইব্রেরি"
   },
   "resources_Library": {
+    "videoManage":"ভিডিও পরিচালনা",
     "No Data Available":"কোন তথ্য নেই",
     "Today's Course Sales": "আজকের কোর্স বিক্রয়",
     "Dashboard Overview": "ড্যাশবোর্ড ওভারভিউ",

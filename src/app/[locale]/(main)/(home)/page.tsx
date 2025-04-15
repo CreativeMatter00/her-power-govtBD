@@ -9,16 +9,21 @@ const page = () => {
     <div className="bg-bgSecondary">
       <Hero />
       <div className="container mx-auto px-4">
-        <div
-          className="grid gap-4 mt-16"
-          style={{ gridTemplateColumns: "1fr 4fr 1fr" }}
-        >
-          <Ad1 />
+        <div className="grid gap-4 mt-4 md:mt-16 grid-cols-1 md:grid-cols-[1fr_4fr_1fr]">
+          <div className="hidden md:block">
+            <Ad1 />
+          </div>
           <div>
             <Sections />
             <LatestNews />
           </div>
-          <Ad2 />
+          <div className="hidden md:block">
+            <Ad2 />
+          </div>
+        </div>
+        <div className="grid gap-4 my-4 grid-cols-2 md:hidden ">
+          <Ad1/>
+          <Ad2/>
         </div>
       </div>
     </div>

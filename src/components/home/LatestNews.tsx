@@ -69,7 +69,7 @@ const LatestNews = () => {
                     <p className="pt-[4px]">
                       <FaCaretRight color="#2D0C3E" />
                     </p>
-                    <p>
+                    <p className="text-xs md:text-base">
                       {news.news_title} -{" "}
                       {new Date(news.publish_date).toLocaleDateString("en-US")}
                     </p>
@@ -84,7 +84,7 @@ const LatestNews = () => {
       )}
 
       <Link href={`${locale}/latest-news`}>
-        <button className="px-4 py-2.5 bg-brandDs text-white absolute bottom-0 right-0 flex items-center gap-4">
+        <button className="px-4 py-2.5 bg-brandDs text-white absolute bottom-0 right-0 flex items-center gap-4 text-xs md:text-base">
           {t("seeAll")} <FaAngleRight size={20} />
         </button>
       </Link>

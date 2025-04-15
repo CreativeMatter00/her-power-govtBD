@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { getAllStories,url } from "@/api/api";
+import { useCookies } from "next-client-cookies";
 
 const StoriesManagement = () => {
   const t = useTranslations("story");
@@ -21,6 +22,8 @@ const StoriesManagement = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
+     const cookies = useCookies();
+    const userID=cookies.get("user_pid");
   const { isLoading, data, error, refetch } = useQuery({
     queryKey: ["getAllStories", currentPage],
     queryFn: () => getAllStories(currentPage),
@@ -29,7 +32,7 @@ const StoriesManagement = () => {
   const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/delete-success-stories/${id}`
+        `${url}/api/admin/delete-success-stories/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

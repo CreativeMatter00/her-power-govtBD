@@ -14,11 +14,14 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useCookies } from "next-client-cookies";
 
 export const ChallengeManagement = () => {
   const t = useTranslations("challenges");
 
   const locale = useLocale();
+     const cookies = useCookies();
+      const userID=cookies.get("user_pid");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
@@ -30,7 +33,7 @@ export const ChallengeManagement = () => {
   const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/challanges/${id}`
+        `${url}/api/admin/challanges/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

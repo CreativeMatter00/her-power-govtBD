@@ -64,6 +64,13 @@ const ResourceLibraryNavbar = () => {
       >
         {t("Video Management")}
       </Link>}
+
+      {user_pid && <Link
+        href={`/${locale}/resource-library/documents/document-management`}
+        className="cursor-pointer hover:underline underline-offset-8 decoration-2"
+      >
+        {t("Document Management")}
+      </Link>}
     </ul>
   );
 };

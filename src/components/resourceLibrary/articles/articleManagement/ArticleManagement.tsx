@@ -4,7 +4,7 @@ import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import EventsPagination from "@/components/shared/EventsPagination";
-import { getAllArticles, url } from "@/api/api";
+import { articlesManagement, url } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
 import Link from "next/link";
 import axios from "axios";
@@ -14,22 +14,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useCookies } from "next-client-cookies";
 
 export const ArticleManagement = () => {
   const t = useTranslations("resources_Library");
   const locale = useLocale();
+  const cookies = useCookies();
+  const userID=cookies.get("user_pid");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const { isLoading, data, error, refetch } = useQuery({
-    queryKey: ["getAllArticles", currentPage],
-    queryFn: () => getAllArticles(currentPage),
+    queryKey: ["articlesManagement", currentPage],
+    queryFn: () => articlesManagement(currentPage,userID as string),
   });
 
   const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/delete-article/${id}`
+        `${url}/api/admin/delete-article/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

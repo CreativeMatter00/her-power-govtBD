@@ -15,13 +15,15 @@ interface DocumentCardProps {
   cardTitle: string;
   cardDate: string;
   documents: IDocProps[];
+  handleDelete: (cardId: string) => void;
 }
 
-const DocumentCard: React.FC<DocumentCardProps> = ({
+const DocumentCardManagement: React.FC<DocumentCardProps> = ({
   cardId,
   cardTitle,
   cardDate,
   documents,
+  handleDelete,
 }) => {
   const downloadAllDocuments = async () => {
 
@@ -81,10 +83,13 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
           >
             {t("Download")}
           </button>
+          <button onClick={() => handleDelete(cardId)}>
+            <MdDelete size={30} className="text-dangerPrimary" />
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default DocumentCard;
+export default DocumentCardManagement;

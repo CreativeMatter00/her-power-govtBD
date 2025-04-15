@@ -34,7 +34,7 @@ const Ad2 = () => {
         width={100}
         alt="advertisement"
       />
-      <div className="h-[530px] w-[200px] bg-black rounded-md relative">
+      <div className="h-[260px] w-full md:h-[530px] md:w-[200px] bg-black rounded-md relative">
         <video
           ref={videoRef}
           src={"/sp-11.mp4"}

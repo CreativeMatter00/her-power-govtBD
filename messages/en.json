@@ -6,12 +6,13 @@
     "okayGotIt": "Okay, Got It"
   },
   "Navbar": {
+    "Document Management":"Document Management",
     "Blogs": "Blogs",
     "Challenges": "Challenges",
     "Add Challenge": "Add Challenge",
     "Challenges Management": "Challenges Management",
     "Success Stories Management": "Success Stories Management",
-    "Add Success Stroy": "Add Success Stroy",
+    "Add Success Story": "Add Success Stroy",
     "Success Stories": "Success Stories",
     "home": "Home",
     "shopNow": "Shop Now",
@@ -35,6 +36,7 @@
     "Resource Library": "Resource Library"
   },
   "resources_Library": {
+    "videoManage":"Video Management",
     "No Data Available":"No Data Available",
     "Dashboard Overview": "Dashboard Overview",
     "Lesson Name": "Lesson Name",

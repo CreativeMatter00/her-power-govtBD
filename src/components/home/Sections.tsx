@@ -19,8 +19,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("shopNow")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("shopNow")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("shopDes")}
                   </p>
                 </div>
@@ -47,8 +47,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px] ">
-                  <p className="font-black text-3xl mb-3"> {t("course")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("course")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("courseDes")}
                   </p>
                 </div>
@@ -84,8 +84,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("career")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("career")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("cpDes")}
                   </p>
                 </div>
@@ -111,8 +111,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("events")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("events")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden transition-all duration-300">
                     {t("eventDes")}
                   </p>
                 </div>
@@ -138,11 +138,11 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3">
+                  <p className="font-black text-xl md:text-2xl mb-3">
                     {" "}
                     {t("Blogs")}{" "}
                   </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("blogDes")}
                   </p>
                 </div>
@@ -164,12 +164,12 @@ const Sections = () => {
           <div className="bg-[#A954CD] rounded-lg group h-[260px] cursor-pointer">
             <div className="py-3 px-6 flex gap-4">
               <div
-                className="grid gap-4"
+                className="grid gap-1 md:gap-4"
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("resource")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("resource")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("rlDes")}
                   </p>
                 </div>
@@ -195,8 +195,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("success-story")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("success-story")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("successDes")}
                   </p>
                 </div>
@@ -222,8 +222,8 @@ const Sections = () => {
                 style={{ gridTemplateColumns: "2fr 1fr" }}
               >
                 <div className="text-white flex flex-col justify-center h-[240px]">
-                  <p className="font-black text-3xl mb-3"> {t("challenges")} </p>
-                  <p className="text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
+                  <p className="font-black text-xl md:text-2xl mb-3"> {t("challenges")} </p>
+                  <p className="text-xs md:text-sm max-h-max md:h-10 group-hover:h-full overflow-hidden    transition-all duration-300">
                     {t("ChallengesDes")}
                   </p>
                 </div>

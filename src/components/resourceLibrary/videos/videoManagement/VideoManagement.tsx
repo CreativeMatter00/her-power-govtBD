@@ -14,24 +14,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getAllVideos, url } from "@/api/api";
+import { videoManagement, url } from "@/api/api";
+import { useCookies } from "next-client-cookies";
 
 export const VideoManagement = () => {
   const t = useTranslations("resources_Library");
-
+  const cookies = useCookies();
+  const userID=cookies.get("user_pid");
   const locale = useLocale();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const { isLoading, data, error, refetch } = useQuery({
-    queryKey: ["getAllVideos", currentPage],
-    queryFn: () => getAllVideos(currentPage),
+    queryKey: ["videoManagement", currentPage],
+    queryFn: () => videoManagement(currentPage,userID as string),
   });
 
   const handleDelete = async (id: string) => {
     try {
       const response = await axios.delete(
-        `${url}/api/admin/delete-video/${id}`
+        `${url}/api/admin/delete-video/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {
@@ -75,7 +77,7 @@ export const VideoManagement = () => {
         <div className="max-w-7xl container flex flex-col">
           {/* title */}
           <div className="mt-7 mb-2 flex flex-col ">
-            <h1 className="text-3xl text-brandDs font-normal">{t("videos")}</h1>
+            <h1 className="text-3xl text-brandDs font-normal">{t("videoManage")}</h1>
             <p className="w-full h-[2px] bg-brandLsPrimary my-6"></p>
           </div>
 

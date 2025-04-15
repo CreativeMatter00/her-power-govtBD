@@ -32,8 +32,8 @@ const Hero = () => {
 		<div>
 			{/* <div className="bg-[#763B90] h-[200px]"> */}
 			<div className="bg-[#763B90] h-[150px]">
-				<div className="container mx-auto px-12 text-center h-full flex items-center">
-					<p className="text-3xl md:text-6xl font-bold text-white text-center w-full">
+				<div className="container mx-auto md:px-12 text-center h-full flex items-center">
+					<p className="text-2xl md:text-6xl font-bold text-white text-center w-full">
 						{t("hero")}
 					</p>
 				</div>
