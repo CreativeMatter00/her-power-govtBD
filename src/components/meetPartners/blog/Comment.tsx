@@ -32,11 +32,11 @@ const Comment = ({ data, ownerId, refetch }: any) => {
     queryFn: () => getCommentById(data?.comment_pid, showReply),
   });
   console.log("PM",data);
-  // console.log("GGT",reply);
+  console.log("GGT",reply);
 
   useEffect(() => {
     if (reply) {
-      setReplyData(() => [...reply]);
+      setReplyData(() => [...reply.data]);
     }
   }, [reply]);
 
@@ -134,6 +134,8 @@ const Comment = ({ data, ownerId, refetch }: any) => {
       const response = await axios.delete(
         `${url}/api/admin/delete-comment/${data?.comment_pid}`
       );
+      refetch();
+      replyRefetch();
       if (response?.data?.meta?.status === true) {
         toast.success("Comment Deleted Successfully!", {
           position: "bottom-left",
@@ -145,7 +147,6 @@ const Comment = ({ data, ownerId, refetch }: any) => {
           progress: undefined,
           theme: "light",
         });
-        refetch();
       } else {
         toast.error("Delete failed! Please try again.", {
           position: "bottom-left",
@@ -178,10 +179,10 @@ const Comment = ({ data, ownerId, refetch }: any) => {
   const t = useTranslations("Blog");
   return (
     <div className="flex items-start gap-1 my-1 p-2 rounded-md relative">
-      {data?.total_reply > 0 && (
+      {reply?.total_comments> 0 && (
         <div className=" border border-greyPrimary absolute top-7 bottom-5 left-3.5" />
       )}
-      {data?.total_reply > 0 && (
+      {reply?.total_comments> 0 && (
         <div className=" border border-greyPrimary absolute bottom-5 left-3.5 right-[92%] md:right-[96%] lg:right-[97%]" />
       )}
       <Image
@@ -274,11 +275,11 @@ const Comment = ({ data, ownerId, refetch }: any) => {
                     {t("Reply")}
                   </button>
                 )}
-                {data?.total_reply > 0 && <div> | </div>}
-                {data?.total_reply > 0 && (
+                {reply?.total_comments> 0 && <div>  | </div>}
+                {reply?.total_comments> 0 && (
                   <p>
-                    {data?.total_reply}{" "}
-                    {data?.total_reply === 1 ? t("reply") : t("replies")}
+                    {reply?.total_comments}{" "}
+                    {reply?.total_comments=== 1 ? t("reply") : t("replies")}
                   </p>
                 )}
               </div>
@@ -306,19 +307,19 @@ const Comment = ({ data, ownerId, refetch }: any) => {
           ))}
         </div>
         <div>
-          {data?.total_reply - showReply > 0 ? (
+          {reply?.total_comments- showReply > 0 ? (
             <button
-              onClick={() => newReplies(data?.total_reply - showReply)}
+              onClick={() => newReplies(reply?.total_comments- showReply)}
               className="cursor-pointer py-1 px-2 hover:bg-brandLsSecondary rounded-md text-sm"
             >
               {t("See1")}{" "}
-              {data?.total_reply - showReply > 2
+              {reply?.total_comments- showReply > 2
                 ? "2"
-                : data?.total_reply - showReply}{" "}
-              {t("more")} {data?.total_reply === 1 ? t("reply") : t("replies")}
+                : reply?.total_comments- showReply}{" "}
+              {t("more")} {reply?.total_comments=== 1 ? t("reply") : t("replies")}
             </button>
           ) : (
-            data?.total_reply > 0 && (
+            reply?.total_comments> 0 && (
               <button
                 onClick={() => setShowReply(0)}
                 className="cursor-pointer py-1 px-2 hover:bg-brandLsSecondary rounded-md text-sm"
