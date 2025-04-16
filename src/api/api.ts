@@ -1,7 +1,10 @@
 import axios from "axios";
-import { baseUrl,adminMail } from "../../config/config";
-export const url =baseUrl();
-export const adminEmail=adminMail();
+import { baseUrl, adminMail } from "../../config/config";
+export const url = baseUrl();
+export const adminEmail = adminMail();
+
+
+
 
 // env
 // export const url = process.env.NEXT_PUBLIC_API_URL;
@@ -98,7 +101,7 @@ export const getProductDetails = async (id: string) => {
 };
 
 // ? PRODUCT DETAIL CHAT
-export const getProductDetailsChat = async (id: string,page:any) => {
+export const getProductDetailsChat = async (id: string, page: any) => {
   try {
     const response = await axios.get(`${url}/api/admin/chat-with-seller/${id}?page=${page}`);
     return response?.data;
@@ -344,7 +347,7 @@ export const getSellerAllProducts = async (id: any) => {
 
 // ? Get seller chats
 
-export const getSellerChat = async (id: any,page: string | number,queryNumber:any) => {
+export const getSellerChat = async (id: any, page: string | number, queryNumber: any) => {
   try {
     const response = await axios.get(
       `${url}/api/admin/get-chats-for-seller/${id}/${queryNumber}?page=${page}`
@@ -834,7 +837,7 @@ export const getCourseLessons = async (id: string) => {
     console.log(error);
   }
 };
-export const getCourseLessonById = async (id: string|null) => {
+export const getCourseLessonById = async (id: string | null) => {
   try {
     const response = await axios.get(
       `${url}/api/admin/course-lesson/${id}`
@@ -844,7 +847,7 @@ export const getCourseLessonById = async (id: string|null) => {
     console.log(error);
   }
 };
-export const getCourseDetailsById = async (id: string|null) => {
+export const getCourseDetailsById = async (id: string | null) => {
   try {
     const response = await axios.get(
       `${url}/api/frontend/get-course-details/${id}`
@@ -1186,7 +1189,7 @@ export const getAllBlogs = async (page: number) => {
   }
 };
 
-export const blogsManagement = async (page: number,userID:string) => {
+export const blogsManagement = async (page: number, userID: string) => {
   try {
     const response = await axios.get(
       `${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`
@@ -1232,7 +1235,7 @@ export const getAllDocuments = async (page: number) => {
     console.log(error);
   }
 };
-export const documentsManagement = async (page: number,userID:string) => {
+export const documentsManagement = async (page: number, userID: string) => {
   try {
     const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.documents;
@@ -1258,7 +1261,7 @@ export const getAllVideos = async (page: number) => {
   }
 };
 
-export const videoManagement = async (page: number,userID:string) => {
+export const videoManagement = async (page: number, userID: string) => {
   try {
     const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.videos;
@@ -1294,7 +1297,7 @@ export const getAllArticles = async (page: number) => {
   }
 };
 
-export const articlesManagement = async (page: number,userID:string) => {
+export const articlesManagement = async (page: number, userID: string) => {
   try {
     const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.articles;
@@ -1331,7 +1334,7 @@ export const getHomeStories = async () => {
   }
 };
 
-export const getAllStories= async (page: number) => {
+export const getAllStories = async (page: number) => {
   try {
     const response = await axios.get(`${url}/api/admin/success-stories?page=${page}`);
     return response.data;
