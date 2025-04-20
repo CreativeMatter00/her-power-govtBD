@@ -10,31 +10,30 @@ import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/shared/input/Input";
 import SelectField from "@/components/shared/input/SelectField";
 import { useTranslations } from "next-intl";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 
-
 interface FormValues {
   course_title: string;
   course_type: string;
   description?: string;
-  selectedBranches?:Option[];
+  selectedBranches?: Option[];
   course_price: number;
 }
 
 const EditCourse = () => {
-  const t=useTranslations("course")
+  const t = useTranslations("course");
   const [selectThumbnailImage, setSelectedThumbnailImage] =
     useState<File | null>(null);
   const [selectBannerImage, setSelectedBannerImage] = useState<File | null>(
     null
   );
   const cookies = useCookies();
-  const providerPid = cookies.get('providor_pid');
+  const providerPid = cookies.get("providor_pid");
   const [description, setCourseDescription] = useState<string>("");
   const param = useParams();
   const id = param.id as string;
@@ -42,14 +41,18 @@ const EditCourse = () => {
   const redirect = searchParams.get("redirect");
   const router = useRouter();
   // =========== DATA FETCHING =========
-  const { isLoading, data: courseDetails, error } = useQuery({
+  const {
+    isLoading,
+    data: courseDetails,
+    error,
+  } = useQuery({
     queryKey: ["getCourseDetail", id],
     queryFn: () => getCourseDetail(id),
   });
 
-const {
-    isLoading:courseBranchesLoading,
-    error:courseBranchesError,
+  const {
+    isLoading: courseBranchesLoading,
+    error: courseBranchesError,
     data: courseBranches,
   } = useQuery({
     queryKey: ["courseBranches"],
@@ -62,21 +65,41 @@ const {
       value: branch.branch_pid,
     })) || [];
 
-    const schema = Yup.object().shape({
-      course_type: Yup.string().required('Course type is required'),
-      course_title: Yup.string().required('Course title is required'),
-      selectedBranches: Yup.array().when("course_type", {
-        is: (type: string) => type === 'Physical' || type === 'Blended',
-        then: () => Yup.array().min(1, "At least one branch is required for non-online courses"),
-        otherwise: (schema) => schema.nullable().notRequired(),
-      }),
-      description: Yup.string().required('Course description is required'),
-      thumbnail: Yup.mixed().required('Thumbnail is required'),
-      image: Yup.mixed().required('Banner image is required'),
-      course_price: Yup.number().required('Course price is required'),
-    });
+  const allowedBranchPids = courseDetails?.data?.branches || [];
+  const selectedBranches =
+    courseBranches?.data
+      ?.filter((branch: any) => allowedBranchPids.includes(branch.branch_pid))
+      .map((branch: any) => ({
+        label: branch.branch_name || `Branch ${branch.branch_id}`,
+        value: branch.branch_pid,
+      })) || [];
 
-  const { control, handleSubmit, register, reset, formState: { errors }, watch } = useForm({
+  const schema = Yup.object().shape({
+    course_type: Yup.string().required("Course type is required"),
+    course_title: Yup.string().required("Course title is required"),
+    selectedBranches: Yup.array().when("course_type", {
+      is: (type: string) => type === "Physical" || type === "Blended",
+      then: () =>
+        Yup.array().min(
+          1,
+          "At least one branch is required for non-online courses"
+        ),
+      otherwise: (schema) => schema.nullable().notRequired(),
+    }),
+    description: Yup.string().required("Course description is required"),
+    thumbnail: Yup.mixed().required("Thumbnail is required"),
+    image: Yup.mixed().required("Banner image is required"),
+    course_price: Yup.number().required("Course price is required"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm({
     defaultValues: {},
     resolver: yupResolver(schema),
   });
@@ -90,39 +113,42 @@ const {
         course_price: courseDetails?.data?.course_price,
         thumbnail: courseDetails?.data?.thumbnail,
         image: courseDetails?.data?.banner,
-        selectedBranches: courseDetails?.data?.branch_id ||[]
-      }
+        selectedBranches: selectedBranches || [],
+      };
       reset(filterData);
     }
-  }, [courseDetails, reset])
-
+  }, [courseDetails, reset]);
 
   const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    const bId=data?.selectedBranches?.map((branch:any) => branch.value);
-    formData.append("category_pid", "C241000000001");
-    formData.append("providor_pid", providerPid as string);
-    formData.append("course_title", data.course_title);
-    formData.append("course_type", data.course_type);
-    formData.append("course_price", String(data.course_price));
-    formData.append("description", description);
-    if(bId){
-      formData.append("branch_id", bId);
-    }
+    const bId = data?.selectedBranches?.map((branch: any) => branch.value);
+
+    const formData: any = {
+      category_pid: "C241000000001",
+      providor_pid: providerPid as string,
+      course_title: data.course_title,
+      course_type: data.course_type,
+      course_price: Number(data.course_price),
+      description: description,
+      branch_id: bId,
+    };
+    
     if (selectThumbnailImage) {
-      formData.append("thumbnail", selectThumbnailImage);
+      formData.thumbnail = selectThumbnailImage;
     }
-
+    
     if (selectBannerImage) {
-      formData.append("image", selectBannerImage);
+      formData.image = selectBannerImage;
     }
-
     try {
-      const response = await axios.post(`${url}/api/admin/course/${id}?_method=put`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${url}/api/admin/course/${id}?_method=put`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       // console.log(response);
 
       if (response?.data?.meta?.status === true) {
@@ -137,11 +163,10 @@ const {
           theme: "light",
         });
         reset();
-        setSelectedThumbnailImage(null); 
+        setSelectedThumbnailImage(null);
         setSelectedBannerImage(null);
-        router.push(redirect as string)
-      }
-      else {
+        router.push(redirect as string);
+      } else {
         toast.error("Form submit failed!", {
           position: "bottom-left",
           autoClose: 3000,
@@ -166,10 +191,9 @@ const {
     }
   };
 
-
   const onError = (err: any) => {
-    console.log(err)
-  }
+    console.log(err);
+  };
 
   return (
     <section className="bg-brandLsSecondary">
@@ -196,49 +220,49 @@ const {
                 name="course_type"
                 control={control}
                 options={[
-                  { value: 'Online', label: t(`Online Course`) },
-                  { value: 'Physical', label: t('Physical Course') },
-                  { value: 'Blended', label: t('Blended Course') },
+                  { value: "Online", label: t(`Online Course`) },
+                  { value: "Physical", label: t("Physical Course") },
+                  { value: "Blended", label: t("Blended Course") },
                 ]}
-                rules={{ required: 'Course category is required' }}
+                rules={{ required: "Course category is required" }}
                 errorMessage={errors.course_type?.message}
                 placeholder={t("Select a category")}
               />
-              </div>
-              
-<div>
-  {courseCategory !== "Online" && courseCategory !== undefined && (
-    <div className="flex w-full flex-col gap-2">
-      <label className="font-normal text-brandDs">
-        {t("Select Branches for the course")}{" "}
-        <span className="text-red-500">*</span>
-      </label>
-      <Controller
-        name="selectedBranches"
-        control={control}
-        rules={{ required: "Please select at least one branch" }}
-        render={({ field }) => (
-          <MultipleSelector
-            value={field.value || []}
-            onChange={(val) => field.onChange(val)}
-            defaultOptions={filteredBranches}
-            placeholder={t("Select branches")}
-            emptyIndicator={
-              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                {t("no results found")}
-              </p>
-            }
-          />
-        )}
-      />
-      {errors.selectedBranches && (
-        <p className="text-red-600">
-          {errors.selectedBranches.message}
-        </p>
-      )}
-    </div>
-  )}
-</div>
+            </div>
+
+            <div>
+              {courseCategory !== "Online" && courseCategory !== undefined && (
+                <div className="flex w-full flex-col gap-2">
+                  <label className="font-normal text-brandDs">
+                    {t("Select Branches for the course")}{" "}
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <Controller
+                    name="selectedBranches"
+                    control={control}
+                    rules={{ required: "Please select at least one branch" }}
+                    render={({ field }) => (
+                      <MultipleSelector
+                        value={field.value || []}
+                        onChange={(val) => field.onChange(val)}
+                        defaultOptions={filteredBranches}
+                        placeholder={t("Select branches")}
+                        emptyIndicator={
+                          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                            {t("no results found")}
+                          </p>
+                        }
+                      />
+                    )}
+                  />
+                  {errors.selectedBranches && (
+                    <p className="text-red-600">
+                      {errors.selectedBranches.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
               <TextInput
                 inputName="description"
@@ -291,7 +315,3 @@ const {
 };
 
 export default EditCourse;
-
-
-
-

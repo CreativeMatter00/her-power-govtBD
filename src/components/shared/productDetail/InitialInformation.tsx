@@ -30,7 +30,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { calculateAge } from "../../../utils/calculateAge";
 import { useCookies } from "next-client-cookies";
 import { addToCart } from "@/redux/Reducer/CartSlice";
-import { handleCartUpdate } from "@/redux/Reducer/MainSlice";
+import { handleCartUpdate, handleWishlistUpdate } from "@/redux/Reducer/MainSlice";
 import { addToWishList } from "@/redux/Reducer/WishListSlice";
 
 // ============= ALL FETCHED DATA DEFINITION ================
@@ -121,7 +121,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
     const wishList = localStorage.getItem("wishlist")
       ? JSON.parse(localStorage.getItem("wishlist") as string)
       : { products: [] };
-
+    wishList.products=wishList.products||[]
     const existingProductIndex = wishList.products.findIndex(
       (p: { id: string; varientId: string }) =>
         p.id === product?.id &&
@@ -134,8 +134,8 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
       wishList.products.push(product);
     }
     localStorage.setItem("wishlist", JSON.stringify(wishList));
-    dispatch(addToWishList(product));
-
+    // dispatch(addToWishList(product));
+    dispatch(handleWishlistUpdate());
     try {
       const formData = new FormData();
       formData.append("customer_pid", userData.customer_pid);

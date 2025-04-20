@@ -197,12 +197,18 @@ export default function AddToNewLesson() {
                   required={true}
                 />
                 <DialogFooter className="flex gap-2">
+                {
+                    uploadProgress>0 &&  
                   <Button type="button" onClick={handleCancelUpload} className="bg-red-500 px-6 text-white rounded-full">
                     {t("Cancel")}
                   </Button>
+                    }
+                  {
+                    uploadProgress===0 &&
                   <Button type="submit" className="bg-[#2D0C3E] px-6 text-white rounded-full">
                     {t("Upload")}
                   </Button>
+                  }
                 </DialogFooter>
               </form>
             </div>

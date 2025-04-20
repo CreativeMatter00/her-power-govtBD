@@ -28,7 +28,7 @@ const ShopNavbar = () => {
   const pathName = usePathname().toString();
   const cart = useSelector((state: any) => state.Initial.cartUpdate);
   const isSeller = cookies.get("isSeller");
-  const wishlist = useSelector((state: any) => state.wishlist);
+  const wishlist = useSelector((state: any) => state.Initial.wishlistUpdate);
   const [storedCartData, setStoredCartData] = useState<number>(0);
   const [storedWishListData, setStoredWishListData] = useState<number>(0);
 
@@ -42,7 +42,12 @@ const ShopNavbar = () => {
   };
 
   const getWishListLength = () => {
-    setStoredWishListData(wishlist?.products?.length);
+    const numberOfProduct = JSON.parse(
+      localStorage.getItem("wishlist") as string
+    ) || {
+      products: [],
+    };
+    setStoredWishListData(numberOfProduct?.products?.length);
   };
 
   useEffect(() => {

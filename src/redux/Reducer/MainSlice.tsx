@@ -4,14 +4,16 @@ interface MainState {
   search: boolean;
   add: boolean;
   val: any;
-  cartUpdate: boolean; // Added for cart update functionality. This flag is used to indicate if cart data needs to be updated.
+  cartUpdate: boolean;
+  wishlistUpdate:boolean;
 }
 
 const initialState: MainState = {
   search: false,
   add: false,
   val: {},
-  cartUpdate:false
+  cartUpdate:false,
+  wishlistUpdate:false,
 };
 
 export const MainSlice = createSlice({
@@ -31,11 +33,13 @@ export const MainSlice = createSlice({
       state.add = false;
     },
     rowValue: (state, action) => {
-      state.val = action.payload; // Updating Redux state with the rowData
+      state.val = action.payload;
     },
     handleCartUpdate: (state) => {
-      // console.log("slice called")
-      state.cartUpdate = !state.cartUpdate; // Flag to indicate cart data needs to be updated.
+      state.cartUpdate = !state.cartUpdate;
+    },
+    handleWishlistUpdate: (state) => {
+      state.wishlistUpdate = !state.wishlistUpdate; 
     }
   },
 });
@@ -46,7 +50,8 @@ export const {
   handleAddModalOpen,
   handleAddModalClose,
   rowValue,
-  handleCartUpdate
+  handleCartUpdate,
+  handleWishlistUpdate
 } = MainSlice.actions;
 
 export default MainSlice.reducer;

@@ -48,6 +48,7 @@ const TextInput: React.FC<IDescription> = ({
           rules={{ required: "Description is required" }}
           render={({ field }) => (
             <ReactQuill
+            className="text-wrap break-all"
               theme="snow"
               value={field.value || ""}
               onChange={(content) => {

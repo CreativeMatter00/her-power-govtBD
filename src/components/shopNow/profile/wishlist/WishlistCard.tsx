@@ -1,12 +1,15 @@
+"use client";
 import { url } from "@/api/api";
 import StarRating from "@/components/shared/RenderStars";
 import { addToCart } from "@/redux/Reducer/CartSlice";
+import { handleWishlistUpdate } from "@/redux/Reducer/MainSlice";
 import { removeFromWishList } from "@/redux/Reducer/WishListSlice";
 import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -24,21 +27,22 @@ type IWishlistCard = {
 
 const WishlistCard = (props: IWishlistCard) => {
   const locale = useLocale();
-const cookies = useCookies();
-	const customerId = cookies.get("customer_pid") || ""
+  const cookies = useCookies();
+  const customerId = cookies.get("customer_pid") || "";
   // ? Getting Customer ID
   // const userData = JSON.parse(localStorage.getItem("loginDetails") || "{}");
   // const customerId = userData.customer_pid;
+  const [storedWishlistData, setStoredWishlistData] = useState<any>(
+    JSON.parse(localStorage.getItem("wishlist") as string) || { products: [] }
+  );
 
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleDelete = async () => {
-    dispatch(removeFromWishList(props.id));
     try {
       const response = await axios.delete(
         `${url}/api/admin/wishlist/${customerId},${props.id}`
       );
-      // console.log("Response:", response.data);
       toast.success("Product removed form wishlist successfully.", {
         position: "bottom-left",
         autoClose: 3001,
@@ -50,6 +54,16 @@ const dispatch = useDispatch();
         theme: "light",
       });
       props.refetch();
+      const updatedCart = {
+        ...storedWishlistData,
+        products: storedWishlistData.products.filter(
+          (product: any) =>
+            !(product.id === props.id && product?.variantId === props.variantId)
+        ),
+      };
+      setStoredWishlistData(updatedCart);
+      localStorage.setItem("wishlist", JSON.stringify(updatedCart));
+      dispatch(handleWishlistUpdate());
     } catch (error) {
       toast.error("Something went wrong", {
         position: "bottom-left",
