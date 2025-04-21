@@ -23,6 +23,7 @@ interface VariantI {
   variant: Variant;
   refetch: Function;
   index: number;
+  totalVariants: number;
 }
 
 interface EditProductVariantProps {
@@ -30,7 +31,7 @@ interface EditProductVariantProps {
   refetch: Function;
 }
 
-const VariantForm = ({ variant, refetch, index }: VariantI) => {
+const VariantForm = ({ variant, refetch, index, totalVariants }: VariantI) => {
   const router = useRouter();
   const locale = useLocale();
   const {
@@ -39,7 +40,7 @@ const VariantForm = ({ variant, refetch, index }: VariantI) => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(VariantSchema), 
+    resolver: yupResolver(VariantSchema),
     defaultValues: {
       varient_name: variant.varient_name,
     },
@@ -58,7 +59,8 @@ const VariantForm = ({ variant, refetch, index }: VariantI) => {
       formData.append("mrp", data?.mrp);
     }
     if (data?.mrp_primary && data?.mrp) {
-      const mrpPercentageDifference = ((data.mrp - data.mrp_primary) / data.mrp_primary) * 100;
+      const mrpPercentageDifference =
+        ((data.mrp - data.mrp_primary) / data.mrp_primary) * 100;
       const roundedPercentage = Math.round(mrpPercentageDifference).toString();
       formData.append("disc_pct", roundedPercentage);
     }
@@ -84,9 +86,9 @@ const VariantForm = ({ variant, refetch, index }: VariantI) => {
         });
         refetch();
         reset(); // Reset form after successful submission
-        setTimeout(()=>{
+        setTimeout(() => {
           router.push(`/${locale}/shop-now/seller/dashboard/all-product`);
-        },3000)
+        }, 3000);
       } else {
         toast.error("Failed to updating variant. Please try again.", {
           position: "bottom-left",
@@ -118,10 +120,10 @@ const VariantForm = ({ variant, refetch, index }: VariantI) => {
           autoClose: 3000,
         });
         refetch();
-        reset(); 
-        setTimeout(()=>{
+        reset();
+        setTimeout(() => {
           router.push(`/${locale}/shop-now/seller/dashboard/all-product`);
-        },3000)
+        }, 3000);
       } else {
         toast.error("Failed to updating product. Please try again.", {
           position: "bottom-left",
@@ -158,13 +160,15 @@ const VariantForm = ({ variant, refetch, index }: VariantI) => {
       <div className="flex justify-end mt-6">
         <div className="flex gap-4">
           {/* Delete Button */}
-          <button
-            type="button"
-            className="border border-red-500 hover:bg-red-600 py-4 px-10 rounded-full text-white font-medium bg-red-500"
-            onClick={handleDeleteVariant}
-          >
-            {t("Delete")}
-          </button>
+          {totalVariants > 1 && (
+            <button
+              type="button"
+              className="border border-red-500 hover:bg-red-600 py-4 px-10 rounded-full text-white font-medium bg-red-500"
+              onClick={handleDeleteVariant}
+            >
+              {t("Delete")}
+            </button>
+          )}
           {/* Submit Button */}
           <button
             type="submit"
@@ -194,6 +198,7 @@ const EditProductVariant = ({ variants, refetch }: EditProductVariantProps) => {
           variant={variant}
           refetch={refetch}
           index={index}
+          totalVariants={variants.length}
         />
       ))}
     </div>

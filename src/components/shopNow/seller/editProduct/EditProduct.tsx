@@ -1,16 +1,3 @@
-// "use client";
-
-// import { useParams } from "next/navigation";
-// import React from "react";
-
-// const EditProduct = () => {
-//   const params = useParams();
-//   console.log(params);
-//   return <div>{params?.id}</div>;
-// };
-
-// export default EditProduct;
-
 "use client";
 import { useParams } from "next/navigation";
 

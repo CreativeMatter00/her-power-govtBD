@@ -715,6 +715,19 @@ export const getEventsByOrganizer = async (id: string) => {
   }
 };
 
+// Overview
+
+export const getOverViewData = async (id: string) => {
+  try {
+    const response = await axios.get(
+      `${url}/api/admin/registration-overview/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // ? GET FIRST 8 ALL EVENTS FOR EVENT HOME PAGE
 
 export const getLimitedAllEvents = async () => {

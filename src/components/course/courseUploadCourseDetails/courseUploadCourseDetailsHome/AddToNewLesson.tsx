@@ -1,9 +1,15 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import { FaVideo } from "react-icons/fa";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import InputField from "@/components/shared/input/InputField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -49,35 +55,39 @@ export default function AddToNewLesson() {
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: async (data: any) => {
-      abortControllerRef.current = new AbortController(); 
+      abortControllerRef.current = new AbortController();
       try {
-        const response = await axios.post(`${url}/api/admin/course-lessons`, data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / (progressEvent.total || 1)
-            );
-            setUploadProgress(percentCompleted);
-          },
-          signal: abortControllerRef.current.signal,
-        });
+        const response = await axios.post(
+          `${url}/api/admin/course-lessons`,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / (progressEvent.total || 1)
+              );
+              setUploadProgress(percentCompleted);
+            },
+            signal: abortControllerRef.current.signal,
+          }
+        );
         if (response.status === 201) {
           return response.data;
         } else {
-          throw new Error('Upload failed');
+          throw new Error("Upload failed");
         }
-      } catch (error: any) {  
+      } catch (error: any) {
         throw new Error(error.message);
       }
     },
     onSuccess: () => {
-      toast.success("New Lesson Added...")
-      queryClient.invalidateQueries(['CourseLessons'] as any);
+      toast.success("New Lesson Added...");
+      queryClient.invalidateQueries(["CourseLessons"] as any);
     },
     onError: (error: Error) => {
-      toast.error("Upload failed...")
+      toast.error("Upload failed...");
       console.error("Error adding lesson:", error.message);
     },
     onMutate: () => {
@@ -97,7 +107,7 @@ export default function AddToNewLesson() {
 
     try {
       await mutate(formData);
-      toast.success("New Lesson Added...")
+      toast.success("New Lesson Added...");
     } catch (error) {
       console.log("error", error);
     }
@@ -151,14 +161,17 @@ export default function AddToNewLesson() {
 
   const handleClose = () => {
     setOpen(false);
-    resetForm(); 
+    resetForm();
   };
 
   return (
     <div>
       <ToastContainer />
       <div className="flex justify-end mt-8">
-        <Button onClick={handleOpen} className="bg-[#2D0C3E] px-6 text-white rounded-full flex items-center gap-2">
+        <Button
+          onClick={handleOpen}
+          className="bg-[#2D0C3E] px-6 text-white rounded-full flex items-center gap-2"
+        >
           <FaVideo className="text-xl" /> {t("Add New Course Video")}
         </Button>
       </div>
@@ -169,7 +182,10 @@ export default function AddToNewLesson() {
               <DialogTitle>{t("Add New Course Video")}</DialogTitle>
             </DialogHeader>
             <div className="">
-              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 py-5">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-6 py-5"
+              >
                 <InputField
                   type="text"
                   labelName={t("Lesson Name")}
@@ -197,18 +213,23 @@ export default function AddToNewLesson() {
                   required={true}
                 />
                 <DialogFooter className="flex gap-2">
-                {
-                    uploadProgress>0 &&  
-                  <Button type="button" onClick={handleCancelUpload} className="bg-red-500 px-6 text-white rounded-full">
-                    {t("Cancel")}
-                  </Button>
-                    }
-                  {
-                    uploadProgress===0 &&
-                  <Button type="submit" className="bg-[#2D0C3E] px-6 text-white rounded-full">
-                    {t("Upload")}
-                  </Button>
-                  }
+                  {uploadProgress > 0 && (
+                    <Button
+                      type="button"
+                      onClick={handleCancelUpload}
+                      className="bg-red-500 px-6 text-white rounded-full"
+                    >
+                      {t("Cancel")}
+                    </Button>
+                  )}
+                  {uploadProgress === 0 && (
+                    <Button
+                      type="submit"
+                      className="bg-[#2D0C3E] px-6 text-white rounded-full"
+                    >
+                      {t("Upload")}
+                    </Button>
+                  )}
                 </DialogFooter>
               </form>
             </div>

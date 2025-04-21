@@ -20,6 +20,8 @@ const EditProductNew = () => {
     queryKey: ["productDetails", params.id],
     queryFn: () => getProductDetails(productId as string),
   });
+  // console.log("Check",productDetailData);
+  
   if (isLoading)
     return (
       <div className="w-screen h-screen flex justify-center items-center">

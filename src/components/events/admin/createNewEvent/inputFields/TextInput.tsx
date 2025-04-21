@@ -42,7 +42,7 @@ const TextInput: React.FC<IDescription> = ({
           {labelName} {required && <span className="text-red-500">*</span>}
         </label>
       </div>
-      <div className="w-full break-words inline-block">
+      <div className="w-full break-all inline-block">
         <Controller
           name={inputName}
           control={control}

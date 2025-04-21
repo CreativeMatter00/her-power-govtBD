@@ -5,39 +5,18 @@ import EventTable from "./eventTable/EventTable";
 import Pagination from "./pagination/Pagination";
 import RegistrationOverview from "./registrationOverview/RegistrationOverview";
 import SearchEvent from "./searchEvent/SearchEvent";
-import { getEventsByOrganizer } from "@/api/api";
+import { getEventsByOrganizer, getOverViewData } from "@/api/api";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { useCookies } from "next-client-cookies";
 import { useState } from "react";
-
-// ================================= TYPE DEFINITION ===========================
-type TOverviewInfo = {
-  title: string;
-  total: number;
-};
-
-// =========================== STATIC DATA ==================
-const overviews: TOverviewInfo[] = [
-  {
-    title: "Total Registrations",
-    total: 334,
-  },
-  {
-    title: "Registrations Today",
-    total: 27,
-  },
-  {
-    title: "Scheduled Events",
-    total: 7,
-  },
-];
 
 // ================================ COMPONENT ============================
 
 const RegistrationManagement = () => {
   const cookies = useCookies();
   const organizerId = cookies.get("isOrganizer_pid") || "";
-  const [searchEvents, setSearchEvents] = useState(null); // Store filtered events
+  const userId=cookies.get("user_pid")
+  const [searchEvents, setSearchEvents] = useState(null);
 
   const {
     isLoading,
@@ -48,6 +27,15 @@ const RegistrationManagement = () => {
     queryKey: ["eventsByOrganizer"],
     queryFn: () => getEventsByOrganizer(organizerId),
   });
+  const {
+    isLoading:overViewLoading,
+    error:overViewError,
+    data: overViewData,
+    refetch:overViewRefetch,
+  } = useQuery({
+    queryKey: ["overViewData"],
+    queryFn: () => getOverViewData(userId as string),
+  });
 
   if (isLoading)
     return (
@@ -55,14 +43,6 @@ const RegistrationManagement = () => {
         <ScaleLoader color="#421957" height={70} radius={8} width={10} />
       </div>
     );
-
-  // if (error)
-  //   return (
-  //     <div className="text-center text-xl font-md py-8">
-  //       Something went wrong. Please reload
-  //     </div>
-  //   );
-
   const handleSearch = (searchTerm: any) => {
     // console.log("search term", searchTerm);
     if (!searchTerm) {
@@ -79,7 +59,7 @@ const RegistrationManagement = () => {
   return (
     <main className="w-full">
       <h1 className="text-3xl text-brandPrimary">Registration Management</h1>
-      <RegistrationOverview overviews={overviews} />
+      <RegistrationOverview overviews={overViewData?.data} />
       <SearchEvent onSearch={handleSearch} /> {/* Pass onSearch handler */}
       <DownloadOption />
       <EventTable allEvents={searchEvents || eventsByOrganizer?.data} />{" "}

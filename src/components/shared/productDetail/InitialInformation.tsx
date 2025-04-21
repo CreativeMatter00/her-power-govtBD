@@ -30,7 +30,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { calculateAge } from "../../../utils/calculateAge";
 import { useCookies } from "next-client-cookies";
 import { addToCart } from "@/redux/Reducer/CartSlice";
-import { handleCartUpdate, handleWishlistUpdate } from "@/redux/Reducer/MainSlice";
+import {
+  handleCartUpdate,
+  handleWishlistUpdate,
+} from "@/redux/Reducer/MainSlice";
 import { addToWishList } from "@/redux/Reducer/WishListSlice";
 
 // ============= ALL FETCHED DATA DEFINITION ================
@@ -118,24 +121,6 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
       // customer_pid: userData.customer_pid,
     };
 
-    const wishList = localStorage.getItem("wishlist")
-      ? JSON.parse(localStorage.getItem("wishlist") as string)
-      : { products: [] };
-    wishList.products=wishList.products||[]
-    const existingProductIndex = wishList.products.findIndex(
-      (p: { id: string; varientId: string }) =>
-        p.id === product?.id &&
-        p.varientId === product.variantId
-    );
-
-    if (existingProductIndex >= 0) {
-      wishList.products[existingProductIndex].quantity += product?.quantity;
-    } else {
-      wishList.products.push(product);
-    }
-    localStorage.setItem("wishlist", JSON.stringify(wishList));
-    // dispatch(addToWishList(product));
-    dispatch(handleWishlistUpdate());
     try {
       const formData = new FormData();
       formData.append("customer_pid", userData.customer_pid);
@@ -143,6 +128,23 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
       formData.append("varient_pid", product.variantId);
       const response = await axios.post(`${url}/api/admin/wishlist`, formData);
       if (response?.data?.meta?.http_status === 201) {
+        const wishList = localStorage.getItem("wishlist")
+          ? JSON.parse(localStorage.getItem("wishlist") as string)
+          : { products: [] };
+        wishList.products = wishList.products || [];
+        const existingProductIndex = wishList.products.findIndex(
+          (p: { id: string; varientId: string }) =>
+            p.id === product?.id && p.varientId === product.variantId
+        );
+
+        if (existingProductIndex >= 0) {
+          wishList.products[existingProductIndex].quantity += product?.quantity;
+        } else {
+          wishList.products.push(product);
+        }
+        localStorage.setItem("wishlist", JSON.stringify(wishList));
+        // dispatch(addToWishList(product));
+        dispatch(handleWishlistUpdate());
         toast.success("Product added to wishlist", {
           position: "bottom-left",
           autoClose: 3000,
@@ -181,8 +183,6 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
       }
     }
   };
-
-
 
   const handleAddToCart = () => {
     const product = {
@@ -429,7 +429,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
               </div>
             </div>
 
-            {isSeller!=="true" && (
+            {isSeller !== "true" && (
               <div className="py-4 mb-4">
                 <div className="text-brandDs">
                   <p className="text-sm mb-2"> {t("quantity")} </p>
@@ -459,7 +459,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
               </div>
             )}
 
-            {isSeller!=="true" && (
+            {isSeller !== "true" && (
               <div className="flex flex-col md:flex-row items-center gap-4">
                 <button
                   type="submit"

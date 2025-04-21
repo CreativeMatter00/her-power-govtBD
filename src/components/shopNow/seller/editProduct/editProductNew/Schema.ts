@@ -26,20 +26,11 @@ export const VariantSchema = Yup.object().shape({
     .positive("New price must be greater than 0")
     .max(999999, "New price can't exceed 999,999"),
 
-  // disc_pct: Yup.number()
-  //   .required("Discount percentage is required") // Explicitly marked as required
-  //   .transform((value, originalValue) =>
-  //     String(originalValue).trim() === "" ? undefined : value
-  //   ) // Treat empty string as undefined
-  //   .typeError("Discount percentage must be a number")
-  //   .min(0, "Discount percentage can't be negative")
-  //   .max(100, "Discount percentage can't exceed 100%"),
-
   stock_available: Yup.number()
     .required("Stock is required")
     .transform((value, originalValue) =>
       String(originalValue).trim() === "" ? undefined : value
-    ) // Treat empty string as undefined
+    ) 
     .typeError("Stock available must be a number")
     .integer("Stock available must be a whole number")
     .min(0, "Stock available can't be negative"),
