@@ -159,9 +159,9 @@ const JobSeekerRegistrationEdit = () => {
         }
       });
 
-      for (const pair of formData.entries()) {
-        console.log(`${pair[0]}:`, pair[1]);
-      }
+      // for (const pair of formData.entries()) {
+      //   console.log(`${pair[0]}:`, pair[1]);
+      // }
 
       const response = await axios.post(
         `${url}/api/job-seeker-update/${
