@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IFormInput {
   title: string;
@@ -18,7 +19,7 @@ interface IFormInput {
 }
 const AddDocument = () => {
   const t = useTranslations("resources_Library");
-const cookies = useCookies();
+  const cookies = useCookies();
   const user_pid = cookies.get("user_pid");
   const locale = useLocale();
   const router = useRouter();
@@ -37,7 +38,7 @@ const cookies = useCookies();
   const onSubmit = async (data: IFormInput) => {
     // console.log(data);
     const formData = new FormData();
-    if(user_pid) formData.append("user_pid", user_pid);
+    if (user_pid) formData.append("user_pid", user_pid);
     formData.append("title", data.title);
     formData.append("active_status", "1");
 
@@ -79,6 +80,8 @@ const cookies = useCookies();
       });
       setSelectedDocs([]);
       router.push(`/${locale}/resource-library/documents`);
+      // setTimeout(() => {
+      // }, 3000);
     } catch (error) {
       console.log("error", error);
     }

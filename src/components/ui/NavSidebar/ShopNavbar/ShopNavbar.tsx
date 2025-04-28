@@ -19,6 +19,8 @@ import HomeNavbar from "../HomeNavbar/HomeNavbar";
 import TopNav from "../HomeNavbar/TopNav";
 import { useSelector } from "react-redux";
 import { useCookies } from "next-client-cookies";
+import { useQuery } from "@tanstack/react-query";
+import { getWishlistProducts } from "@/api/api";
 
 const ShopNavbar = () => {
   const [mobileNav, setMobileNav] = useState<boolean>(false);
@@ -28,9 +30,20 @@ const ShopNavbar = () => {
   const pathName = usePathname().toString();
   const cart = useSelector((state: any) => state.Initial.cartUpdate);
   const isSeller = cookies.get("isSeller");
+  const customerId = cookies.get("customer_pid") || "";
   const wishlist = useSelector((state: any) => state.Initial.wishlistUpdate);
   const [storedCartData, setStoredCartData] = useState<number>(0);
   const [storedWishListData, setStoredWishListData] = useState<number>(0);
+
+  const {
+    isLoading,
+    error,
+    data: WishListData,
+    refetch,
+  } = useQuery({
+    queryKey: ["getWishlistProducts"],
+    queryFn: () => getWishlistProducts(customerId),
+  });
 
   const getCartLength = () => {
     const numberOfProduct = JSON.parse(
@@ -47,13 +60,18 @@ const ShopNavbar = () => {
     ) || {
       products: [],
     };
-    setStoredWishListData(numberOfProduct?.products?.length);
+
+    if (numberOfProduct.products.length < 1) {
+      setStoredWishListData(WishListData?.data.length);
+    } else {
+      setStoredWishListData(numberOfProduct?.products?.length);
+    }
   };
 
   useEffect(() => {
     getCartLength();
     getWishListLength();
-  }, [cart, wishlist]);
+  }, [cart, wishlist, WishListData]);
 
   useEffect(() => {
     setMobileNav(false);
@@ -118,7 +136,10 @@ const ShopNavbar = () => {
                       )}
 
                       {t("cart")}
-                      <FiShoppingCart fontSize={24} className="cursor-pointer" />
+                      <FiShoppingCart
+                        fontSize={24}
+                        className="cursor-pointer"
+                      />
                     </div>
                   </Link>
                 </div>

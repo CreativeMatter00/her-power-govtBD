@@ -1,33 +1,31 @@
 "use client";
 import React, { useEffect } from "react";
-import { UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue, UseFormWatch, FieldErrors, Controller } from "react-hook-form";
 
 interface IProps {
   name: string;
   register: UseFormRegister<any>;
   setValue: UseFormSetValue<any>;
   watch?: UseFormWatch<any>;
-  errors?: any;
-  defaultDate?: string; // New prop for conditional default date
-  required?: boolean; // New prop for required field validation
+  errors?: FieldErrors<any>;
+  defaultDate?: string;
+  required?: boolean;
 }
 
 const DatePicker: React.FC<IProps> = ({
-  register,
   name,
+  register,
   setValue,
   watch,
   errors,
   defaultDate,
   required,
 }) => {
-  const today = new Date().toISOString().split("T")[0]; // Default to today's date
+  const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
 
-  // Format defaultDate if it's in the "YYYY-MM-DD HH:MM:SS" format
   const formattedDefaultDate = defaultDate ? defaultDate.split(" ")[0] : today;
   const currentDate = watch ? watch(name) : formattedDefaultDate;
 
-  // Set the date based on formattedDefaultDate or fallback to today if no value is selected
   useEffect(() => {
     if (!currentDate) {
       setValue(name, formattedDefaultDate);
@@ -36,20 +34,7 @@ const DatePicker: React.FC<IProps> = ({
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
-    const todayDate = new Date().toISOString().split("T")[0];
-
-    if (selectedDate < todayDate) {
-      // Set an error if the selected date is earlier than today
-      setValue(name, selectedDate, { shouldValidate: true });
-      errors[name] = {
-        type: "manual",
-        message: "Selected date cannot be earlier than today.",
-      };
-    } else {
-      // Clear the error if the date is valid
-      setValue(name, selectedDate, { shouldValidate: true });
-      errors[name] = undefined;
-    }
+    setValue(name, selectedDate, { shouldValidate: true });
   };
 
   return (
@@ -58,23 +43,30 @@ const DatePicker: React.FC<IProps> = ({
         Deadline {required && <span className="text-dangerPrimary">*</span>}
       </label>
 
-      <button className="w-full flex justify-start items-center text-left font-normal rounded px-2 py-[2px] border border-brandLsPrimary">
+      <div className="w-full">
         <input
           type="date"
-          value={currentDate || today} // Set to formattedDefaultDate or today's date
+          {...register(name, {
+            required: required ? "This field is required." : false,
+            validate: (value) => {
+              const todayDate = new Date().toISOString().split("T")[0];
+              return value > todayDate || "Please select a future date.";
+            },
+          })}
+          value={currentDate || today}
           onChange={handleDateChange}
+          min={today}
           placeholder="dd/mm/yyyy"
-          className="w-full outline-none rounded px-2 py-1"
-          min={today} // Set the minimum date to today
+          className="w-full outline-none rounded px-2 py-1 border border-brandLsPrimary"
         />
-        {errors && errors[name] && (
-          <p className="text-red-500 text-sm mt-1 ml-6">
-            {errors[name]?.message}
+        {errors?.[name] && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors[name]?.message as string}
           </p>
         )}
-      </button>
+      </div>
     </div>
   );
 };
 
-export default DatePicker; 
+export default DatePicker;

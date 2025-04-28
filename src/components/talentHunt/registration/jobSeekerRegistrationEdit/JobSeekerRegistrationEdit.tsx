@@ -34,8 +34,8 @@ interface IFormInputs {
 }
 
 const JobSeekerRegistrationEdit = () => {
-    const router = useRouter();
-    const locale = useLocale();
+  const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations("career");
 
   const [editedJobData, setEditedJobData] = useState<any>();
@@ -86,43 +86,93 @@ const JobSeekerRegistrationEdit = () => {
       })
     );
 
-    // Create a JSON object to send in the request body
-    const jobSeekerData = {
-      user_pid: userId as string,
-      // user_pid: "U241100000192",
-      // user_pid: "U241000000162",
-      job_seeker_info: {
-        portfolio: data.portfolio || null,
-        work_profile: data.portfolio ? "Freelancer" : null,
-        cv_path: selectedCV,
-      },
-      education_info: data.degree?.map((degree: any, index: any) => ({
-        edu_dgree: degree,
-        group_department: data?.groupDepartment[index],
-        passing_year: data?.passingYear[index],
-        result_gpa: data.gpaCgpa[index]?.toString(),
-        gpa_cgpa_outof: data.outOf[index]?.toString(),
-      })),
-      skill_info: editedSkillData?.map((skillGroup: any) => ({
-        skill_group: skillGroup?.skill_group,
-        skill_category: skillGroup?.skill_category, // You can modify this according to your data
-      })),
-      work_experience_info: editedJobData?.map(
-        (experience: any, index: number) => ({
-          experience_title: experience?.experience_title,
-          experience_desc: experience?.experience_desc,
-          institution_name: experience?.institution_name,
-        })
-      ),
-      achievement_info: achievements, // Combined achievement data
-    };
-
     try {
+      const formData = new FormData();
+
+      formData.append("user_pid", userId as string);
+
+      formData.append("job_seeker_info[portfolio]", data.portfolio || "");
+      formData.append(
+        "job_seeker_info[work_profile]",
+        data.portfolio ? "Freelancer" : ""
+      );
+      if (selectedCV) {
+        formData.append("job_seeker_info[cv_path]", selectedCV);
+      }
+
+      data.degree?.forEach((degree: any, index: number) => {
+        formData.append(`education_info[${index}][edu_dgree]`, degree);
+        formData.append(
+          `education_info[${index}][group_department]`,
+          data.groupDepartment[index]
+        );
+        formData.append(
+          `education_info[${index}][passing_year]`,
+          data.passingYear[index]
+        );
+        formData.append(
+          `education_info[${index}][result_gpa]`,
+          data.gpaCgpa[index]?.toString() || ""
+        );
+        formData.append(
+          `education_info[${index}][gpa_cgpa_outof]`,
+          data.outOf[index]?.toString() || ""
+        );
+      });
+
+      editedSkillData?.forEach((skillGroup: any, index: number) => {
+        formData.append(
+          `skill_info[${index}][skill_group]`,
+          skillGroup?.skill_group
+        );
+        formData.append(
+          `skill_info[${index}][skill_category]`,
+          skillGroup?.skill_category
+        );
+      });
+
+      editedJobData?.forEach((experience: any, index: number) => {
+        formData.append(
+          `work_experience_info[${index}][experience_title]`,
+          experience?.experience_title
+        );
+        formData.append(
+          `work_experience_info[${index}][experience_desc]`,
+          experience?.experience_desc
+        );
+        formData.append(
+          `work_experience_info[${index}][institution_name]`,
+          experience?.institution_name
+        );
+      });
+
+      achievements?.forEach((achievement: any, index: number) => {
+        formData.append(
+          `achievement_info[${index}][achievment_title]`,
+          achievement?.achievment_title
+        );
+        if (achievement?.attached_doc) {
+          formData.append(
+            `achievement_info[${index}][attached_doc]`,
+            achievement?.attached_doc
+          );
+        }
+      });
+
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}:`, pair[1]);
+      }
+
       const response = await axios.post(
         `${url}/api/job-seeker-update/${
           jobSeekEditData && jobSeekEditData?.profile_pid
         }`,
-        jobSeekerData // Send the JSON object in the request body
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (response?.data?.meta?.status === true) {
         toast.success("Job seeker details updated successfully!", {
@@ -137,9 +187,9 @@ const JobSeekerRegistrationEdit = () => {
         });
 
         refetch();
-        setTimeout(() => {
-          router.push(`/${locale}/career/profile/job-seeker`);
-        }, 3000);
+        // setTimeout(() => {
+        //   router.push(`/${locale}/career/profile/job-seeker`);
+        // }, 3000);
       } else {
         toast.error("Job seeker registration failed!", {
           position: "bottom-left",

@@ -15,7 +15,7 @@ import Schema from "./Schema";
 interface IFormInput {
   user_pid: string;
   jobtitle: string;
-  duration: number;
+  duration: string;
   email: string;
   jobdescription: string;
   remarks: string;
@@ -106,7 +106,7 @@ const PostTask = () => {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-5">
           <InputField
-          inputType="number"
+          inputType="text"
             inputLabel={t("Duration")}
             inputName="duration"
             placeHolderText={t("Duration")}

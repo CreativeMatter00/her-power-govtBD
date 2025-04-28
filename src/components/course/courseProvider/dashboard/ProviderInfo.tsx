@@ -19,10 +19,14 @@ const ProviderInfo = () => {
 
   const userId = cookies.get("user_pid");
   const email = cookies.get("email");
+  const mobile_no = cookies.get("mobile_no");
+
   const { isLoading, data, error } = useQuery({
     queryKey: ["getCourseProviderInfoById"],
     queryFn: () => getCourseProviderInfoById(userId as string),
   });
+
+  // console.log("data course provider ==>> ", data);
 
   // if (error)
   // 	return (
@@ -57,7 +61,7 @@ const ProviderInfo = () => {
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Mobile No")}</h1>
-                <p className="px-6 py-1 mt-1">{data?.mobile_no}</p>
+                <p className="px-6 py-1 mt-1">{mobile_no}</p>
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Email")}</h1>
@@ -94,7 +98,7 @@ const ProviderInfo = () => {
             <h1 className="text-base font-bold pb-3 border-b border-brandLsPrimary mb-2">
               {t("Branches")}
             </h1>
-            {data?.branch?.map((d:any) => (
+            {data?.branch?.map((d: any) => (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 ">
                 <div>
                   <h1 className="text-greyPrimary ml-6">{t("Branch Name")}</h1>
@@ -105,9 +109,7 @@ const ProviderInfo = () => {
                   </h1>
                 </div>
                 <p className="px-6  py-1 mt-1">{d?.branch_name}</p>
-                <p className="px-6  py-1 mt-1">
-                  {d?.address_line}
-                </p>
+                <p className="px-6  py-1 mt-1">{d?.address_line}</p>
               </div>
             ))}
           </div>

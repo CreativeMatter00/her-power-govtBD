@@ -5,14 +5,14 @@ const Schema = yup.object().shape({
     .string()
     .required("Job title is required")
     .min(2, "Job title must be at least 2 characters long"),
-    duration: yup
-    .number()
+  duration: yup
+    .string()
     .transform((value, originalValue) => {
       // Convert empty string to undefined
       return originalValue === "" ? undefined : value;
     })
     .required("Duration is required")
-    .min(0, "Duration cannot be negative"),  
+    .min(0, "Duration cannot be negative"),
   email: yup
     .string()
     .required("Email is required")

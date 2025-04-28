@@ -9,6 +9,7 @@ import CareerLoader from "@/components/shared/loader/CareerLoader";
 import { useTranslations } from "next-intl";
 import { useCookies } from "next-client-cookies";
 import DocumentCard from "./DocumentCard";
+import "react-toastify/dist/ReactToastify.css";
 
 const AllDocuments = () => {
   const t = useTranslations("resources_Library");

@@ -46,6 +46,10 @@ const Sidebar = () => {
     queryFn: () => getUserInfo(userId as string),
   });
 
+  if (data) {
+    cookies.set("mobile_no", data?.mobile_no);
+  }
+
   return (
     <aside className={`${styles.dashboardSidebarShadow} min-w-fit`}>
       <div className="">
