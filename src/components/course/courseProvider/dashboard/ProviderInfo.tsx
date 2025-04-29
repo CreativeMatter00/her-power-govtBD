@@ -19,7 +19,7 @@ const ProviderInfo = () => {
 
   const userId = cookies.get("user_pid");
   const email = cookies.get("email");
-  const mobile_no = cookies.get("mobile_no");
+  // const mobile_no = cookies.get("mobile_no");
 
   const { isLoading, data, error } = useQuery({
     queryKey: ["getCourseProviderInfoById"],
@@ -61,7 +61,7 @@ const ProviderInfo = () => {
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Mobile No")}</h1>
-                <p className="px-6 py-1 mt-1">{mobile_no}</p>
+                
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Email")}</h1>
