@@ -13,6 +13,7 @@ interface DatePickerProps {
   setValue: UseFormSetValue<any>;
   watch?: UseFormWatch<any>;
   errors?: any;
+  defaultValue?:string;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -21,11 +22,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
   setValue,
   watch,
   errors,
+  defaultValue
 }) => {
   const today = new Date().toISOString().split("T")[0]; // Default today's date
   const currentDate = watch ? watch(name) : today;
 
-  // Set today's date if no value is selected
+  console.log("Default Value:", defaultValue);
+
   useEffect(() => {
     if (!currentDate) {
       setValue(name, today);
@@ -35,7 +38,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = event.target.value;
     setValue(name, selectedDate);
-    // console.log("Selected Date:", selectedDate);
   };
 
   return (
@@ -44,9 +46,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
         <CalendarIcon className="mr-2 h-4 w-4" />
         <input
           type="date"
-          value={currentDate || today} // Default to today
+          value={currentDate || today}
           onChange={handleDateChange}
-          className="w-full   border-brandLsPrimary rounded px-2 py-1"
+          defaultValue={defaultValue && defaultValue}
+          className="w-full border-brandLsPrimary rounded px-2 py-1"
         />
         {errors && (
           <p className="text-red-500 text-sm mt-1 ml-6">

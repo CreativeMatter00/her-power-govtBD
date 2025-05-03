@@ -2,7 +2,7 @@
 import { MdCheckBoxOutlineBlank, MdCheckBox } from "react-icons/md";
 import CreateEventHeading from "../CreateEventHeading";
 import CreateEventInputField from "../inputFields/CreateEventInputField";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EventCategorySelect from "../inputFields/SelectInput";
 import EventLocationSelect from "../inputFields/EventLocationSelect";
 import SelectInput from "./SelectInput";
@@ -11,10 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllVenue } from "../../../../../api/api";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
-const Location = () => {
+const Location = ({eventData}:{eventData?:any}) => {
   // ========================================= STATES INITIALIZED ======================================
   const [desiredLocation, setDesiredLocation] = useState<boolean>(false);
-  const [virtualEvent, setShowVirtualEvent] = useState<boolean>(true);
+  const [virtualEvent, setVirtualEvent] = useState<boolean>(true);
 
   // =============================== TYPE DEFINITION =================================
 
@@ -40,8 +40,20 @@ const Location = () => {
     register,
     formState: { errors },
     setValue,
+    reset,
     handleSubmit,
   } = useFormContext();
+
+  useEffect(()=>{
+    if(eventData){
+      reset({
+        locationVenue: eventData.venue_name,        
+      })
+      setVirtualEvent(eventData.virtual_event === "1");
+    }
+  },[eventData, reset])
+
+
 
   if (isLoading)
     return (
@@ -67,6 +79,7 @@ const Location = () => {
                 optionalField={false}
                 register={register}
                 required={true}
+                defaultValue={eventData?.venue_pid}
               />
             </div>
             {errors?.locationVenue && (
@@ -80,7 +93,7 @@ const Location = () => {
           type="button"
           onClick={() => {
             setValue("virtualEvent", !virtualEvent);
-            return setShowVirtualEvent(!virtualEvent);
+            return setVirtualEvent(!virtualEvent);
           }}
           className="flex items-center gap-2 pl-6"
         >

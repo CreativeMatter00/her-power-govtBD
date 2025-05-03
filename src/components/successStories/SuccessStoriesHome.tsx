@@ -8,7 +8,7 @@ const SuccessStoriesHome = () => {
         <div>
           <div className="h-80 flex mx-auto justify-center">
             <Image
-              src={"/assets/images/resource/Images/Hero_Banner.png"}
+              src={"/assets/images/success-stories/Images/Hero_Banner.jpg"}
               alt="Resource Banner"
               width={1920}
               height={300}

@@ -247,7 +247,7 @@ const EditCourseProvider = () => {
               />
               <InputField
                 labelName={t("Trade License")}
-                inputType="number"
+                inputType="string"
                 placeholderText={t("Enter your trade license number")}
                 inputName="trade_licence"
                 register={register}
@@ -257,7 +257,7 @@ const EditCourseProvider = () => {
               />
               <InputField
                 labelName={t("VAT ID")}
-                inputType="number"
+                inputType="string"
                 placeholderText={t("Enter your Vat ID")}
                 inputName="vat_reg_id"
                 register={register}
@@ -267,7 +267,7 @@ const EditCourseProvider = () => {
               />
               <InputField
                 labelName={t("Tax ID")}
-                inputType="number"
+                inputType="string"
                 placeholderText={t("Enter your Tax ID")}
                 inputName="tax_reg_id"
                 register={register}
@@ -277,7 +277,7 @@ const EditCourseProvider = () => {
               />
               <InputField
                 labelName={t("TIN Number")}
-                inputType="number"
+                inputType="string"
                 placeholderText={t("Enter your TIN Number")}
                 inputName="tin_number"
                 register={register}
@@ -431,7 +431,7 @@ const EditCourseProvider = () => {
                     />
                     <InputField
                       labelName={t("Experience")}
-                       inputType="number"
+                       inputType="string"
                       placeholderText={t("How long you served here")}
                       inputName={`experience[${index}].experience`}
                       register={register}
@@ -439,7 +439,6 @@ const EditCourseProvider = () => {
                       required={true}
                       defaultValue={data?.experience?.[index]?.experiance || ''}
                     />
-
                     <InputField
                       labelName={t("Institution Name")}
                       placeholderText={t("Enter your institution name")}

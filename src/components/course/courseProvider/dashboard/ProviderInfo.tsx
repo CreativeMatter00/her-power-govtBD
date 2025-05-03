@@ -61,7 +61,7 @@ const ProviderInfo = () => {
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Mobile No")}</h1>
-                
+                <p className="px-6 py-1 mt-1">{data?.mobile_no}</p>
               </div>
               <div>
                 <h1 className="text-greyPrimary ml-6">{t("Email")}</h1>

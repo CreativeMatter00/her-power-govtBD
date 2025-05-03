@@ -1,6 +1,6 @@
 "use client";
 
-import { getSellerAllProducts, placeholderImage } from "@/api/api";
+import { getSellerAllProducts, placeholderImage, url } from "@/api/api";
 import FilterDiv from "@/components/admin/table/FilterDiv";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -12,14 +12,16 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useMemo, useState } from "react";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit,MdDelete} from "react-icons/md";
 import TableModel from "@/components/admin/table/TableModel";
 import PaginationDiv from "@/components/admin/table/PaginationDiv";
-import { Dialog, DialogContent, DialogTrigger } from "../../../../ui/dialog";
+import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const AllProduct = () => {
   const t = useTranslations("talentHunt");
@@ -66,7 +68,36 @@ const AllProduct = () => {
   const handleCloseAdd = () => {
     setAddModalOpen(false);
   };
-
+  const handleDelete=async (category: any)=>{
+    try {
+      const response = await axios.delete(
+        `${url}/api/admin/product/${category?.product_pid}`
+      );
+        toast.success("Product Deleted Successfully!", {
+          position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+        refetch();
+    } catch (error: any) {
+      toast.error("Product Delete failed! Please try again.", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      console.log("error", error.response ? error.response.data : error);
+    }
+  }
   // ============ DEFINING COLUMNS =========
   const COLUMNS = [
     {
@@ -143,7 +174,23 @@ const AllProduct = () => {
         >
           <div className="flex items-center gap-2">
             <MdOutlineEdit className="w-4 h-4 text-[#FEFCFF]" />
-            {t("Edit")}
+            {/* {t("Edit")} */}
+          </div>
+        </button>
+      ),
+    },
+    {
+      header: t("Delete"),
+      accessor: "delete",
+      enableSorting: false,
+      cell: (row: any) => (
+        <button
+          onClick={()=>handleDelete(row.row.original)}
+          className="bg-[#f13325] text-[#FEFCFF] font-medium text-sm px-6 py-3 rounded-sm "
+        >
+          <div className="flex items-center gap-2">
+          <MdDelete className="w-4 h-4 text-[#FEFCFF]" />
+            {/* {t("Delete")} */}
           </div>
         </button>
       ),
@@ -180,6 +227,7 @@ const AllProduct = () => {
 
   return (
     <>
+    <ToastContainer/>
       <section>
         <div className="text-3xl p-4 border-b-2 border-[#989898]">
           <p className="container mx-auto">{t("All_Product")}</p>

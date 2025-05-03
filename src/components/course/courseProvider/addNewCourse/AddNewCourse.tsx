@@ -119,7 +119,7 @@ const AddNewCourse = () => {
       });
 
       if (response?.data?.meta?.status === true) {
-        toast.success("Form submitted successfully!", {
+        toast.success("Course Added successfully!", {
           position: "bottom-left",
           autoClose: 3000,
           hideProgressBar: false,
@@ -132,18 +132,21 @@ const AddNewCourse = () => {
         reset();
         setSelectedThumbnailImage(null);
         setSelectedBannerImage(null);
-        router.push(`/${local}/course/course-provider/courses`);
+        setTimeout(() => {
+          router.push(`/${local}/course/course-provider/courses`);
+        }, 2000);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error:", error.response?.data);
-        // alert(
-        //   `Error: ${error.response?.data.message || "Something went wrong"}`
-        // );
-      } else {
-        console.error("Error during form submission", error);
-        // alert("Unexpected error during form submission");
-      }
+      toast.error("Failed to add the course. Please try again.", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -253,8 +256,10 @@ const AddNewCourse = () => {
                   required={true}
                 />
                 {errors.courseDescription && (
-                    <p className="text-red-600">{errors.courseDescription.message}</p>
-                  )}
+                  <p className="text-red-600">
+                    {errors.courseDescription.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-8 w-full lg:w-1/2">

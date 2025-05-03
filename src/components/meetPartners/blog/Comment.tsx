@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useCookies } from "next-client-cookies";
 import { useTranslations } from "next-intl";
+import "react-toastify/dist/ReactToastify.css";
 
 const Comment = ({ data, ownerId, refetch }: any) => {
   const cookies = useCookies();
@@ -160,7 +161,7 @@ const Comment = ({ data, ownerId, refetch }: any) => {
         });
       }
     } catch (error: any) {
-      toast.error("Job Posting failed! Please try again.", {
+      toast.error("Comment Delete failed! Please try again.", {
         position: "bottom-left",
         autoClose: 3001,
         hideProgressBar: false,

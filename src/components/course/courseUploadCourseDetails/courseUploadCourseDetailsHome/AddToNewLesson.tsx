@@ -83,11 +83,16 @@ export default function AddToNewLesson() {
       }
     },
     onSuccess: () => {
-      toast.success("New Lesson Added...");
+      toast.success("New Lesson Added",{
+        position:"bottom-left"
+      }
+      );
       queryClient.invalidateQueries(["CourseLessons"] as any);
     },
     onError: (error: Error) => {
-      toast.error("Upload failed...");
+      toast.error("Upload failed",{
+        position:"bottom-left"
+      });
       console.error("Error adding lesson:", error.message);
     },
     onMutate: () => {

@@ -5,23 +5,32 @@ import CreateEventHeading from "../CreateEventHeading";
 import CreateEventInputField from "../inputFields/CreateEventInputField";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io";
-import { useForm, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import TextInput from "../inputFields/TextInput";
 
-interface ITickerPricingProp {
-  onUpdate: any;
-}
 
-const TicketPricing = () => {
+const TicketPricing = ({eventData}:{eventData?:any}) => {
   const [eventFreeOrPaid, setEventFreeOrPaid] = useState<string>("Paid");
   const [textDescription, setTextDescription] = useState<string>("");
+ const [sections, setSections] = useState<{ id: number; ticket_name?: string }[]>([]);
 
-  const [sections, setSections] = useState<{ id: number }[]>([
-    { id: Date.now() },
-  ]);
+  useEffect(() => {
+    if(eventData){
+      setEventFreeOrPaid(eventData.ticket_type === "P" ? "Paid" : "Free");
+    }
+    if(eventData?.tricket_info){
+      setSections(eventData.tricket_info);
+    }
+  },[eventData])
+
+
+  // console.log("Event Free Or Paid ? ===> ",eventFreeOrPaid)
+  // console.log("Sections ? ===> ",sections)
+
+ 
 
   const addSection = () => {
-    setSections([...sections, { id: Date.now() }]);
+    setSections([...sections, { id: Date.now(), ticket_name: "" }]);
   };
 
   const removeSection = (id: number) => {
@@ -84,7 +93,10 @@ const TicketPricing = () => {
 
           {eventFreeOrPaid === "Paid" && (
             <button
-              type="button" onClick={addSection} className="rounded-full bg-link h-fit">
+              type="button"
+              onClick={addSection}
+              className="rounded-full bg-link h-fit"
+            >
               <FaPlus className="text-bgPrimary p-2 w-10 h-10" />
             </button>
           )}
@@ -103,12 +115,14 @@ const TicketPricing = () => {
                     inputType="text"
                     placeholderText="Enter ticket name"
                     required={true}
+                    defaultValue={section?.ticket_name}
                   />
-                  {Array.isArray(errors.tickets) && errors.tickets?.[index]?.ticket_name && (
-  <p className="text-danger text-sm text-red-500">
-    {errors.tickets[index].ticket_name.message}
-  </p>
-)}
+                  {Array.isArray(errors.tickets) &&
+                    errors.tickets?.[index]?.ticket_name && (
+                      <p className="text-danger text-sm text-red-500">
+                        {errors.tickets[index].ticket_name.message}
+                      </p>
+                    )}
                 </div>
                 <div className="max-lg:w-full w-1/2">
                   <div className="flex gap-6 items-end">
@@ -121,41 +135,46 @@ const TicketPricing = () => {
                         inputType="number"
                         placeholderText="Enter price"
                         required={true}
+                        defaultValue={section?.ticket_name}
                       />
-                      { Array.isArray(errors.tickets) && errors.tickets?.[index]?.ticket_price && (
-  <p className="text-danger text-sm text-red-500">
-    {errors.tickets?.[index].ticket_price.message}
-  </p>
-)}
+                      {Array.isArray(errors.tickets) &&
+                        errors.tickets?.[index]?.ticket_price && (
+                          <p className="text-danger text-sm text-red-500">
+                            {errors.tickets?.[index].ticket_price.message}
+                          </p>
+                        )}
                     </div>
                     <button
                       type="button"
                       onClick={() => removeSection(section.id)}
                       disabled={sections.length === 1}
-                      className={`rounded-full ${sections.length === 1
+                      className={`rounded-full ${
+                        sections.length === 1
                           ? "bg-gray-300 cursor-not-allowed"
                           : "bg-dangerSecondary"
-                        } h-fit`}
+                      } h-fit`}
                     >
                       <FaMinus className="text-bgPrimary p-2 w-10 h-10" />
                     </button>
                   </div>
                 </div>
               </div>
-
-              <TextInput
+// ! Check This
+              {/* <TextInput
                 setTextDescription={setTextDescription}
                 errors={errors}
                 control={control}
                 labelName="Facilities"
                 required={true}
                 inputName={`tickets[${index}].Facilities`}
-              />
-              { Array.isArray(errors.tickets) &&errors.tickets?.[index]?.Facilities && (
-              <p className="text-danger text-sm text-red-500">
-                {errors.tickets?.[index].Facilities.message}
-              </p>
-            )}
+                defaultValue={section?.ticket_name}
+              /> */}
+              {Array.isArray(errors.tickets) &&
+                errors.tickets?.[index]?.Facilities && (
+                  <p className="text-danger text-sm text-red-500">
+                    {errors.tickets?.[index].Facilities.message}
+                  </p>
+                )}
             </div>
           ))}
       </main>

@@ -18,14 +18,18 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 
 interface Segment {
   id: number;
+  start_datetime: string;
+  from_time: string;
+  end_datetime: string;
+  to_time: string;
 }
 
-const TimeDate = () => {
+const TimeDate = ({ eventData }: { eventData?: any }) => {
   const [selectedOption, setSelectedOption] = useState<
     "singleDate" | "multiDate" | "breakDown"
   >("singleDate");
 
-  const [segments, setSegments] = useState<Segment[]>([{ id: 1 }]);
+  const [segments, setSegments] = useState<Segment[]>([]);
 
   const {
     register,
@@ -43,11 +47,29 @@ const TimeDate = () => {
     option: "singleDate" | "multiDate" | "breakDown"
   ) => {
     setSelectedOption(option);
-
     setValue("multiDateOrNot", option === "multiDate");
     setValue("singleDateOrNot", option === "singleDate");
     setValue("breakDownOrNot", option === "breakDown");
   };
+
+  useEffect(() => {
+    if (eventData?.event_schedule?.length === 1) {
+      setSelectedOption("singleDate");
+    } else if (
+      eventData?.event_schedule?.length > 1 &&
+      eventData?.event_schedule?.[0]?.segment_name === null
+    ) {
+      // console.log("Segment Name ----------------===>",eventData?.event_schedule?.[0]?.segment_name)
+      setSelectedOption("multiDate");
+    } else {
+      // console.log("Segment Name ----------------===>",eventData?.event_schedule?.[0]?.segment_name)
+      setSelectedOption("breakDown");
+    }
+  }, [
+    setSelectedOption,
+    eventData?.event_schedule?.length,
+    eventData?.event_schedule?.[0]?.segment_name,
+  ]);
 
   useEffect(() => {
     // Update form values when the selected option changes
@@ -56,8 +78,23 @@ const TimeDate = () => {
     setValue("breakDownOrNot", selectedOption === "breakDown");
   }, [selectedOption, setValue]);
 
+  useEffect(() => {
+    if (eventData?.event_schedule) {
+      setSegments(eventData.event_schedule);
+    }
+  }, [eventData]);
+
   const addSegment = () => {
-    setSegments([...segments, { id: segments.length + 1 }]);
+    setSegments([
+      ...segments,
+      {
+        id: segments.length + 1,
+        start_datetime: "",
+        from_time: "",
+        end_datetime: "",
+        to_time: "",
+      },
+    ]);
   };
 
   const deleteSegment = (id: number) => {
@@ -127,60 +164,78 @@ const TimeDate = () => {
         </div>
 
         {/* Conditional Rendering for Single Date */}
-        {selectedOption === "singleDate" && (
-          <div className="flex flex-col gap-2 w-full">
-            <label className="text-brandPrimary text-sm pl-6">
-              Start/End <span className="text-red-500">*</span>
-            </label>
-            <div className="flex max-lg:flex-col items-center max-md:gap-3 gap-6">
-              <div className="w-full">
-                <DatePicker
-                  register={register}
-                  watch={watch}
-                  setValue={setValue}
-                  name="singleDate.eventStartDate"
-                  errors={errors}
-                />
+        {selectedOption === "singleDate" &&
+          eventData &&
+          segments?.map(
+            (
+              schedule: {
+                start_datetime: string;
+                from_time: string;
+                end_datetime: string;
+                to_time: string;
+              },
+              index: number
+            ) => (
+              <div key={index} className="flex flex-col gap-2 w-full">
+                <label className="text-brandPrimary text-sm pl-6">
+                  Start/End <span className="text-red-500">*</span>
+                </label>
+                <div className="flex max-lg:flex-col items-center max-md:gap-3 gap-6">
+                  <div className="w-full">
+                    <DatePicker
+                      register={register}
+                      watch={watch}
+                      setValue={setValue}
+                      name="singleDate.eventStartDate"
+                      errors={errors}
+                      defaultValue={schedule.start_datetime}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <EventTimePicker
+                      register={register}
+                      watch={watch}
+                      setValue={setValue}
+                      name="singleDate.eventStartTime"
+                      errors={errors}
+                      defaultValue={schedule.from_time}
+                    />
+                  </div>
+                  <p className="text-sm min-w-fit">-to-</p>
+                  <div className="w-full">
+                    <DatePicker
+                      register={register}
+                      watch={watch}
+                      setValue={setValue}
+                      name="singleDate.eventEndDate"
+                      errors={errors}
+                      defaultValue={schedule.end_datetime}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <EventTimePicker
+                      register={register}
+                      watch={watch}
+                      setValue={setValue}
+                      name="singleDate.eventEndTime"
+                      errors={errors}
+                      defaultValue={schedule.to_time}
+                    />
+                  </div>
+                </div>
+                {errors?.singleDate && (
+                  <p className="text-sm text-red-500">
+                    {String(errors.singleDate?.message)}
+                  </p>
+                )}
               </div>
-              <div className="w-full">
-                <EventTimePicker
-                  register={register}
-                  watch={watch}
-                  setValue={setValue}
-                  name="singleDate.eventStartTime"
-                  errors={errors}
-                />
-              </div>
-              <p className="text-sm min-w-fit">-to-</p>
-              <div className="w-full">
-                <DatePicker
-                  register={register}
-                  watch={watch}
-                  setValue={setValue}
-                  name="singleDate.eventEndDate"
-                  errors={errors}
-                />
-              </div>
-              <div className="w-full">
-                <EventTimePicker
-                  register={register}
-                  watch={watch}
-                  setValue={setValue}
-                  name="singleDate.eventEndTime"
-                  errors={errors}
-                />
-              </div>
-            </div>
-            {errors?.singleDate && (
-              <p className="text-sm text-red-500">
-                {String(errors.singleDate?.message)}
-              </p>
-            )}
-          </div>
-        )}
+            )
+          )}
 
         {/* Conditional Rendering for Multi Date */}
-        {selectedOption === "multiDate" && <MultiTimeDate />}
+        {selectedOption === "multiDate" && (
+          <MultiTimeDate multiSchedule={eventData?.event_schedule} />
+        )}
 
         {/* Breakdown Handling */}
         {selectedOption === "breakDown" && (
@@ -188,17 +243,15 @@ const TimeDate = () => {
             <div className="flex justify-between items-start mb-4">
               <div>Current Segments</div>
               <button
+                type="button"
                 className="rounded-full bg-link h-fit cursor-pointer"
                 onClick={addSegment}
               >
                 <FaPlus className="text-bgPrimary p-2 w-10 h-10" />
               </button>
             </div>
-            {segments.map((segment, index) => (
-              <div
-                key={segment.id}
-                className="relative border p-4 rounded-md mb-4"
-              >
+            {eventData?.event_schedule?.map((segment: any, index: number) => (
+              <div key={index} className="relative border p-4 rounded-md mb-4">
                 <div className="flex max-lg:flex-col items-center gap-6 w-full">
                   <div className="max-lg:w-full basis-1/2">
                     <CreateEventInputField
@@ -207,6 +260,7 @@ const TimeDate = () => {
                       register={register}
                       name={`segments[${index}].segmentName`}
                       errors={errors}
+                      defaultValue={segment?.segment_name}
                     />
                     {(errors.segments as any)?.[index]?.segmentName && (
                       <p className="text-sm text-red-500">
@@ -226,6 +280,7 @@ const TimeDate = () => {
                       register={register}
                       name={`segments[${index}].speaker`}
                       errors={errors}
+                      defaultValue={segment?.speaker_pid}
                     />
                   </div>
                 </div>
@@ -273,10 +328,10 @@ const TimeDate = () => {
                     </div>
                   </div>
                   {(errors.segments as any)?.[index] && (
-                  <p className="text-sm text-red-500">
-                    {String((errors.segments as any)?.[index]?.message)}
-                  </p>
-                )}
+                    <p className="text-sm text-red-500">
+                      {String((errors.segments as any)?.[index]?.message)}
+                    </p>
+                  )}
                 </div>
                 {segments.length > 1 && (
                   <div className="absolute top-3 right-3 cursor-pointer">
@@ -286,7 +341,6 @@ const TimeDate = () => {
                     />
                   </div>
                 )}
-              
               </div>
             ))}
           </div>

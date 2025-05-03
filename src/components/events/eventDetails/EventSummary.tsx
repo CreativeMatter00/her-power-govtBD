@@ -171,7 +171,7 @@ const EventSummary = ({ eventSummary, refetch }: any) => {
 
         {eventEnded ? (
           <p className="text-red-500 text-lg mt-4">
-            {t("This_event_has_ended")}
+            {/* {t("This_event_has_ended")} */}
           </p>
         ) : (
           <Countdown endDatetime={schedules[0]?.end_datetime} />

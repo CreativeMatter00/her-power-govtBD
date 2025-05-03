@@ -1,37 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineInformationCircle } from "react-icons/hi2";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
-
 import CreateEventHeading from "../CreateEventHeading";
 import CreateEventInputField from "../inputFields/CreateEventInputField";
 import SelectInput from "./SelectInput";
 import ImageInput from "../inputFields/ImageInput";
-import { useForm, useFormContext } from "react-hook-form";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useFormContext } from "react-hook-form";
 import TextInput from "../inputFields/TextInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllEventCategories } from "../../../../../api/api";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
-interface IGeneralInfoProps {
-  onUpdate: any;
-}
-
-const GeneralInformation = () => {
+const GeneralInformation = ({ eventData }: { eventData?: any }) => {
   const [selectedBanner, setSelectedBanner] = useState<any>();
-  const [textDescription, setTextDescription] = useState<string>("");
+  // const [textDescription, setTextDescription] = useState<string>("");
   const [selectedThumbnail, setSelectedThumbnail] = useState<any>();
   const [isFeaturedEvent, setIsFeaturedEvent] = useState<boolean>(false);
+
+  // console.log("Event Data:------------>", eventData)
+  // console.log("isFeaturedEvent:------------>", isFeaturedEvent)
 
   const {
     register,
     formState: { errors },
     setValue,
+    reset,
     handleSubmit,
     control,
   } = useFormContext();
+
+  useEffect(() => {
+    if (eventData) {
+      reset({
+        eventTitle: eventData.event_title,
+        eventCategory: eventData.category_pid,
+        description: eventData.event_desc,
+        featuredOrNot: eventData.featchered_event === 1,
+        eventBanner: eventData.banner_file_url || null,
+        thumbnail: eventData.thumbnail_file_url || null,
+      });
+      // setValue("eventTitle", eventData.event_title);
+      // setValue("eventCategory", eventData.category_pid);
+      // setValue("description", eventData.event_desc);
+      // setValue("featuredOrNot", eventData.featchered_event === 1);
+      // setValue("eventBanner", eventData.banner_file_url);
+      // setValue("thumbnail", eventData.thumbnail_file_url);
+
+      setIsFeaturedEvent(eventData.featchered_event === 1);
+    }
+  }, [eventData, reset]);
+
+  // console.log("--------------------------->>>>",eventData);
+  // console.log("--------------------------->>>>",eventData?.featchered_event===1);
+
+
 
   const {
     isLoading,
@@ -62,6 +86,7 @@ const GeneralInformation = () => {
               errors={errors}
               register={register}
               required={true}
+              defaultValue={eventData?.event_title}
             />
 
             <div className="grid grid-cols-2 gap-6">
@@ -74,6 +99,7 @@ const GeneralInformation = () => {
                   placeholderText="Select Category"
                   filedWidth="w-1/2 max-lg:w-full"
                   required={true}
+                  defaultValue={eventData?.category_pid}
                 />
                 {errors?.eventCategory && (
                   <p className="text-sm text-red-500">
@@ -113,6 +139,7 @@ const GeneralInformation = () => {
                   setValue={setValue} // Pass the setValue function
                   inputName="eventBanner"
                   required={true} // The name to register the file input
+                  imgSrc={eventData?.banner_file_url}
                 />
 
                 <div className="flex items-center max-md:items-start gap-2">
@@ -126,10 +153,10 @@ const GeneralInformation = () => {
                   </p>
                 </div>
                 {errors?.eventBanner && (
-              <p className="text-sm text-red-500">
-                {String(errors.eventBanner?.message)}
-              </p>
-            )}
+                  <p className="text-sm text-red-500">
+                    {String(errors.eventBanner?.message)}
+                  </p>
+                )}
               </div>
 
               <div className="w-full flex flex-col gap-2">
@@ -141,6 +168,7 @@ const GeneralInformation = () => {
                   setValue={setValue} // Ensure setValue is passed correctly
                   inputName="thumbnail"
                   required={true} // Set the appropriate input name for your form
+                  imgSrc={eventData?.thumbnail_file_url}
                 />
 
                 <div className="flex items-center max-md:items-start gap-2">
@@ -154,19 +182,20 @@ const GeneralInformation = () => {
                   </p>
                 </div>
                 {errors?.thumbnail && (
-              <p className="text-sm text-red-500">
-                {String(errors.thumbnail?.message)}
-              </p>
-            )}
+                  <p className="text-sm text-red-500">
+                    {String(errors.thumbnail?.message)}
+                  </p>
+                )}
               </div>
             </div>
             <TextInput
-              setTextDescription={setTextDescription}
+              // setTextDescription={setTextDescription}
               errors={errors}
               control={control}
               labelName="Description/ Event Summary"
               inputName="description"
               required={true}
+              defaultValue={eventData?.event_desc}
             />
           </div>
         </main>

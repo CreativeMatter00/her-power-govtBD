@@ -9,7 +9,7 @@ const ChallengesHome = () => {
         {/* banner */}
         <div className="h-80 flex mx-auto justify-center">
           <Image
-            src={"/assets/images/meet-partners/Meet Partners Banner 1.png"}
+            src={"/assets/images/challenges/images/Hero_Banner.jpg"}
             alt="Events Banner"
             width={1920}
             height={300}

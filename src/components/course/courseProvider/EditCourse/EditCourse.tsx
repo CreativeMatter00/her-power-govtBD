@@ -131,11 +131,11 @@ const EditCourse = () => {
       description: description,
       branch_id: bId,
     };
-    
+
     if (selectThumbnailImage) {
       formData.thumbnail = selectThumbnailImage;
     }
-    
+
     if (selectBannerImage) {
       formData.image = selectBannerImage;
     }
@@ -152,7 +152,7 @@ const EditCourse = () => {
       // console.log(response);
 
       if (response?.data?.meta?.status === true) {
-        toast.success("Form submitted successfully!", {
+        toast.success("Course Edit successfully!", {
           position: "bottom-left",
           autoClose: 3000,
           hideProgressBar: false,
@@ -165,9 +165,11 @@ const EditCourse = () => {
         reset();
         setSelectedThumbnailImage(null);
         setSelectedBannerImage(null);
-        router.push(redirect as string);
+        setTimeout(() => {
+          router.push(redirect as string);
+        }, 3000);
       } else {
-        toast.error("Form submit failed!", {
+        toast.error("Course Edit failed!", {
           position: "bottom-left",
           autoClose: 3000,
           hideProgressBar: false,
@@ -197,6 +199,7 @@ const EditCourse = () => {
 
   return (
     <section className="bg-brandLsSecondary">
+      <ToastContainer />
       <div className="container p-4">
         <h1 className="text-2xl text-[#252525]">{t("Edit Course")}</h1>
         <main className="lg:ml-8 mt-4">
@@ -309,7 +312,6 @@ const EditCourse = () => {
           </form>
         </main>
       </div>
-      <ToastContainer />
     </section>
   );
 };

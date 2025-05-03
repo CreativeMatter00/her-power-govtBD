@@ -103,6 +103,16 @@ const AddVideo = () => {
           router.push(`/${locale}/resource-library`);
         });
     } catch (error) {
+      toast.error("Oops! Something went wrong while uploading your video.",{
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       console.log("error", error);
       setIsUploading(false);
     }
