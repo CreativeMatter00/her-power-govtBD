@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import ScaleLoader from "react-spinners/ScaleLoader";
+// import ScaleLoader from "react-spinners/ScaleLoader";
 import { useCookies } from "next-client-cookies";
 import { url } from "@/api/api";
 import { useRouter } from "next/navigation";
@@ -41,6 +41,8 @@ const Publish = ({
     const { multiDateOrNot, singleDateOrNot, breakDownOrNot } = data;
     const formDataObj = new FormData();
 
+    console.log("Form Data from Publish------------->",data);
+
     safeAppend(formDataObj, "org_pid", organizerPid);
     safeAppend(formDataObj, "event_title", data?.eventTitle);
     safeAppend(formDataObj, "event_desc", data?.description);
@@ -49,17 +51,14 @@ const Publish = ({
 
     // Venue or virtual event
     if (data?.locationVenue) {
-      formDataObj.append("venue_pid", data.locationVenue);
-      formDataObj.append("vanue_name", data.locationVenue);
+      formDataObj.append("venue_pid", data?.locationVenue);
+      formDataObj.append("venue_name", data?.locationVenue);
     } else {
       formDataObj.append("virtual_event", data?.virtualEvent ? "1" : "0");
     }
 
     safeAppend(formDataObj, "ticket_type", data?.ticket_type);
-    formDataObj.append(
-      "ticket_amount",
-      data?.ticket_type === "P" ? data?.sections?.[0]?.price || "0" : "0"
-    );
+    formDataObj.append("ticket_amount", data?.ticket_type === "P" ? data?.sections?.[0]?.price || "0" : "0");
 
     safeAppend(formDataObj, "tags", data?.tags);
     safeAppend(formDataObj, "zip_code", data?.locationZip);
@@ -127,21 +126,25 @@ const Publish = ({
     safeAppend(formDataObj, "notification_schedule", data?.notificationSchedule);
 
     // Files
-    if (data?.eventBanner && typeof data.eventBanner !== "string") {
-      formDataObj.append("banner", data.eventBanner);
+    if (data?.eventBanner && typeof data?.eventBanner !== "string") {
+      formDataObj.append("banner", data?.eventBanner);
     }
-    if (data?.thumbnail && typeof data.thumbnail !== "string") {
-      formDataObj.append("thumbnail", data.thumbnail);
+    if (data?.thumbnail && typeof data?.thumbnail !== "string") {
+      formDataObj.append("thumbnail", data?.thumbnail);
     }
 
     // Test data
-    formDataObj.append("transaction_id", "test");
-    formDataObj.append("remarks", "test");
+    // formDataObj.append("transaction_id", "test");
+    formDataObj.append("remarks", data?.remarks);
 
     setIsLoading(true);
+    console.log("Form Data Object Publish------------->",formDataObj);
+    // for (const [key, value] of formDataObj.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
     try {
       const response = await axios.post(
-        `${url}/api/admin/event/newEvent-update//${eventId}`,
+        `${url}/api/admin/event/newEvent-update/${eventId}`,
         formDataObj,
         {
           headers: {
@@ -165,7 +168,7 @@ const Publish = ({
         });
       }
     } catch (error) {
-      console.error("PATCH error:", error);
+      console.error("POST error:", error);
       toast.error("Something went wrong.", {
         position: "bottom-left",
         autoClose: 3000,
@@ -175,12 +178,12 @@ const Publish = ({
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <ScaleLoader color="#421957" height={70} radius={8} width={10} />
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="w-screen h-screen bg-red-600 flex justify-center items-center">
+  //       <ScaleLoader color="#421957" height={70} radius={8} width={10} />
+  //     </div>
+  //   );
 
   return (
     <section className="my-8 p-4">

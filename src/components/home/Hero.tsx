@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import TestMessageModal from "./TestMessageModal";
+// import TestMessageModal from "./TestMessageModal";
 
 const Hero = () => {
 	const t = useTranslations("Home");
@@ -38,7 +38,7 @@ const Hero = () => {
 					</p>
 				</div>
 			</div>
-			<TestMessageModal />
+			{/* <TestMessageModal /> */}
 			{/* <div className="relative h-[600px]">
 				<span className="absolute inset-0 flex flex-col justify-center container mx-auto z-50 text-[#fff]">
 					<div className="block mx-4 text-center">

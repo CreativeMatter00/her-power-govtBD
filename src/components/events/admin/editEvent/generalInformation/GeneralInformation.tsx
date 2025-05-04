@@ -19,7 +19,7 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState<any>();
   const [isFeaturedEvent, setIsFeaturedEvent] = useState<boolean>(false);
 
-  // console.log("Event Data:------------>", eventData)
+  console.log("Event Data:------------>", eventData)
   // console.log("isFeaturedEvent:------------>", isFeaturedEvent)
 
   const {

@@ -5,6 +5,7 @@ import { UseFormRegister } from "react-hook-form";
 type TVenue = {
   data_id: string;
   data_name: string;
+  data_value: string;
 };
 
 // **************************************** PROPS TYPE DEFINITION ====================================
@@ -47,7 +48,7 @@ const SelectInput: React.FC<TProps> = ({
           {placeholderText}
         </option>
         {allData?.map((data) => (
-          <option key={data.data_id} value={data?.data_name}>
+          <option key={data.data_id} value={data?.data_value}>
             {data.data_name}
           </option>
         ))}

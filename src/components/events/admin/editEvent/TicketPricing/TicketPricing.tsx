@@ -12,7 +12,7 @@ import TextInput from "../inputFields/TextInput";
 const TicketPricing = ({eventData}:{eventData?:any}) => {
   const [eventFreeOrPaid, setEventFreeOrPaid] = useState<string>("Paid");
   const [textDescription, setTextDescription] = useState<string>("");
- const [sections, setSections] = useState<{ id: number; ticket_name?: string }[]>([]);
+ const [sections, setSections] = useState<{ id: number; ticket_name?: string; ticket_amount?: number; ticket_remarks?: string }[]>([]);
 
   useEffect(() => {
     if(eventData){
@@ -135,7 +135,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
                         inputType="number"
                         placeholderText="Enter price"
                         required={true}
-                        defaultValue={section?.ticket_name}
+                        defaultValue={section?.ticket_amount}
                       />
                       {Array.isArray(errors.tickets) &&
                         errors.tickets?.[index]?.ticket_price && (
@@ -159,16 +159,16 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
                   </div>
                 </div>
               </div>
-// ! Check This
-              {/* <TextInput
-                setTextDescription={setTextDescription}
+                {/* // ! Check This */}
+              <TextInput
+                // setTextDescription={setTextDescription}
                 errors={errors}
                 control={control}
                 labelName="Facilities"
                 required={true}
                 inputName={`tickets[${index}].Facilities`}
-                defaultValue={section?.ticket_name}
-              /> */}
+                defaultValue={section?.ticket_remarks}
+              />
               {Array.isArray(errors.tickets) &&
                 errors.tickets?.[index]?.Facilities && (
                   <p className="text-danger text-sm text-red-500">

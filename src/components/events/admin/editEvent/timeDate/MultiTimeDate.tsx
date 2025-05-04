@@ -34,7 +34,7 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
   return (
     <div>
       {/* ===================================== START / END INPUT =============================== */}
-// ! Check
+      {/* // ! Check */}
       {isMultiDate && (
         <div>
           {multiSchedule?.map((row:any, index:any) => (

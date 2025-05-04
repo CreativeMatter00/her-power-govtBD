@@ -10,17 +10,19 @@ import Publish from "./publish/Publish";
 import Notification from "./notification/Notification";
 import Schema from "./Schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
 
 const CreateNewEvent = () => {
   const methods = useForm({
     resolver: yupResolver(Schema),
+    defaultValues: {
+      virtualEvent: false,
+      locationVenue: "",
+    },
   });
-  const { handleSubmit, watch } = methods;
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={methods.handleSubmit((data) => console.log("Form submitted:", data))}>
         <section className="basis-full">
           <div className="border-b border-brandLsPrimary pb-3">
             <h1 className="text-3xl text-brandPrimary">Create a new event</h1>
@@ -31,7 +33,7 @@ const CreateNewEvent = () => {
           <TicketPricing />
           <Notification />
           <Tags />
-          <Publish formData={watch()} />
+          <Publish />
         </section>
       </form>
     </FormProvider>

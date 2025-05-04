@@ -154,7 +154,7 @@ const Notification = ({eventData}:{eventData?:any}) => {
             name={"notificationSchedule"}
             errors={errors}
             register={register}
-            inputType="text"
+            inputType="number"
             placeholderText="Enter number of days before event"
             defaultValue={eventData?.notification?.notification_days}
           />

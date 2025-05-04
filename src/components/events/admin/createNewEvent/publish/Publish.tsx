@@ -1,35 +1,27 @@
 "use client";
 
-import styles from "@/styles/Events.module.css";
-import DatePicker from "../inputFields/DatePicker";
-import EventTimePicker from "../inputFields/EventTimePicker";
-import { SubmitHandler, useFormContext } from "react-hook-form"; // Use useFormContext
+import { useWatch, useFormContext } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import ScaleLoader from "react-spinners/ScaleLoader";
 import { useCookies } from "next-client-cookies";
 import { url } from "@/api/api";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
-const Publish = ({ formData }: { formData: any }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const Publish = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const cookies = useCookies();
   const organizerPid = cookies.get("isOrganizer_pid");
-  const local = useLocale();
   const router = useRouter();
+  const locale = useLocale();
+  const { handleSubmit } = useFormContext();
+  const formData = useWatch(); // Always up-to-date
 
-  // Use useFormContext to access form methods
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useFormContext();
-
-  const onSubmit: SubmitHandler<any> = async () => {
+  const onSubmit = async () => {
     const data = formData;
-    const { multiDateOrNot, singleDateOrNot, breakDownOrNot } = data;
+
+    alert(`Submitted Data----> ${JSON.stringify(data)}`);
 
     const formDataObj = new FormData();
 
@@ -37,22 +29,15 @@ const Publish = ({ formData }: { formData: any }) => {
     formDataObj.append("event_title", data?.eventTitle || "");
     formDataObj.append("event_desc", data?.description || "");
     formDataObj.append("category_pid", data?.eventCategory || "");
-    formDataObj.append(
-      "featured_event",
-      data?.featuredOrNot ? "true" : "false"
-    );
+    formDataObj.append("featured_event", data?.featuredOrNot ? "true" : "false");
 
-    // Append venue_pid
-    const venueId = data?.locationVenue;
-    formDataObj.append("venue_pid", venueId || ""); // Append venue_pid, or empty if not present
-    formDataObj.append("vanue_name", venueId || ""); // Append venue_pid, or empty if not present
-
-    // Append virtual_event only if venue_pid is not present
-    if (!venueId) {
-      formDataObj.append(
-        "virtual_event",
-        data?.virtualEvent === true ? "1" : "0"
-      );
+    if (data?.locationVenue) {
+      alert(data?.locationVenue)
+      formDataObj.append("venue_pid", data?.locationVenue);
+      formDataObj.append("vanue_name", data?.locationVenue); // typo: "vanue" if backend expects it
+    } else {
+      alert(data?.virtualEvent)
+      formDataObj.append("virtual_event", data?.virtualEvent ? "1" : "0");
     }
 
     formDataObj.append("ticket_type", data?.ticket_type || "");
@@ -63,100 +48,74 @@ const Publish = ({ formData }: { formData: any }) => {
     formDataObj.append("tags", data?.tags || "");
     formDataObj.append("zip_code", data?.locationZip || "");
 
-    // Handle single-day event
-    if (singleDateOrNot) {
-      formDataObj.append(
-        "singleday",
-        JSON.stringify({
-          start_datetime: data?.singleDate?.eventStartDate || "",
-          end_datetime: data?.singleDate?.eventEndDate || "",
-          from_time: data?.singleDate?.eventStartTime || "",
-          to_time: data?.singleDate?.eventEndTime || "",
-        })
-      );
+    // Date handling
+    if (data?.singleDateOrNot) {
+      formDataObj.append("singleday", JSON.stringify({
+        start_datetime: data?.singleDate?.eventStartDate || "",
+        end_datetime: data?.singleDate?.eventEndDate || "",
+        from_time: data?.singleDate?.eventStartTime || "",
+        to_time: data?.singleDate?.eventEndTime || "",
+      }));
     }
 
-    // Handle multi-date event
-    if (multiDateOrNot) {
-      formDataObj.append(
-        "multidate",
-        JSON.stringify(
-          data?.multiDates?.map((multiDate: any) => ({
-            start_datetime: multiDate?.startDate || "",
-            end_datetime: multiDate?.endDate || "",
-            from_time: multiDate?.startTime || "",
-            to_time: multiDate?.endTime || "",
-          }))
-        )
-      );
+    if (data?.multiDateOrNot) {
+      formDataObj.append("multidate", JSON.stringify(
+        data?.multiDates?.map((d: any) => ({
+          start_datetime: d.startDate,
+          end_datetime: d.endDate,
+          from_time: d.startTime,
+          to_time: d.endTime,
+        }))
+      ));
     }
 
-    // Handle breakdown segments
-    if (breakDownOrNot) {
-      formDataObj.append(
-        "breakdown",
-        JSON.stringify(
-          data?.segments?.map((segment: any) => ({
-            segment_name: segment?.segmentName || "",
-            speaker_pid: segment?.speaker || "",
-            start_datetime: segment?.startDate || "",
-            end_datetime: segment?.endDate || "",
-            from_time: segment?.startTime || "",
-            to_time: segment?.endTime || "",
-          }))
-        )
-      );
+    if (data?.breakDownOrNot) {
+      formDataObj.append("breakdown", JSON.stringify(
+        data?.segments?.map((s: any) => ({
+          segment_name: s.segmentName || "",
+          speaker_pid: s.speaker || "",
+          start_datetime: s.startDate || "",
+          end_datetime: s.endDate || "",
+          from_time: s.startTime || "",
+          to_time: s.endTime || "",
+        }))
+      ));
     }
 
-    // Handle ticket details
     if (data?.tickets?.length) {
-      formDataObj.append(
-        "tickets",
-        JSON.stringify(
-          data?.tickets?.map((ticket: any) => ({
-            ticket_amount: ticket?.ticket_price || "0",
-            ticket_name: ticket?.ticket_name || "Unnamed Ticket",
-            remarks: ticket?.remarks || "unpaid",
-          }))
-        )
-      );
+      formDataObj.append("tickets", JSON.stringify(
+        data.tickets.map((ticket: any) => ({
+          ticket_amount: ticket.ticket_price || "0",
+          ticket_name: ticket.ticket_name || "Unnamed Ticket",
+          remarks: ticket.remarks || "unpaid",
+        }))
+      ));
     }
 
-    // Append notification and media data
     formDataObj.append("notification_type", data?.notificationType || "");
-    formDataObj.append(
-      "notification_schedule",
-      data?.notificationSchedule || ""
-    );
-    if (data?.eventBanner) {
-      formDataObj.append("banner", data?.eventBanner); // Ensure `eventBanner` is a File object
-    }
-    if (data?.thumbnail) {
-      formDataObj.append("thumbnail", data?.thumbnail); // Ensure `thumbnail` is a File object
-    }
+    formDataObj.append("notification_schedule", data?.notificationSchedule || "");
 
-    // Add transaction and remarks
+    if (data?.eventBanner) formDataObj.append("banner", data.eventBanner);
+    if (data?.thumbnail) formDataObj.append("thumbnail", data.thumbnail);
+
     formDataObj.append("transaction_id", "test");
     formDataObj.append("remarks", "test");
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/event/newEvent`,
-        formDataObj,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      if (response?.data?.meta.status === true) {
+      const response = await axios.post(`${url}/api/admin/event/newEvent`, formDataObj, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response?.data?.meta.status) {
         toast.success("Event added successfully!", {
           position: "bottom-left",
           autoClose: 3000,
         });
         setTimeout(() => {
-          router.push(`/${local}/events/organizer`);
+          router.push(`/${locale}/events/organizer`);
         }, 3000);
       } else {
         toast.error("Failed to add event. Please try again.", {
@@ -165,7 +124,7 @@ const Publish = ({ formData }: { formData: any }) => {
         });
       }
     } catch (error) {
-      console.error("Error adding event:", error);
+      console.error("Submission error:", error);
       toast.error("An error occurred. Please try again.", {
         position: "bottom-left",
         autoClose: 3000,
@@ -175,21 +134,16 @@ const Publish = ({ formData }: { formData: any }) => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <ScaleLoader color="#421957" height={70} radius={8} width={10} />
-      </div>
-    );
-
   return (
-    <section className={`my-8 p-4`}>
+    <section className="my-8 p-4">
       <main className="flex flex-col items-center gap-8 w-full">
         <button
-          onClick={handleSubmit(onSubmit)} // Use handleSubmit from useFormContext
+          type="button"
+          onClick={handleSubmit(onSubmit)}
           className="bg-success hover:bg-successHover rounded-full w-full py-3 text-lg text-bgPrimary font-medium"
+          disabled={isLoading}
         >
-          Publish Now
+          {isLoading ? "Publishing..." : "Publish Now"}
         </button>
       </main>
       <ToastContainer />
