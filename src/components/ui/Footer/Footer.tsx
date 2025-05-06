@@ -4,7 +4,7 @@ import HerPowerPart from "./HerPowerPart";
 import EarnPawerPart from "./EarnPawerPart";
 import DownloadPart from "./DownloadPart";
 import FollowPart from "./FollowPart";
-import PaymentPart from "./PaymentPart";
+// import PaymentPart from "./PaymentPart";
 import PartnersPart from "./PartnersPart";
 import herPowerLottie from "../../../../public/assets/data.json";
 import Lottie from "lottie-react";
@@ -60,9 +60,9 @@ const Footer = () => {
 						<div className=" lg:mb-6">
 							<HerPowerPart />
 						</div>
-						<div className="h-24 max-lg:hidden">
+						{/* <div className="h-24 max-lg:hidden">
 							<PaymentPart />
-						</div>
+						</div> */}
 						<div className="h-24 lg:hidden">
 							<EarnPawerPart />
 						</div>
@@ -72,9 +72,9 @@ const Footer = () => {
 						<div className="mb-6 max-lg:hidden">
 							<EarnPawerPart />
 						</div>
-						<div className="lg:h-24 lg:hidden">
+						{/* <div className="lg:h-24 lg:hidden">
 							<PaymentPart />
-						</div>
+						</div> */}
 						<div className=" lg:h-24 ">
 							<PartnersPart />
 						</div>

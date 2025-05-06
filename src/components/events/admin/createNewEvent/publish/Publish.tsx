@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useCookies } from "next-client-cookies";
 import { url } from "@/api/api";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
@@ -20,9 +21,6 @@ const Publish = () => {
 
   const onSubmit = async () => {
     const data = formData;
-
-    alert(`Submitted Data----> ${JSON.stringify(data)}`);
-
     const formDataObj = new FormData();
 
     formDataObj.append("org_pid", organizerPid || "");
@@ -32,11 +30,9 @@ const Publish = () => {
     formDataObj.append("featured_event", data?.featuredOrNot ? "true" : "false");
 
     if (data?.locationVenue) {
-      alert(data?.locationVenue)
       formDataObj.append("venue_pid", data?.locationVenue);
       formDataObj.append("vanue_name", data?.locationVenue); // typo: "vanue" if backend expects it
     } else {
-      alert(data?.virtualEvent)
       formDataObj.append("virtual_event", data?.virtualEvent ? "1" : "0");
     }
 
@@ -85,9 +81,9 @@ const Publish = () => {
     if (data?.tickets?.length) {
       formDataObj.append("tickets", JSON.stringify(
         data.tickets.map((ticket: any) => ({
-          ticket_amount: ticket.ticket_price || "0",
-          ticket_name: ticket.ticket_name || "Unnamed Ticket",
-          remarks: ticket.remarks || "unpaid",
+          ticket_amount: ticket?.ticket_price || "0",
+          ticket_name: ticket?.ticket_name || "Unnamed Ticket",
+          remarks: ticket?.remarks || "unpaid",
         }))
       ));
     }
@@ -95,11 +91,11 @@ const Publish = () => {
     formDataObj.append("notification_type", data?.notificationType || "");
     formDataObj.append("notification_schedule", data?.notificationSchedule || "");
 
-    if (data?.eventBanner) formDataObj.append("banner", data.eventBanner);
-    if (data?.thumbnail) formDataObj.append("thumbnail", data.thumbnail);
+    if (data?.eventBanner) formDataObj.append("banner", data?.eventBanner);
+    if (data?.thumbnail) formDataObj.append("thumbnail", data?.thumbnail);
 
-    formDataObj.append("transaction_id", "test");
-    formDataObj.append("remarks", "test");
+    // formDataObj.append("transaction_id", "test");
+    formDataObj.append("remarks", data?.remarks || "");
 
     setIsLoading(true);
     try {

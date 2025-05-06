@@ -17,6 +17,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
   useEffect(() => {
     if(eventData){
       setEventFreeOrPaid(eventData.ticket_type === "P" ? "Paid" : "Free");
+      console.log("Event Data----------------->", eventData);
     }
     if(eventData?.tricket_info){
       setSections(eventData.tricket_info);

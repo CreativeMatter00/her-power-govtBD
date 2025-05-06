@@ -5,21 +5,20 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { useFormContext } from "react-hook-form";
+import CreateEventInputField from "../inputFields/CreateEventInputField";
 
-const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
+const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
   const [rows, setRows] = useState([{ id: Date.now() }]);
 
-  console.log("Multi Schedule:--------------->>", multiSchedule);
-
   // Function to add a new row
-  const addRow = () => {
-    setRows([...rows, { id: Date.now() }]);
-  };
+  // const addRow = () => {
+  //   setRows([...rows, { id: Date.now() }]);
+  // };
 
-  // Function to remove a row
-  const removeRow = (id: any) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+  // // Function to remove a row
+  // const removeRow = (id: any) => {
+  //   setRows(rows.filter((row) => row.id !== id));
+  // };
 
   const {
     register,
@@ -37,7 +36,7 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
       {/* // ! Check */}
       {isMultiDate && (
         <div>
-          {multiSchedule?.map((row:any, index:any) => (
+          {multiSchedule?.map((row: any, index: any) => (
             <div key={row.id} className="flex flex-col gap-2 w-full mb-4">
               {/* ======================================== TITLE ============================ */}
               {index === 0 && (
@@ -45,10 +44,26 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
                   Start/End
                 </label>
               )}
-
+                <input
+                  type="hidden"
+                  {...register(`multiDates[${index}].schedule_pid`)}
+                  defaultValue={row.schedule_pid}
+                />
               {/* ===================================== INPUT FIELDS =============================== */}
               <div className="flex max-lg:flex-col items-center max-md:gap-3 gap-6">
                 {/* ================================ START SCHEDULE ================================ */}
+
+                <CreateEventInputField
+                  inputType="hidden"
+                  placeholderText=""
+                  label=""
+                  name="multiDate.schedule_pid"
+                  errors={errors}
+                  register={register}
+                  required={true}
+                  defaultValue={row?.schedule_pid}
+                />
+
                 <div className="w-full">
                   <DatePicker
                     register={register}
@@ -92,7 +107,7 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
                 </div>
 
                 {/* =============================== REMOVE BUTTON =============================== */}
-                {multiSchedule.length > 1 && (
+                {/* {multiSchedule.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeRow(row.id)}
@@ -100,10 +115,10 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
                   >
                     <FaMinus className="text-bgPrimary p-2 w-10 h-10" />
                   </button>
-                )}
+                )} */}
 
                 {/* =============================== ADD BUTTON =============================== */}
-                {index === multiSchedule.length - 1 && (
+                {/* {index === multiSchedule.length - 1 && (
                   <button
                     type="button"
                     onClick={addRow}
@@ -111,7 +126,7 @@ const MultiTimeDate = ({multiSchedule}:{multiSchedule?:any}) => {
                   >
                     <FaPlus className="text-bgPrimary p-2 w-10 h-10" />
                   </button>
-                )}
+                )} */}
               </div>
               {(errors.multiDates as any)?.[index] && (
                 <p className="text-sm text-red-500">

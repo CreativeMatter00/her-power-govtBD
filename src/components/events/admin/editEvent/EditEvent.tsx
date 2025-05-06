@@ -15,8 +15,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllEventsBackendById } from "@/api/api";
 
 const EditEvent = ({ eventId }: { eventId: string }) => {
-  // console.log("Event Id------------>", eventId);
-  // const [data, setData] = useState();
 
   const {
     isLoading,
@@ -29,23 +27,10 @@ const EditEvent = ({ eventId }: { eventId: string }) => {
     enabled: !!eventId,
   });
 
-  // 🔍 Log event data for debugging
-  // alert(`Fetched eventData: ${JSON.stringify(eventData)}`);
-  
-  useEffect(() => {
-    if (eventData) {
-      console.log("Fetched eventData:", eventData);
-      alert(`Fetched eventData: ${JSON.stringify(eventData)}`);
-    }
-  }, [eventData]);
-
-
   const methods = useForm({
-    resolver: yupResolver(EditEventSchema),
-    defaultValues: eventData || {}
+    resolver: yupResolver(EditEventSchema)
   });
   const { handleSubmit, watch } = methods;
-
   return (
     <FormProvider {...methods}>
       <form>

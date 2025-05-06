@@ -31,15 +31,15 @@ const TaskDetail = () => {
 		);
 
 	return (
-		<div className="container  p-4 flex flex-col gap-5">
+		<div className="container p-4 flex flex-col gap-5">
 			{isLoading ? (
 				<div className="flex items-center justify-center">
 					<ScaleLoader color="#421957" height={70} radius={8} width={10} />
 				</div>
 			) : (
-				<div className="py-4">
+				<div className="py-4 overflow-hidden">
 					<p className="text-black text-2xl font-bold">{data.jobtitle}</p>
-					<div className="py-4">
+					<div className="py-4 overflow-hidden">
 						<p dangerouslySetInnerHTML={{ __html: data.jobdescription }}></p>
 					</div>
 

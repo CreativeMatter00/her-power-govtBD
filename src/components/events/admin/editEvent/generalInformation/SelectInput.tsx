@@ -31,25 +31,31 @@ const SelectInput: React.FC<TProps> = ({
   required,
   defaultValue
 }) => {
-  // console.log("Category ID", defaultValue);
-
+  // FIX 1: Added debug logging to verify props
+  // console.log("SelectInput rendering", defaultValue, allData);
+  
   return (
     <div className="w-full">
-      {/* ======================================= LABEL ======================================== */}
       <div className="mb-1 flex gap-2 items-center">
-        <label className="text-brandPrimary text-sm pl-6"> {labelName} {required && <span className="text-red-500">*</span>}</label>
+        <label className="text-brandPrimary text-sm pl-6">
+          {labelName} {required && <span className="text-red-500">*</span>}
+        </label>
         {optionalField && <p className="text-[#A5A5A5]">(optional)</p>}
       </div>
       <select
-        {...register(inputName)} // Register the select input
+        {...register(inputName)}
         className={`${filedWidth} border border-brandLsPrimary text-brandPrimary px-6 h-10 rounded-md focus:outline-none`}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue || ""}
       >
         <option value="" disabled className="text-gray-400">
           {placeholderText}
         </option>
         {allData?.map((data) => (          
-          <option key={data.category_pid} value={data.category_pid}>
+          <option 
+            key={data.category_pid} 
+            value={data.category_pid}
+            selected={defaultValue === data.category_pid}
+          >
             {data.category_name}
           </option>
         ))}

@@ -126,6 +126,9 @@ const Notification = ({eventData}:{eventData?:any}) => {
     }
   }, [eventData, setValue]);
 
+  // console.log("Notification media id--------->", eventData?.notification?.notification_media);
+
+
   return (
     <section className="my-8">
       <main className="flex flex-col gap-4">

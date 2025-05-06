@@ -116,6 +116,7 @@ const EditEventSchema = yup.object().shape({
       yup
         .object()
         .shape({
+          schedule_pid:yup.string(),
           eventStartDate: yup.string(), //.required("Start date is required"),
           eventStartTime: yup.string(), //.required("Start time is required"),
           eventEndDate: yup.string(), //.required("End date is required"),
@@ -130,8 +131,6 @@ const EditEventSchema = yup.object().shape({
               eventEndDate,
               eventEndTime,
             } = value;
-
-
             const startDateTime = `${eventStartDate}T${eventStartTime}`;
             const endDateTime = `${eventEndDate}T${eventEndTime}`;
             const isValid = new Date(startDateTime) < new Date(endDateTime);
@@ -149,6 +148,7 @@ const EditEventSchema = yup.object().shape({
           yup
             .object()
             .shape({
+              schedule_pid:yup.string(),
               startDate: yup.string(), //.required("Start date is required"),
               startTime: yup.string(), //.required("Start time is required"),
               endDate: yup.string(), //.required("End date is required"),
@@ -183,6 +183,7 @@ const EditEventSchema = yup.object().shape({
           yup
             .object()
             .shape({
+              schedule_pid:yup.string(),
               segmentName:yup.string(), //.required("Segment Name is required"),
               speaker:yup.string().optional(),
               breakDownEventStartDate: yup.string(), //.required("Start date is required"),

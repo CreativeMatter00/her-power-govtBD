@@ -41,21 +41,10 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
         eventBanner: eventData.banner_file_url || null,
         thumbnail: eventData.thumbnail_file_url || null,
       });
-      // setValue("eventTitle", eventData.event_title);
-      // setValue("eventCategory", eventData.category_pid);
-      // setValue("description", eventData.event_desc);
-      // setValue("featuredOrNot", eventData.featchered_event === 1);
-      // setValue("eventBanner", eventData.banner_file_url);
-      // setValue("thumbnail", eventData.thumbnail_file_url);
 
       setIsFeaturedEvent(eventData.featchered_event === 1);
     }
   }, [eventData, reset]);
-
-  // console.log("--------------------------->>>>",eventData);
-  // console.log("--------------------------->>>>",eventData?.featchered_event===1);
-
-
 
   const {
     isLoading,
@@ -71,6 +60,9 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
         <ScaleLoader color="#421957" height={70} radius={8} width={10} />
       </div>
     );
+
+    // console.log("Event category PID:", eventData?.category_pid);
+    // console.log("All categories data:", allEventCategories);
 
   return (
     <>

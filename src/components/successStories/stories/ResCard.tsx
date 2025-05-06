@@ -37,13 +37,13 @@ const ResCard: React.FC<ResCardProps> = ({
       <div
         className={`flex flex-col gap-2 bg-cardColor  ${styles.cardShadowHover} p-3 group cursor-pointer rounded h-full`}
       >
-        <div className="relative rounded-md">
+        <div className="flex justify-center rounded-md mb-6">
           <Image
             src={cardImage || placeholderImg}
             alt={cardTitle}
             width={244}
             height={165}
-            className="w-full h-[255px] rounded-md"
+            className="w-auto h-auto max-h-[500px] rounded-md"
           />
           <div className="absolute top-[42%] left-[42%] text-playButton">
             {" "}

@@ -30,13 +30,13 @@ const VideoDetails = () => {
         </div>
       ) : (
         <div className=" container max-w-7xl mt-20">
-          <div className="relative rounded-md">
+          <div className="flex justify-center rounded-md mb-6">
           <video
               src={data?.video_url}
               controls
               width="100%"
               // height="520px"
-              className="w-full h-auto rounded-md"
+              className="w-auto h-auto max-h-[500px] rounded-md"
             />
             {/* <div className="absolute top-[40%] left-[45%] text-playButton">
               {" "}

@@ -11,25 +11,21 @@ import { url } from "@/api/api";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
-const Publish = ({
-  eventId,
-  formData,
-}: {
-  eventId: string;
-  formData: any;
-}) => {
+const Publish = ({ eventId, formData }: { eventId: string; formData: any }) => {
   const [isLoading, setIsLoading] = useState(false);
   const cookies = useCookies();
   const organizerPid = cookies.get("isOrganizer_pid");
   const local = useLocale();
   const router = useRouter();
 
+  console.log("Form Data------------->", formData);
+  // alert(JSON.stringify(formData));
+
   const {
     handleSubmit,
     formState: { errors },
   } = useFormContext();
 
-  // Util to append only if value is defined and not null
   const safeAppend = (form: FormData, key: string, value: any) => {
     if (value !== undefined && value !== null && value !== "") {
       form.append(key, value);
@@ -38,16 +34,19 @@ const Publish = ({
 
   const onSubmit: SubmitHandler<any> = async () => {
     const data = formData;
+    // console.log("Data------------->", data);
+    
     const { multiDateOrNot, singleDateOrNot, breakDownOrNot } = data;
     const formDataObj = new FormData();
-
-    console.log("Form Data from Publish------------->",data);
 
     safeAppend(formDataObj, "org_pid", organizerPid);
     safeAppend(formDataObj, "event_title", data?.eventTitle);
     safeAppend(formDataObj, "event_desc", data?.description);
     safeAppend(formDataObj, "category_pid", data?.eventCategory);
-    formDataObj.append("featured_event", data?.featuredOrNot ? "true" : "false");
+    formDataObj.append(
+      "featured_event",
+      data?.featuredOrNot ? "true" : "false"
+    );
 
     // Venue or virtual event
     if (data?.locationVenue) {
@@ -58,16 +57,19 @@ const Publish = ({
     }
 
     safeAppend(formDataObj, "ticket_type", data?.ticket_type);
-    formDataObj.append("ticket_amount", data?.ticket_type === "P" ? data?.sections?.[0]?.price || "0" : "0");
+    formDataObj.append(
+      "ticket_amount",
+      data?.ticket_type === "P" ? data?.sections?.[0]?.price || "0" : "0"
+    );
 
     safeAppend(formDataObj, "tags", data?.tags);
     safeAppend(formDataObj, "zip_code", data?.locationZip);
 
-    // Single-day
     if (singleDateOrNot) {
       formDataObj.append(
-        "singleday",
+        "singleDate",
         JSON.stringify({
+          schedule_pid:data.singleDate?.schedule_pid,
           start_datetime: data?.singleDate?.eventStartDate,
           end_datetime: data?.singleDate?.eventEndDate,
           from_time: data?.singleDate?.eventStartTime,
@@ -75,13 +77,12 @@ const Publish = ({
         })
       );
     }
-
-    // Multi-day
     if (multiDateOrNot) {
       formDataObj.append(
         "multidate",
         JSON.stringify(
           data?.multiDates?.map((d: any) => ({
+            schedule_pid:d?.schedule_pid,
             start_datetime: d?.startDate,
             end_datetime: d?.endDate,
             from_time: d?.startTime,
@@ -90,13 +91,12 @@ const Publish = ({
         )
       );
     }
-
-    // Breakdown segments
     if (breakDownOrNot) {
       formDataObj.append(
         "breakdown",
         JSON.stringify(
           data?.segments?.map((s: any) => ({
+            schedule_pid:s?.schedule_pid,
             segment_name: s?.segmentName,
             speaker_pid: s?.speaker,
             start_datetime: s?.startDate,
@@ -108,7 +108,6 @@ const Publish = ({
       );
     }
 
-    // Tickets
     if (data?.tickets?.length) {
       formDataObj.append(
         "tickets",
@@ -116,32 +115,21 @@ const Publish = ({
           data.tickets.map((ticket: any) => ({
             ticket_amount: ticket?.ticket_price,
             ticket_name: ticket?.ticket_name,
-            remarks: ticket?.remarks,
+            remarks: ticket?.Facilities,
           }))
         )
       );
     }
-
     safeAppend(formDataObj, "notification_type", data?.notificationType);
     safeAppend(formDataObj, "notification_schedule", data?.notificationSchedule);
-
-    // Files
     if (data?.eventBanner && typeof data?.eventBanner !== "string") {
       formDataObj.append("banner", data?.eventBanner);
     }
     if (data?.thumbnail && typeof data?.thumbnail !== "string") {
       formDataObj.append("thumbnail", data?.thumbnail);
     }
-
-    // Test data
-    // formDataObj.append("transaction_id", "test");
-    formDataObj.append("remarks", data?.remarks);
-
+    formDataObj.append("remarks", data?.description);
     setIsLoading(true);
-    console.log("Form Data Object Publish------------->",formDataObj);
-    // for (const [key, value] of formDataObj.entries()) {
-    //   console.log(`${key}:`, value);
-    // }
     try {
       const response = await axios.post(
         `${url}/api/admin/event/newEvent-update/${eventId}`,

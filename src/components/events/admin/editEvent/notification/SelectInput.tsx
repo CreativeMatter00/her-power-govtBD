@@ -30,25 +30,34 @@ const SelectInput: React.FC<TProps> = ({
   filedWidth,
   optionalField,
   required,
-  defaultValue
+  defaultValue,
 }) => {
+  // console.log("Notification media id--------->", defaultValue);
+  // console.log("Add Data--------->", allData);
+
   return (
     <div className="w-full">
       {/* ======================================= LABEL ======================================== */}
       <div className="mb-1 flex gap-2 items-center">
-        <label className="text-brandPrimary text-sm pl-6">{labelName} {required && <span className="text-red-500">*</span>}</label>
+        <label className="text-brandPrimary text-sm pl-6">
+          {labelName} {required && <span className="text-red-500">*</span>}
+        </label>
         {optionalField && <p className="text-[#A5A5A5]">(optional)</p>}
       </div>
       <select
         {...register(inputName)} // Register the select input
         className={`${filedWidth} border border-brandLsPrimary text-brandPrimary px-6 h-10 rounded-md focus:outline-none`}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue || ""}
       >
         <option value="" disabled className="text-black ">
           {placeholderText}
         </option>
         {allData?.map((data) => (
-          <option key={data.data_id} value={data?.data_value}>
+          <option
+            key={data.data_id}
+            value={data?.data_value}
+            selected={defaultValue === data?.data_id}
+          >
             {data.data_name}
           </option>
         ))}

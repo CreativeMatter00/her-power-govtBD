@@ -55,12 +55,12 @@ const StoriesDetails = () => {
             </div>
           </div>
           <div className="border-b border-brandLsPrimary w-full my-6"></div>
-          <div className="relative rounded-md mb-6">
+          <div className="flex justify-center rounded-md mb-6">
             <video
               src={data?.video_url}
               controls
               width="100%"
-              className="w-full h-auto rounded-md"
+              className="w-auto h-auto max-h-[500px] rounded-md"
             />
           </div>
         </div>
