@@ -1,11 +1,10 @@
 "use client";
 
-import React, { FC, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { api } from "@/api/api";
 import InputField from "@/components/shared/input/InputField";
-import { url } from "@/api/api";
-import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import divisionSchema from "./divisionSchema";
 
@@ -46,8 +45,8 @@ const DivisionEdit: FC<IDivisionAddProps> = ({
   const onSubmit = async (data: IFormInput) => {
     // console.log("Form Submitted:", data);
     try {
-      const response: any = await axios.patch(
-        `${url}/api/admin/geo-division/${editData.division_pid}`,
+      const response: any = await api.patch(
+        `/api/admin/geo-division/${editData.division_pid}`,
         data
       );
 

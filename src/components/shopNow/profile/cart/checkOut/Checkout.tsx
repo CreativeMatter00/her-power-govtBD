@@ -1,23 +1,19 @@
 "use client";
-import { useForm } from "react-hook-form";
-import HeadingPart from "./HeadingPart";
-import BillingDetails from "./formPart/BillingDetails";
-import CouponCode from "./formPart/CouponCode";
-import Payment from "./formPart/Payment";
+import { api, getUserInfo } from "@/api/api";
 import { yupResolver } from "@hookform/resolvers/yup";
-import CheckOutSchema from "./CheckOutSchema";
-import OrdersTotal from "./formPart/OrdersTotal";
-import { FC, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUserInfo, url } from "@/api/api";
-import CheckBoxInput from "./checkOutInputs/CheckBoxInput";
-import axios from "axios";
+import { useTranslations } from "next-intl";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { handleCartUpdate } from "@/redux/Reducer/MainSlice";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { useTranslations } from "next-intl";
+import CheckOutSchema from "./CheckOutSchema";
+import HeadingPart from "./HeadingPart";
+import CheckBoxInput from "./checkOutInputs/CheckBoxInput";
+import BillingDetails from "./formPart/BillingDetails";
+import OrdersTotal from "./formPart/OrdersTotal";
 // 	============================ FORM INPUT SCHEMA ===========================
 interface FormInputs {
   firstName: string;
@@ -127,8 +123,8 @@ const Checkout: FC<ICheckoutProps> = ({
       orders: formattedOrders,
     };
     try {
-      const response = await axios.post(
-        `${url}/api/admin/order`,
+      const response = await api.post(
+        `/api/admin/order`,
         // `test`,
         formattedSubmit
       );

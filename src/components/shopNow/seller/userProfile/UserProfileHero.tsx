@@ -1,19 +1,18 @@
-import { getSellerBasicInfo, getUserInfo, url } from "@/api/api";
+import { api, getSellerBasicInfo, getUserInfo } from "@/api/api";
 import StarRating from "@/components/shared/RenderStars";
 import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { FaCamera } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import { LuPackagePlus } from "react-icons/lu";
-import { toast, ToastContainer } from "react-toastify";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import axios from "axios";
-import { FaCamera } from "react-icons/fa";
-import { useCookies } from "next-client-cookies";
+import { toast, ToastContainer } from "react-toastify";
 
 type IHeroProps = {
   active: string;
@@ -121,8 +120,8 @@ const UserProfileHero: React.FC<IHeroProps> = ({
       printFormData(imageData);
 
       try {
-        const response = await axios.post(
-          `${url}/api/admin/update-profile-photo`,
+        const response = await api.post(
+          `/api/admin/update-profile-photo`,
           imageData
         );
         userDataRefetch();

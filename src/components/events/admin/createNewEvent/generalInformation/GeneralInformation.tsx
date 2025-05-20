@@ -8,8 +8,7 @@ import CreateEventHeading from "../CreateEventHeading";
 import CreateEventInputField from "../inputFields/CreateEventInputField";
 import SelectInput from "./SelectInput";
 import ImageInput from "../inputFields/ImageInput";
-import { useForm, useFormContext } from "react-hook-form";
-import { Checkbox } from "@/components/ui/checkbox";
+import {  useFormContext } from "react-hook-form";
 import TextInput from "../inputFields/TextInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllEventCategories } from "../../../../../api/api";
@@ -109,8 +108,7 @@ const GeneralInformation = () => {
                   title="Event Banner"
                   selectedFile={selectedBanner}
                   setSelectedFile={setSelectedBanner}
-                  register={register} // Pass the register function
-                  setValue={setValue} // Pass the setValue function
+                 control={control} // Pass the register function
                   inputName="eventBanner"
                   required={true} // The name to register the file input
                 />
@@ -137,8 +135,7 @@ const GeneralInformation = () => {
                   title="Event Thumbnail"
                   selectedFile={selectedThumbnail}
                   setSelectedFile={setSelectedThumbnail}
-                  register={register} // Add this line if needed
-                  setValue={setValue} // Ensure setValue is passed correctly
+                 control={control} // Add this line if needed
                   inputName="thumbnail"
                   required={true} // Set the appropriate input name for your form
                 />

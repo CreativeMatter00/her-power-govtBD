@@ -1,23 +1,54 @@
 import axios from "axios";
-import { baseUrl,adminMail } from "../../config/config";
+import Cookies from "js-cookie";
+import { adminMail, baseUrl } from "../../config/config";
 export const url =baseUrl();
 export const adminEmail=adminMail();
-
 // env
 // export const url = process.env.NEXT_PUBLIC_API_URL;
 
+export const api = axios.create({
+  baseURL: url,
+});
 
+
+api.interceptors.request.use(
+  (config) => {
+    const token = Cookies.get("token"); 
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.data?.message === "Unauthenticated") {
+      const locale = Cookies.get("NEXT_LOCALE") || "en"
+      Object.keys(Cookies.get()).forEach((cookieName) => {
+        Cookies.remove(cookieName);
+      });
+      localStorage.clear();
+      window.location.href = `/${locale}/login`; 
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const placeholderImage = `https://placehold.co/600x400?text=PlaceHolder+Image`;
 
-export const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI1IiwianRpIjoiMTE5NjQwYjdkMzQ3MTZjNGQ1NTU4Yjc0OTlmYTFjYmI1ZmMyZmJlMDQ5MzljNjVhYzRmNWVkZTYxYjg1YzlkMTZmZTA4NzY0ZTZiNmI2ZTUiLCJpYXQiOjE3MjM5ODA4MzEuMjIyMzQ3LCJuYmYiOjE3MjM5ODA4MzEuMjIyMzQ5LCJleHAiOjE3NTU1MTY4MzEuMjE3MTU4LCJzdWIiOiI1MSIsInNjb3BlcyI6W119.cAqYmwOVcTXLgsFzcnxcHfdd_hK2BaRWSlgwVHH-EzYYNjCIJu6K7aGKVElHcVhbG3J34a47V_4Hb_xot1QJ9kovXBvD1fqi9qTrloINvu7zjWSZXplG3m1JqlkLNYEQL0yowmA9AEi5or4I3X9wyQ8WhP2fUstDfw7nPeqKXiGjnaBVsR0QLvfCzD0HsgGiwIO-AtkNKCctas3f_K_5pUepfSjJQ99Ohgug690k5MtWRG2OUE6XtXCRmE0mXmL8IqWRSWOw3UcefUiaBvWs3r0D6tnHLumt42-aAPSbQW7EMhzn80ghla5A5RB97wByzk8Dx08TBZm2G-fCly34oXuyPd-_d4i4p13dRlGlus3U30ckxzhU5eOC8mWxH_YgEFi-GpvCpOLz5kyWwwsu5Gx1lbS04XveHBDJiKqCX6ybluQvH8OWPRd_gCNC5Ei6hVGdml7s6MFwpLZ3tueD-PPuY53ysmwZmLQM6e8mEzqck6AWXAfNTmXQsbdoUyqfLfa6U0tTrqI1loi-gkHxUaE-eu31hCGcQ2yqeBDuALQerd8sNF76dY-5WkdGUFAjhEng_jwMTJIVQkIMhjA14LQC6LSD1yp290Ybhn1KoiRVuoZ39rdO10A3-GfCUjY8rDSd5TkLSQgo7dL1_1YBdzYjZpx4HWy5OPsQnsCHFLE";
+// export const token =
+//   "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI1IiwianRpIjoiMTE5NjQwYjdkMzQ3MTZjNGQ1NTU4Yjc0OTlmYTFjYmI1ZmMyZmJlMDQ5MzljNjVhYzRmNWVkZTYxYjg1YzlkMTZmZTA4NzY0ZTZiNmI2ZTUiLCJpYXQiOjE3MjM5ODA4MzEuMjIyMzQ3LCJuYmYiOjE3MjM5ODA4MzEuMjIyMzQ5LCJleHAiOjE3NTU1MTY4MzEuMjE3MTU4LCJzdWIiOiI1MSIsInNjb3BlcyI6W119.cAqYmwOVcTXLgsFzcnxcHfdd_hK2BaRWSlgwVHH-EzYYNjCIJu6K7aGKVElHcVhbG3J34a47V_4Hb_xot1QJ9kovXBvD1fqi9qTrloINvu7zjWSZXplG3m1JqlkLNYEQL0yowmA9AEi5or4I3X9wyQ8WhP2fUstDfw7nPeqKXiGjnaBVsR0QLvfCzD0HsgGiwIO-AtkNKCctas3f_K_5pUepfSjJQ99Ohgug690k5MtWRG2OUE6XtXCRmE0mXmL8IqWRSWOw3UcefUiaBvWs3r0D6tnHLumt42-aAPSbQW7EMhzn80ghla5A5RB97wByzk8Dx08TBZm2G-fCly34oXuyPd-_d4i4p13dRlGlus3U30ckxzhU5eOC8mWxH_YgEFi-GpvCpOLz5kyWwwsu5Gx1lbS04XveHBDJiKqCX6ybluQvH8OWPRd_gCNC5Ei6hVGdml7s6MFwpLZ3tueD-PPuY53ysmwZmLQM6e8mEzqck6AWXAfNTmXQsbdoUyqfLfa6U0tTrqI1loi-gkHxUaE-eu31hCGcQ2yqeBDuALQerd8sNF76dY-5WkdGUFAjhEng_jwMTJIVQkIMhjA14LQC6LSD1yp290Ybhn1KoiRVuoZ39rdO10A3-GfCUjY8rDSd5TkLSQgo7dL1_1YBdzYjZpx4HWy5OPsQnsCHFLE";
 
 // ? Get Popular Products Home
 
 export const getPopularProductsHome = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/popular-products`);
+    const response = await api.get(`/api/frontend/popular-products`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -28,8 +59,8 @@ export const getPopularProductsHome = async () => {
 
 export const getPopularProductsAll = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/popular-products-peginate`
+    const response = await api.get(
+      `/api/frontend/popular-products-peginate`
     );
     return response.data;
   } catch (error) {
@@ -41,7 +72,7 @@ export const getPopularProductsAll = async () => {
 
 export const getNewProductsHome = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/new-products`);
+    const response = await api.get(`/api/frontend/new-products`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -52,8 +83,8 @@ export const getNewProductsHome = async () => {
 
 export const getNewProductsAll = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/new-products-peginate`
+    const response = await api.get(
+      `/api/frontend/new-products-peginate`
     );
     return response.data;
   } catch (error) {
@@ -65,7 +96,7 @@ export const getNewProductsAll = async () => {
 
 export const getAllProductsHome = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/products`);
+    const response = await api.get(`/api/frontend/products`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -76,8 +107,8 @@ export const getAllProductsHome = async () => {
 
 export const getAllProductsDetail = async (page: string | number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/products-peginate?page=${page}`
+    const response = await api.get(
+      `/api/frontend/products-peginate?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -90,7 +121,7 @@ export const getAllProductsDetail = async (page: string | number) => {
 
 export const getProductDetails = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/frontend/products/${id}`);
+    const response = await api.get(`/api/frontend/products/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -100,7 +131,7 @@ export const getProductDetails = async (id: string) => {
 // ? PRODUCT DETAIL CHAT
 export const getProductDetailsChat = async (id: string,page:any) => {
   try {
-    const response = await axios.get(`${url}/api/admin/chat-with-seller/${id}?page=${page}`);
+    const response = await api.get(`/api/admin/chat-with-seller/${id}?page=${page}`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -113,8 +144,8 @@ export const getProductDetailWithCustomerId = async (
   customerID: string
 ) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/products/${productID},${customerID}`
+    const response = await api.get(
+      `/api/frontend/products/${productID},${customerID}`
     );
     return response.data;
   } catch (error) {
@@ -126,7 +157,7 @@ export const getProductDetailWithCustomerId = async (
 
 export const getProductCategories = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/category`);
+    const response = await api.get(`/api/frontend/category`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -140,8 +171,8 @@ export const getProductByCategory = async (
   page: string | number
 ) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/products-by-category-id/${id}?page=${page}`
+    const response = await api.get(
+      `/api/frontend/products-by-category-id/${id}?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -153,7 +184,7 @@ export const getProductByCategory = async (
 
 export const getNews = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/news`);
+    const response = await api.get(`/api/frontend/news`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -164,11 +195,7 @@ export const getNews = async () => {
 
 export const getNewsAdminById = async (page = 1) => {
   try {
-    const response = await axios.get(`${url}/api/admin/news?page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Set the token in the Authorization header
-      },
-    });
+    const response = await api.get(`/api/admin/news?page=${page}`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -180,11 +207,7 @@ export const getNewsAdminById = async (page = 1) => {
 
 export const getNewsAdmin = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/news`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Set the token in the Authorization header
-      },
-    });
+    const response = await api.get(`/api/admin/news`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -195,7 +218,7 @@ export const getNewsAdmin = async () => {
 
 export const getProductFrontendCategory = async () => {
   try {
-    const response = await axios.get(`${url}/api/frontend/category`);
+    const response = await api.get(`/api/frontend/category`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -206,7 +229,7 @@ export const getProductFrontendCategory = async () => {
 
 export const getUserInfo = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-userinfo/${id}`);
+    const response = await api.get(`/api/admin/get-userinfo/${id}`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -217,7 +240,7 @@ export const getUserInfo = async (id: string) => {
 
 export const getWishlistProducts = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/wishlist/${id}`);
+    const response = await api.get(`/api/admin/wishlist/${id}`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -228,7 +251,7 @@ export const getWishlistProducts = async (id: string) => {
 
 export const getFollowedStores = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/follower/${id}`);
+    const response = await api.get(`/api/admin/follower/${id}`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -239,7 +262,7 @@ export const getFollowedStores = async (id: string) => {
 
 export const getAllSponsers = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/event/sponsor`);
+    const response = await api.get(`/api/admin/event/sponsor`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -250,21 +273,32 @@ export const getAllSponsers = async () => {
 
 export const getSellerBasicInfo = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/seller-basic-info/${id}`
+    const response = await api.get(
+      `/api/admin/seller-basic-info/${id}`
     );
     return response?.data;
   } catch (error) {
     console.log(error);
   }
 };
-
+export const sellerApprove = async (seller_pid: string|null, data:any) => {
+  try {
+    const response = await api.post(`/api/admin/seller-approve/${seller_pid}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 // ? Get seller latest products
 
 export const getLatestSellerProducts = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/seller-last-product/${id}`
+    const response = await api.get(
+      `/api/admin/seller-last-product/${id}`
     );
     return response?.data;
   } catch (error) {
@@ -279,8 +313,8 @@ export const getAllSellerProducts = async (
   page: string | number
 ) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/seller-all-product/${id}?page=${page}`
+    const response = await api.get(
+      `/api/admin/seller-all-product/${id}?page=${page}`
     );
     return response?.data;
   } catch (error) {
@@ -290,13 +324,13 @@ export const getAllSellerProducts = async (
 
 export const getSellerOrderInfo = async (id: string) => {
   // try {
-  // 	const response = await axios.get(`${url}/api/admin/get-userinfo/${id}`);
+  // 	const response = await api.get(`/api/admin/get-userinfo/${id}`);
   // 	return response?.data;
   // } catch (error) {
   // 	console.log(error);
   // }
   try {
-    const response = await axios.get(`${url}/api/admin/seller-oder-info/${id}`);
+    const response = await api.get(`/api/admin/seller-oder-info/${id}`);
     console.log("response", response);
     return response?.data;
   } catch (error) {
@@ -308,7 +342,7 @@ export const getSellerOrderInfo = async (id: string) => {
 
 export const sellerOrderList = async (id: any) => {
   try {
-    const response = await axios.get(`${url}/api/admin/seller-oder-list/${id}`);
+    const response = await api.get(`/api/admin/seller-oder-list/${id}`);
 
     return response?.data?.data;
   } catch (error) {
@@ -320,8 +354,8 @@ export const sellerOrderList = async (id: any) => {
 
 export const sellerOrderDetails = async (id: any) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/seller-oder-details/${id}`
+    const response = await api.get(
+      `/api/admin/seller-oder-details/${id}`
     );
     return response?.data?.data;
   } catch (error) {
@@ -333,8 +367,8 @@ export const sellerOrderDetails = async (id: any) => {
 
 export const getSellerAllProducts = async (id: any) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/product-by-id/${id}`
+    const response = await api.get(
+      `/api/admin/product-by-id/${id}`
     );
     return response?.data?.data;
   } catch (error) {
@@ -346,8 +380,8 @@ export const getSellerAllProducts = async (id: any) => {
 
 export const getSellerChat = async (id: any,page: string | number,queryNumber:any) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/get-chats-for-seller/${id}/${queryNumber}?page=${page}`
+    const response = await api.get(
+      `/api/admin/get-chats-for-seller/${id}/${queryNumber}?page=${page}`
     );
     return response?.data?.data;
   } catch (error) {
@@ -359,8 +393,8 @@ export const getSellerChat = async (id: any,page: string | number,queryNumber:an
 
 export const getOrderDetails = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/user-oder-details/${id}`
+    const response = await api.get(
+      `/api/admin/user-oder-details/${id}`
     );
     return response.data;
   } catch (error) {
@@ -372,7 +406,7 @@ export const getOrderDetails = async (id: string) => {
 
 export const getSellerInfo = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-userinfo/${id}`);
+    const response = await api.get(`/api/admin/get-userinfo/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -384,8 +418,8 @@ export const getSellerInfo = async (id: string) => {
 export const getSearchProduct = async (urlLastSegment: string | undefined) => {
   // console.log(urlLastSegment);
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/customer-product-filter?${urlLastSegment}`
+    const response = await api.get(
+      `/api/frontend/customer-product-filter?${urlLastSegment}`
     );
     return response.data;
   } catch (error) {
@@ -400,8 +434,8 @@ export const getSellerSearchProduct = async (
 ) => {
   // console.log(urlLastSegment);
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/customer-product-filter?${urlLastSegment}`
+    const response = await api.get(
+      `/api/frontend/customer-product-filter?${urlLastSegment}`
     );
     return response.data;
   } catch (error) {
@@ -414,8 +448,8 @@ export const getSellerSearchProduct = async (
 export const getAllReviews = async (productId: string | undefined) => {
   // console.log(urlLastSegment);
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/review-rating/${productId}`
+    const response = await api.get(
+      `/api/frontend/review-rating/${productId}`
     );
     return response.data;
   } catch (error) {
@@ -427,8 +461,8 @@ export const getAllReviews = async (productId: string | undefined) => {
 
 export const getCustomerOrderCount = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/customer-oder-count/${id}`
+    const response = await api.get(
+      `/api/admin/customer-oder-count/${id}`
     );
     return response.data;
   } catch (error) {
@@ -440,8 +474,8 @@ export const getCustomerOrderCount = async (id: string) => {
 
 export const getSingleOrderDetails = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/seller-oder-details/${id}`
+    const response = await api.get(
+      `/api/admin/seller-oder-details/${id}`
     );
     return response.data;
   } catch (error) {
@@ -453,8 +487,8 @@ export const getSingleOrderDetails = async (id: string) => {
 
 export const getLastFourNotifications = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/recent-notifications/${id}`
+    const response = await api.get(
+      `/api/admin/recent-notifications/${id}`
     );
     return response.data;
   } catch (error) {
@@ -466,8 +500,8 @@ export const getLastFourNotifications = async (id: string) => {
 
 export const getAllNotifications = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/all-notifications/${id}`
+    const response = await api.get(
+      `/api/admin/all-notifications/${id}`
     );
     return response.data;
   } catch (error) {
@@ -481,7 +515,7 @@ export const getAllNotifications = async (id: string) => {
 
 export const getAllEventCategories = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/ew-category`);
+    const response = await api.get(`/api/admin/ew-category`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -492,7 +526,7 @@ export const getAllEventCategories = async () => {
 
 export const getAllDivisions = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/geo-division`);
+    const response = await api.get(`/api/admin/geo-division`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -503,16 +537,28 @@ export const getAllDivisions = async () => {
 
 export const getAllVenue = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/event/venue`);
+    const response = await api.get(`/api/admin/event/venue`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
   }
 };
 
+export const courseApprove = async (course_provider: string|null, data:any) => {
+  try {
+    const response = await api.post(`/api/admin/course-provider-approve/${course_provider}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getAllProviders = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/course-providers`);
+    const response = await api.get(`/api/admin/course-providers`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -521,7 +567,7 @@ export const getAllProviders = async () => {
 
 export const getAllStudents = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/students`);
+    const response = await api.get(`/api/admin/students`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -530,7 +576,7 @@ export const getAllStudents = async () => {
 // ? Get All users
 export const getAllUsers = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-alluser`);
+    const response = await api.get(`/api/admin/get-alluser`);
     return response?.data;
   } catch (error) {
     console.log(error);
@@ -539,7 +585,7 @@ export const getAllUsers = async () => {
 // ? Get All sellers
 export const getAllSellers = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-allseller`);
+    const response = await api.get(`/api/admin/get-allseller`);
     // console.log(response?.data)
     return response?.data;
   } catch (error) {
@@ -550,7 +596,7 @@ export const getAllSellers = async () => {
 
 export const getAllSpeakers = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/event/speaker`);
+    const response = await api.get(`/api/admin/event/speaker`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -561,7 +607,7 @@ export const getAllSpeakers = async () => {
 
 export const getAllEventsCategory = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/ew-category`);
+    const response = await api.get(`/api/admin/ew-category`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -572,7 +618,7 @@ export const getAllEventByCategory = async (
   query: string | undefined | null
 ) => {
   try {
-    const response = await axios.get(`${url}/api/${query}`);
+    const response = await api.get(`/api/${query}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -581,8 +627,8 @@ export const getAllEventByCategory = async (
 
 export const getAllEventByMonthYear = async (monthYear: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/events-by-monthyear/${monthYear}`
+    const response = await api.get(
+      `/api/frontend/events-by-monthyear/${monthYear}`
     );
     return response.data;
   } catch (error) {
@@ -594,8 +640,8 @@ export const getAllEventByMonthYear = async (monthYear: string) => {
 
 export const getLimitedUpcomingEvents = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/up-comming-events-firstsix`
+    const response = await api.get(
+      `/api/frontend/up-comming-events-firstsix`
     );
     return response.data;
   } catch (error) {
@@ -607,8 +653,8 @@ export const getLimitedUpcomingEvents = async () => {
 
 export const getUpcomingEventsAll = async (page: number = 1) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/up-comming-events-all?page=${page}`
+    const response = await api.get(
+      `/api/frontend/up-comming-events-all?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -620,8 +666,8 @@ export const getUpcomingEventsAll = async (page: number = 1) => {
 
 export const getFeaturedEventsHome = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/featured-events-firstEight`
+    const response = await api.get(
+      `/api/frontend/featured-events-firstEight`
     );
     return response.data;
   } catch (error) {
@@ -633,8 +679,8 @@ export const getFeaturedEventsHome = async () => {
 
 export const getAllFeaturedEvents = async (page: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/featured-events-otherall?page=${page}`
+    const response = await api.get(
+      `/api/frontend/featured-events-otherall?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -646,8 +692,8 @@ export const getAllFeaturedEvents = async (page: number) => {
 
 export const getAllEvents = async (page: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-all-events?page=${page}`
+    const response = await api.get(
+      `/api/frontend/get-all-events?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -659,7 +705,7 @@ export const getAllEvents = async (page: number) => {
 
 export const getAllEventsBackend = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/event/newEvent`);
+    const response = await api.get(`/api/admin/event/newEvent`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -669,7 +715,7 @@ export const getAllEventsBackend = async () => {
 
 export const getAllEventsBackendById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/event-by-id/${id}`);
+    const response = await api.get(`/api/admin/event-by-id/${id}`);
 
     const responseData = response?.data?.data;
     // console.log(responseData);
@@ -682,8 +728,8 @@ export const getAllEventsBackendById = async (id: string) => {
 // ? Get past events
 export const getPastEvents = async (page: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/post-events-all?page=${page}`
+    const response = await api.get(
+      `/api/frontend/post-events-all?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -695,7 +741,7 @@ export const getPastEvents = async (page: number) => {
 
 export const getSearchEvents = async (query: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/search-event?${query}`);
+    const response = await api.get(`/api/admin/search-event?${query}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -706,21 +752,40 @@ export const getSearchEvents = async (query: string) => {
 
 export const getEventsByOrganizer = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/events-by-organizer/${id}`
+    const response = await api.get(
+      `/api/admin/events-by-organizer/${id}`
     );
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
-
+export const getOrganizerProviders = async () => {
+  try {
+    const response = await api.get(`/api/admin/event/organizer`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const approveOrganizerProvider = async (org_provider_pid: string|null, data:any) => {
+  try {
+    const response = await api.post(`/api/admin/organizer-approve/${org_provider_pid}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    return response?.data;
+  } catch (error:any) {
+    throw new Error(error?.response?.data?.meta?.message || "something went wrong")
+  }
+};
 // Overview
 
 export const getOverViewData = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/registration-overview/${id}`
+    const response = await api.get(
+      `/api/admin/registration-overview/${id}`
     );
     return response.data;
   } catch (error) {
@@ -732,8 +797,8 @@ export const getOverViewData = async (id: string) => {
 
 export const getLimitedAllEvents = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/firsteight-of-allevents`
+    const response = await api.get(
+      `/api/frontend/firsteight-of-allevents`
     );
     return response.data;
   } catch (error) {
@@ -745,8 +810,8 @@ export const getLimitedAllEvents = async () => {
 
 export const getLimitedPastEvents = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/post-events-firstSix`
+    const response = await api.get(
+      `/api/frontend/post-events-firstSix`
     );
     return response.data;
   } catch (error) {
@@ -758,7 +823,7 @@ export const getLimitedPastEvents = async () => {
 
 export const getAllDevisions = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/geo-division`);
+    const response = await api.get(`/api/admin/geo-division`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -769,8 +834,8 @@ export const getAllDevisions = async () => {
 
 export const getEventsDivisionId = async (query: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/events-by-division/${query}`
+    const response = await api.get(
+      `/api/frontend/events-by-division/${query}`
     );
     return response.data;
   } catch (error) {
@@ -782,7 +847,7 @@ export const getEventsDivisionId = async (query: string) => {
 
 export const getEventsParticipant = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/users-of-event/${id}`);
+    const response = await api.get(`/api/admin/users-of-event/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -793,8 +858,8 @@ export const getEventsParticipant = async (id: string) => {
 
 export const getEventsParticipantByUser = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/event/participant/${id}`
+    const response = await api.get(
+      `/api/admin/event/participant/${id}`
     );
     return response.data;
   } catch (error) {
@@ -806,8 +871,8 @@ export const getEventsParticipantByUser = async (id: string) => {
 
 export const getPhyscialCourses = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course?courseType=physical`
+    const response = await api.get(
+      `/api/frontend/get-course?courseType=physical`
     );
     return response.data;
   } catch (error) {
@@ -818,7 +883,7 @@ export const getPhyscialCourses = async () => {
 // ? Get Online Courses
 export const addNewLesson = async (data: any) => {
   try {
-    await axios.post(`${url}/api/admin/course-lessons`, data, {
+    await api.post(`/api/admin/course-lessons`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
@@ -829,8 +894,8 @@ export const addNewLesson = async (data: any) => {
 };
 export const getOnlineCourses = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course?courseType=online`
+    const response = await api.get(
+      `/api/frontend/get-course?courseType=online`
     );
     return response.data;
   } catch (error) {
@@ -839,8 +904,8 @@ export const getOnlineCourses = async () => {
 };
 export const getCourseLessons = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/course-lessons/${id}`
+    const response = await api.get(
+      `/api/admin/course-lessons/${id}`
     );
     return response.data.data;
   } catch (error) {
@@ -849,8 +914,8 @@ export const getCourseLessons = async (id: string) => {
 };
 export const getCourseLessonById = async (id: string|null) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/course-lesson/${id}`
+    const response = await api.get(
+      `/api/admin/course-lesson/${id}`
     );
     return response.data.data;
   } catch (error) {
@@ -859,8 +924,8 @@ export const getCourseLessonById = async (id: string|null) => {
 };
 export const getCourseDetailsById = async (id: string|null) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course-details/${id}`
+    const response = await api.get(
+      `/api/frontend/get-course-details/${id}`
     );
     return response.data.data;
   } catch (error) {
@@ -871,8 +936,8 @@ export const getCourseDetailsById = async (id: string|null) => {
 
 export const getBlendedCourses = async () => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course?courseType=blended`
+    const response = await api.get(
+      `/api/frontend/get-course?courseType=blended`
     );
     return response.data;
   } catch (error) {
@@ -884,8 +949,8 @@ export const getBlendedCourses = async () => {
 
 export const getCourseDetail = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course-details/${id}`
+    const response = await api.get(
+      `/api/frontend/get-course-details/${id}`
     );
     return response.data;
   } catch (error) {
@@ -900,8 +965,8 @@ export const getCourseDetailWithStudentId = async (
   studentid: string
 ) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-course-details/${courseid},${studentid}`
+    const response = await api.get(
+      `/api/frontend/get-course-details/${courseid},${studentid}`
     );
     return response.data;
   } catch (error) {
@@ -913,7 +978,7 @@ export const getCourseDetailWithStudentId = async (
 
 export const getProviderInfo = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/frontend/mentor/${id}`);
+    const response = await api.get(`/api/frontend/mentor/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -924,7 +989,7 @@ export const getProviderInfo = async (id: string) => {
 
 export const getStudentInfo = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/frontend/student/${id}`);
+    const response = await api.get(`/api/frontend/student/${id}`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -935,7 +1000,7 @@ export const getStudentInfo = async (id: string) => {
 
 export const getSkillSet = async () => {
   try {
-    const response = await axios.get(`${url}/api/get-skillset`);
+    const response = await api.get(`/api/get-skillset`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -943,7 +1008,7 @@ export const getSkillSet = async () => {
 };
 export const getSkillBySkillset = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-skill-by-skillset/${id}`);
+    const response = await api.get(`/api/get-skill-by-skillset/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -953,7 +1018,7 @@ export const getSkillBySkillset = async (id: string) => {
 // ? GET ALL SKILL
 export const getAllSkill = async () => {
   try {
-    const response = await axios.get(`${url}/api/get-all-skills`);
+    const response = await api.get(`/api/get-all-skills`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -964,7 +1029,7 @@ export const getAllSkill = async () => {
 
 export const getBranchList = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/branch/${id}`);
+    const response = await api.get(`/api/admin/branch/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -975,8 +1040,8 @@ export const getBranchList = async (id: string) => {
 
 export const getCoursesByProviderId = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/course-by-user_id/${id}`
+    const response = await api.get(
+      `/api/frontend/course-by-user_id/${id}`
     );
     return response.data.data;
   } catch (error) {
@@ -985,10 +1050,30 @@ export const getCoursesByProviderId = async (id: string) => {
 };
 
 // ? Get Latest Jobs
-
+export const getJobProviders = async () => {
+  try {
+    const response = await api.get(`/api/get-all-job-providers`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const approveJobProvider = async (job_provider_pid: string|null, data:any) => {
+  try {
+    const response = await api.post(`/api/admin/job-provider-approve/${job_provider_pid}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    return response?.data;
+  } catch (error:any) {
+    console.log(error?.response?.data?.meta?.message)
+    throw new Error(error?.response?.data?.meta?.message || "something went wrong")
+  }
+};
 export const getLatestJobs = async () => {
   try {
-    const response = await axios.get(`${url}/api/get-latest-jobs`);
+    const response = await api.get(`/api/get-latest-jobs`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -999,7 +1084,7 @@ export const getLatestJobs = async () => {
 
 export const getLatestTasks = async () => {
   try {
-    const response = await axios.get(`${url}/api/get-latest-tasks`);
+    const response = await api.get(`/api/get-latest-tasks`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1010,7 +1095,7 @@ export const getLatestTasks = async () => {
 
 export const getAllJobs = async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/get-all-jobs?page=${page}`);
+    const response = await api.get(`/api/get-all-jobs?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1021,7 +1106,7 @@ export const getAllJobs = async (page: number) => {
 
 export const getAllTasks = async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/get-all-tasks?page=${page}`);
+    const response = await api.get(`/api/get-all-tasks?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1031,8 +1116,8 @@ export const getAllTasks = async (page: number) => {
 
 export const getStudentEnrolledCourse = async (id: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/get-student-enrolled-course/${id}`
+    const response = await api.get(
+      `/api/frontend/get-student-enrolled-course/${id}`
     );
     return response.data;
   } catch (error) {
@@ -1044,7 +1129,7 @@ export const getStudentEnrolledCourse = async (id: string) => {
 
 export const getJobDetailById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-job/${id}`);
+    const response = await api.get(`/api/get-job/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1055,7 +1140,7 @@ export const getJobDetailById = async (id: string) => {
 
 export const getTaskDetailById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-task/${id}`);
+    const response = await api.get(`/api/get-task/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1066,7 +1151,7 @@ export const getTaskDetailById = async (id: string) => {
 
 export const getCourseProviderInfoById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/course-provider/${id}`);
+    const response = await api.get(`/api/admin/course-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1076,7 +1161,7 @@ export const getCourseProviderInfoById = async (id: string) => {
 
 export const getJobProviderInfo = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-job-provider/${id}`);
+    const response = await api.get(`/api/get-job-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1087,8 +1172,8 @@ export const getJobProviderInfo = async (id: string) => {
 
 export const getSearchedCourses = async (param: string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/frontend/search-course?searchQuery=${param}`
+    const response = await api.get(
+      `/api/frontend/search-course?searchQuery=${param}`
     );
     return response.data.data;
   } catch (error) {
@@ -1101,7 +1186,7 @@ export const getSearchedCourses = async (param: string) => {
 
 export const getPostedJobsByProviderId = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-jobs-by-provider/${id}`);
+    const response = await api.get(`/api/get-jobs-by-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1112,7 +1197,7 @@ export const getPostedJobsByProviderId = async (id: string) => {
 
 export const getPostedTaskByProviderId = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-task-by-provider/${id}`);
+    const response = await api.get(`/api/get-task-by-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1123,7 +1208,7 @@ export const getPostedTaskByProviderId = async (id: string) => {
 
 export const getJobDetailsById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-job/${id}`);
+    const response = await api.get(`/api/get-job/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1134,7 +1219,7 @@ export const getJobDetailsById = async (id: string) => {
 
 export const getTaskDetailsById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-task/${id}`);
+    const response = await api.get(`/api/get-task/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1145,7 +1230,7 @@ export const getTaskDetailsById = async (id: string) => {
 
 export const getJobProviderDetailsById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-job-provider/${id}`);
+    const response = await api.get(`/api/get-job-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1155,7 +1240,7 @@ export const getJobProviderDetailsById = async (id: string) => {
 
 export const getCourseProviderDetailsById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/course-provider/${id}`);
+    const response = await api.get(`/api/admin/course-provider/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1164,7 +1249,7 @@ export const getCourseProviderDetailsById = async (id: string) => {
 
 export const fetchData = async (path: string) => {
   try {
-    const response = await axios.get(`${url}/api/${path}`);
+    const response = await api.get(`/api/${path}`);
     return response.data.data;
   } catch (err: any) {
     console.log("error");
@@ -1173,7 +1258,7 @@ export const fetchData = async (path: string) => {
 
 export const getJobSeekerEditById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/get-job-seeker/${id}`);
+    const response = await api.get(`/api/get-job-seeker/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1182,7 +1267,7 @@ export const getJobSeekerEditById = async (id: string) => {
 
 export const getProductCategory = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/category`);
+    const response = await api.get(`/api/admin/category`);
     return response?.data?.data;
   } catch (error) {
     console.log(error);
@@ -1190,8 +1275,8 @@ export const getProductCategory = async () => {
 };
 export const getAllBlogs = async (page: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/blog-post-all-blogs?page=${page}`
+    const response = await api.get(
+      `/api/admin/blog-post-all-blogs?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -1201,8 +1286,8 @@ export const getAllBlogs = async (page: number) => {
 
 export const blogsManagement = async (page: number,userID:string) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`
+    const response = await api.get(
+      `/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`
     );
     return response.data.blogs;
   } catch (error) {
@@ -1211,7 +1296,7 @@ export const blogsManagement = async (page: number,userID:string) => {
 };
 export const getHomeBlogs = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/blog-post-homepage`);
+    const response = await api.get(`/api/admin/blog-post-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1220,7 +1305,7 @@ export const getHomeBlogs = async () => {
 
 export const getBlogById = async (id: string, num: number) => {
   try {
-    const response = await axios.get(`${url}/api/admin/blog-post/${id}/${num}`);
+    const response = await api.get(`/api/admin/blog-post/${id}/${num}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1228,8 +1313,8 @@ export const getBlogById = async (id: string, num: number) => {
 };
 export const getCommentById = async (id: string, num: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/get-blog-comment/${id}/${num}`
+    const response = await api.get(
+      `/api/admin/get-blog-comment/${id}/${num}`
     );
     return response.data;
   } catch (error) {
@@ -1239,7 +1324,7 @@ export const getCommentById = async (id: string, num: number) => {
 
 export const getAllDocuments = async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/admin/documents?page=${page}`);
+    const response = await api.get(`/api/admin/documents?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1247,7 +1332,7 @@ export const getAllDocuments = async (page: number) => {
 };
 export const documentsManagement = async (page: number,userID:string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    const response = await api.get(`/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.documents;
   } catch (error) {
     console.log(error);
@@ -1255,7 +1340,7 @@ export const documentsManagement = async (page: number,userID:string) => {
 };
 export const getHomeDocuments = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/document-homepage`);
+    const response = await api.get(`/api/admin/document-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1264,7 +1349,7 @@ export const getHomeDocuments = async () => {
 
 export const getAllVideos = async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/admin/videos?page=${page}`);
+    const response = await api.get(`/api/admin/videos?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1273,7 +1358,7 @@ export const getAllVideos = async (page: number) => {
 
 export const videoManagement = async (page: number,userID:string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    const response = await api.get(`/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.videos;
   } catch (error) {
     console.log(error);
@@ -1282,7 +1367,7 @@ export const videoManagement = async (page: number,userID:string) => {
 
 export const getHomeVideos = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/video-homepage`);
+    const response = await api.get(`/api/admin/video-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1291,7 +1376,7 @@ export const getHomeVideos = async () => {
 
 export const getVideoById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/video/${id}`);
+    const response = await api.get(`/api/admin/video/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1300,7 +1385,7 @@ export const getVideoById = async (id: string) => {
 
 export const getAllArticles = async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/admin/articles?page=${page}`);
+    const response = await api.get(`/api/admin/articles?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1309,7 +1394,7 @@ export const getAllArticles = async (page: number) => {
 
 export const articlesManagement = async (page: number,userID:string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
+    const response = await api.get(`/api/admin/get-vbad-by-pid/${userID}/10?page=${page}`);
     return response.data.articles;
   } catch (error) {
     console.log(error);
@@ -1318,7 +1403,7 @@ export const articlesManagement = async (page: number,userID:string) => {
 
 export const getHomeArticle = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/article-homepage`);
+    const response = await api.get(`/api/admin/article-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1327,7 +1412,7 @@ export const getHomeArticle = async () => {
 
 export const getArticleById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/articles/${id}`);
+    const response = await api.get(`/api/admin/articles/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1337,7 +1422,7 @@ export const getArticleById = async (id: string) => {
 
 export const getHomeStories = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/success-stories-homepage`);
+    const response = await api.get(`/api/admin/success-stories-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1346,7 +1431,7 @@ export const getHomeStories = async () => {
 
 export const getAllStories= async (page: number) => {
   try {
-    const response = await axios.get(`${url}/api/admin/success-stories?page=${page}`);
+    const response = await api.get(`/api/admin/success-stories?page=${page}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1355,7 +1440,7 @@ export const getAllStories= async (page: number) => {
 
 export const getStoryById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/success-stories/${id}`);
+    const response = await api.get(`/api/admin/success-stories/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
@@ -1364,7 +1449,7 @@ export const getStoryById = async (id: string) => {
 
 export const getHomeChallenges = async () => {
   try {
-    const response = await axios.get(`${url}/api/admin/challanges-homepage`);
+    const response = await api.get(`/api/admin/challanges-homepage`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -1373,8 +1458,8 @@ export const getHomeChallenges = async () => {
 
 export const getAllChallenges = async (page: number) => {
   try {
-    const response = await axios.get(
-      `${url}/api/admin/challanges?page=${page}`
+    const response = await api.get(
+      `/api/admin/challanges?page=${page}`
     );
     return response.data;
   } catch (error) {
@@ -1384,7 +1469,7 @@ export const getAllChallenges = async (page: number) => {
 
 export const getChallengeById = async (id: string) => {
   try {
-    const response = await axios.get(`${url}/api/admin/challanges/${id}`);
+    const response = await api.get(`/api/admin/challanges/${id}`);
     return response.data.data;
   } catch (error) {
     console.log(error);

@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { AiOutlineUpload } from "react-icons/ai";
 import { useCookies } from "next-client-cookies";
 import axios from "axios";
-import { getStoryById, url } from "@/api/api";
+import { api, getStoryById } from "@/api/api";
 import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import schema from "./schema";
@@ -77,7 +77,7 @@ const abortControllerRef = useRef<AbortController | null>(null);
     abortControllerRef.current = new AbortController();
     try {
       setIsUploading(true);
-      await axios.post(`${url}/api/admin/update-success-stories/${id}`, formData, {
+      await api.post(`/api/admin/update-success-stories/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

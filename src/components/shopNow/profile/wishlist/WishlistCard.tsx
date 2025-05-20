@@ -1,10 +1,7 @@
 "use client";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import StarRating from "@/components/shared/RenderStars";
-import { addToCart } from "@/redux/Reducer/CartSlice";
 import { handleWishlistUpdate } from "@/redux/Reducer/MainSlice";
-import { removeFromWishList } from "@/redux/Reducer/WishListSlice";
-import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { useLocale } from "next-intl";
 import Image from "next/image";
@@ -40,8 +37,8 @@ const WishlistCard = (props: IWishlistCard) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/wishlist/${customerId},${props.id}`
+      const response = await api.delete(
+        `/api/admin/wishlist/${customerId},${props.id}`
       );
       toast.success("Product removed form wishlist successfully.", {
         position: "bottom-left",

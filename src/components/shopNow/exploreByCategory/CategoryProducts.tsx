@@ -3,6 +3,7 @@ import ProductCard from "@/components/shared/ProductCard";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { FC } from "react";
+import SearchBar from "../home/SearchBar";
 
 type ICategoryProductProps = {
 	productLoading: boolean;
@@ -25,19 +26,10 @@ const CategoryProducts: FC<ICategoryProductProps> = ({
 			</p> */}
 
 			{/* ---------------- SEARCH FIELD ----------------   */}
+				<div className="w-full">
+					<SearchBar/>
+				</div>
 
-			<div className="flex items-center flex-col md:flex-row gap-2 md:gap-8 py-8">
-				<input
-					type="text"
-					placeholder={t("searchForProducts")}
-					className="my-6 py-2 px-4 text-xl flex-grow rounded-full w-full bg-white border border-brandPrimary"
-				/>
-				<Link href={`/${locale}/shop-now/searched-products`}>
-					<button className="w-48 bg-brandPrimary text-white py-2 rounded-full font-medium text-lg hover:bg-brandHover">
-						{t("search")}
-					</button>
-				</Link>
-			</div>
 
 			{productLoading ? (
 				<div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

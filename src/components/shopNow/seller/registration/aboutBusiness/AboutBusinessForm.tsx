@@ -56,7 +56,6 @@ const AboutBusinessForm = ({ setActive }: { setActive: Function }) => {
                   inputName="storeName"
                   register={register}
                   errors={errors}
-                  required={true}
                 />
                 {/* <ProductCategoryInput /> */}
                 {/* changed by abdullah miraz */}
@@ -69,7 +68,6 @@ const AboutBusinessForm = ({ setActive }: { setActive: Function }) => {
                   inputName="address"
                   register={register}
                   errors={errors}
-                  required={true}
                 />
                 <AboutBusinessInput
                   labelName={t("Area")}
@@ -78,7 +76,6 @@ const AboutBusinessForm = ({ setActive }: { setActive: Function }) => {
                   inputName="area"
                   register={register}
                   errors={errors}
-                  required={true}
                 />
                 <AboutBusinessInput
                   labelName={t("City")}
@@ -87,7 +84,6 @@ const AboutBusinessForm = ({ setActive }: { setActive: Function }) => {
                   inputName="city"
                   register={register}
                   errors={errors}
-                  required={true}
                 />
                 <AboutBusinessInput
                   labelName={t("Zip_Code")}
@@ -96,7 +92,6 @@ const AboutBusinessForm = ({ setActive }: { setActive: Function }) => {
                   inputName="zipCode"
                   register={register}
                   errors={errors}
-                  required={true}
                 />
                 <div className="mt-4 flex gap-4">
                   <button

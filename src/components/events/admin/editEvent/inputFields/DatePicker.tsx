@@ -1,5 +1,4 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { CalendarIcon } from "lucide-react";
 import {
   UseFormRegister,
@@ -13,7 +12,7 @@ interface DatePickerProps {
   setValue: UseFormSetValue<any>;
   watch?: UseFormWatch<any>;
   errors?: any;
-  defaultValue?:string;
+  defaultValue?: string;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -22,41 +21,30 @@ const DatePicker: React.FC<DatePickerProps> = ({
   setValue,
   watch,
   errors,
-  defaultValue
+  defaultValue,
 }) => {
-  const today = new Date().toISOString().split("T")[0]; // Default today's date
-  const currentDate = watch ? watch(name) : today;
-
-  console.log("Default Value:", defaultValue);
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
-    if (!currentDate) {
+    if (!defaultValue) {
       setValue(name, today);
     }
-  }, [currentDate, setValue, name, today]);
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = event.target.value;
-    setValue(name, selectedDate);
-  };
+  }, [defaultValue, name, setValue, today]);
 
   return (
-    <div className="relative">
-      <button className="w-full flex justify-start items-center text-left text-brandPrimary font-normal border  border-brandLsPrimary rounded-full px-2 py-[2px]">
-        <CalendarIcon className="mr-2 h-4 w-4" />
+    <div className="relative w-full">
+      <div className="flex items-center border border-brandLsPrimary rounded-full px-2 py-[2px]">
+        <CalendarIcon className="mr-2 h-4 w-4 text-brandPrimary" />
         <input
           type="date"
-          value={currentDate || today}
-          onChange={handleDateChange}
-          defaultValue={defaultValue && defaultValue}
-          className="w-full border-brandLsPrimary rounded px-2 py-1"
+          {...register(name)}
+          defaultValue={defaultValue || today}
+          className="w-full border-none outline-none bg-transparent text-brandPrimary"
         />
-        {errors && (
-          <p className="text-red-500 text-sm mt-1 ml-6">
-            {errors[name]?.message}
-          </p>
-        )}
-      </button>
+      </div>
+      {errors?.[name]?.message && (
+        <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
+      )}
     </div>
   );
 };

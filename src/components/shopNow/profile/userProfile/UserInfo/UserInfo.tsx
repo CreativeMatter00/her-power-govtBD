@@ -1,5 +1,4 @@
-import { url } from "@/api/api";
-import axios from "axios";
+import { api } from "@/api/api";
 import { useCookies } from "next-client-cookies";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -91,8 +90,8 @@ const UserInfo: FC<userInfo> = ({ userData, refetch }) => {
 
       try {
         // console.log("inside try");
-        const response = await axios.post(
-          `${url}/api/admin/update-profile-photo`,
+        const response = await api.post(
+          `/api/admin/update-profile-photo`,
           imageData
         );
         // console.log("Image uploaded successfully:", response?.data);

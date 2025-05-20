@@ -12,39 +12,28 @@ import TextInput from "../inputFields/TextInput";
 import { useQuery } from "@tanstack/react-query";
 import { getAllEventCategories } from "../../../../../api/api";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import ImageFileInput from "@/components/shared/ImageControllerField";
 
 const GeneralInformation = ({ eventData }: { eventData?: any }) => {
-  const [selectedBanner, setSelectedBanner] = useState<any>();
+  const [selectedBanner, setSelectedBanner] = useState<File | string | null>();
   // const [textDescription, setTextDescription] = useState<string>("");
   const [selectedThumbnail, setSelectedThumbnail] = useState<any>();
   const [isFeaturedEvent, setIsFeaturedEvent] = useState<boolean>(false);
 
-  console.log("Event Data:------------>", eventData)
+  // console.log("Event Data:------------>", eventData)
   // console.log("isFeaturedEvent:------------>", isFeaturedEvent)
-
+  // console.log("selectedBanner===========>", selectedBanner)
   const {
     register,
     formState: { errors },
     setValue,
     reset,
     handleSubmit,
+    trigger,
+    getValues,
     control,
   } = useFormContext();
 
-  useEffect(() => {
-    if (eventData) {
-      reset({
-        eventTitle: eventData.event_title,
-        eventCategory: eventData.category_pid,
-        description: eventData.event_desc,
-        featuredOrNot: eventData.featchered_event === 1,
-        eventBanner: eventData.banner_file_url || null,
-        thumbnail: eventData.thumbnail_file_url || null,
-      });
-
-      setIsFeaturedEvent(eventData.featchered_event === 1);
-    }
-  }, [eventData, reset]);
 
   const {
     isLoading,
@@ -61,9 +50,29 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
       </div>
     );
 
+
+    // const handleImageChangeBanner = (file: File | null) => {
+    //   setSelectedBanner(file);
+    //   if (file) {
+    //     const dataTransfer = new DataTransfer();
+    //     dataTransfer.items.add(file);
+    //     setValue("eventBanner", dataTransfer.files);
+    //     trigger("eventBanner");
+    //   }
+    // };
+    // const handleImageChangeThumbnail = (file: File | null) => {
+    //   setSelectedBanner(file);
+    //   if (file) {
+    //     const dataTransfer = new DataTransfer();
+    //     dataTransfer.items.add(file);
+    //     setValue("thumbnail", dataTransfer.files);
+    //     trigger("thumbnail");
+    //   }
+    // };
+
     // console.log("Event category PID:", eventData?.category_pid);
     // console.log("All categories data:", allEventCategories);
-
+console.log(errors)
   return (
     <>
       <section className="mt-2 mb-6">
@@ -120,20 +129,9 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
                 </div>
               </div>
             </div>
-
             <div className="flex max-lg:flex-col justify-between items-start gap-6">
               <div className="w-full flex flex-col gap-2">
-                <ImageInput
-                  title="Event Banner"
-                  selectedFile={selectedBanner}
-                  setSelectedFile={setSelectedBanner}
-                  register={register} // Pass the register function
-                  setValue={setValue} // Pass the setValue function
-                  inputName="eventBanner"
-                  required={true} // The name to register the file input
-                  imgSrc={eventData?.banner_file_url}
-                />
-
+                <ImageFileInput name="eventBanner" title="Event banner" required />
                 <div className="flex items-center max-md:items-start gap-2">
                   <HiOutlineInformationCircle className="text-brandPrimary w-4 h-4" />
                   <p className="text-sm text-greyPrimary">
@@ -144,25 +142,10 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
                     <span className="font-bold">&nbsp;PNG</span>
                   </p>
                 </div>
-                {errors?.eventBanner && (
-                  <p className="text-sm text-red-500">
-                    {String(errors.eventBanner?.message)}
-                  </p>
-                )}
               </div>
-
               <div className="w-full flex flex-col gap-2">
-                <ImageInput
-                  title="Event Thumbnail"
-                  selectedFile={selectedThumbnail}
-                  setSelectedFile={setSelectedThumbnail}
-                  register={register} // Add this line if needed
-                  setValue={setValue} // Ensure setValue is passed correctly
-                  inputName="thumbnail"
-                  required={true} // Set the appropriate input name for your form
-                  imgSrc={eventData?.thumbnail_file_url}
-                />
 
+              <ImageFileInput name="thumbnail" title="Event banner" required />
                 <div className="flex items-center max-md:items-start gap-2">
                   <HiOutlineInformationCircle className="text-brandPrimary w-4 h-4" />
                   <p className="text-sm text-greyPrimary">
@@ -173,11 +156,6 @@ const GeneralInformation = ({ eventData }: { eventData?: any }) => {
                     <span className="font-bold">&nbsp;PNG</span>
                   </p>
                 </div>
-                {errors?.thumbnail && (
-                  <p className="text-sm text-red-500">
-                    {String(errors.thumbnail?.message)}
-                  </p>
-                )}
               </div>
             </div>
             <TextInput

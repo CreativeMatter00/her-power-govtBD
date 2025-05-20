@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import InputField from "./InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SkillsetSchema from "./SkillsetSchema";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -41,7 +41,7 @@ const AddSkillset: React.FC<IProps> = ({ refetch, modalClose }) => {
     // console.log(skillData);
 
     try {
-      const response = await axios.post(`${url}/api/skillset-store`, skillData);
+      const response = await api.post(`/api/skillset-store`, skillData);
       // console.log(response);
 
       refetch();
@@ -61,7 +61,7 @@ const AddSkillset: React.FC<IProps> = ({ refetch, modalClose }) => {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Axios error:", error.response?.data);
+        console.error("api error:", error.response?.data);
         // alert(
         //   `Error: ${error.response?.data.message || "Something went wrong"}`
         // );

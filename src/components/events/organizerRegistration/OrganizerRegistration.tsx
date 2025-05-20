@@ -8,7 +8,7 @@ import PersonalInformation from "./PersonalInformation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import OrganizerRegistrationSchema from "./organizerRegistrationSchema";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,8 +48,8 @@ const OrganizerRegistration = () => {
 		};
 		// console.log(organizerData);
 		try {
-			const response = await axios.post(
-				`${url}/api/admin/event/organizer`,
+			const response = await api.post(
+				`/api/admin/event/organizer`,
 				organizerData
 			);
 			if (response?.data?.meta?.status === true) {

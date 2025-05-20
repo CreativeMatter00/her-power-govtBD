@@ -9,73 +9,8 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// const products = [
-// 	{
-// 		name: "Pink Flower vase",
-// 		image: "/assets/images/shop-now/product/1.jpg",
-// 		price: "1600",
-// 		oldPrice: "1800",
-// 		rating: 4,
-// 		sale: true,
-// 	},
-// 	{
-// 		name: "Matte Peacock Canvas Hanging Painting",
-// 		image: "/assets/images/shop-now/product/2.jpg",
-// 		price: "1600",
-// 		oldPrice: "2000",
-// 		rating: 5,
-// 		sale: false,
-// 	},
-// 	{
-// 		name: "Basketweave Chocolate Cake",
-// 		image: "/assets/images/shop-now/product/3.jpg",
-// 		price: "1500",
-// 		oldPrice: "1700",
-// 		rating: 3,
-// 		sale: true,
-// 	},
-// 	{
-// 		name: "DIY Rattan Style Lamp",
-// 		image: "/assets/images/shop-now/product/4.jpg",
-// 		price: "700",
-// 		oldPrice: "900",
-// 		rating: 4,
-// 		sale: false,
-// 	},
-// 	{
-// 		name: "Chinese Neolithic Pottery",
-// 		image: "/assets/images/shop-now/product/5.jpg",
-// 		price: "800",
-// 		oldPrice: "1000",
-// 		rating: 1,
-// 		sale: true,
-// 	},
-// 	{
-// 		name: "Chocolate Cake",
-// 		image: "/assets/images/shop-now/product/6.jpg",
-// 		price: "1000",
-// 		oldPrice: "1200",
-// 		rating: 3,
-// 		sale: false,
-// 	},
-// 	{
-// 		name: "Wooden Wall Clock",
-// 		image: "/assets/images/shop-now/product/7.jpg",
-// 		price: "1100",
-// 		oldPrice: "1400",
-// 		rating: 3,
-// 		sale: true,
-// 	},
-// 	{
-// 		name: "Marbel Vase",
-// 		image: "/assets/images/shop-now/product/8.jpg",
-// 		price: "500",
-// 		oldPrice: "700",
-// 		rating: 3,
-// 		sale: false,
-// 	},
-// ];
+import Search from "@/components/shopNow/home/Search";
+import SearchBar from "../home/SearchBar";
 
 const PopularProducts = () => {
 	const t = useTranslations("ShopNowHome");
@@ -113,17 +48,8 @@ const PopularProducts = () => {
 
 				{/* ---------------- SEARCH FIELD ----------------   */}
 
-				<div className="flex items-center flex-col md:flex-row gap-2 md:gap-8 py-8">
-					<input
-						type="text"
-						placeholder={t("searchForProducts")}
-						className="my-6 py-2 px-4 text-xl flex-grow rounded-full w-full bg-white border border-brandPrimary"
-					/>
-					<Link href={`/${locale}/shop-now/searched-products`}>
-						<button className="w-48 bg-brandPrimary text-white py-2 rounded-full font-medium text-lg hover:bg-brandHover">
-							{t("search")}
-						</button>
-					</Link>
+				<div className="w-full">
+					<SearchBar/>
 				</div>
 
 				{/* ---------------- PRODUCTS ----------------   */}

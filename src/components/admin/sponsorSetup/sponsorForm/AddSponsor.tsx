@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import SponsorSchema from "./SponsorSchema";
 import InputField from "@/components/shared/input/InputField";
 import ImageInput from "@/components/shared/input/ImageInput";
@@ -70,8 +70,8 @@ const AddSponsor: FC<IEditProps> = ({ refetch, modalClose }) => {
     // console.log("sponsorData", sponsorData);
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/event/sponsor`,
+      const response = await api.post(
+        `/api/admin/event/sponsor`,
         sponsorData,
         {
           headers: {

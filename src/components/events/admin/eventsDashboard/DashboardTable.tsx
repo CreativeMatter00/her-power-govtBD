@@ -3,8 +3,7 @@ import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import styles from "@/styles/Events.module.css";
 import { formattedDateOrTime } from "@/hooks/formattedDateOrTime";
-import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -40,8 +39,8 @@ const DashboardTable: React.FC<Props> = ({ allEvents, refetchEvents }) => {
 
   const handleDeleteEvent = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/event/newEvent/${id}`
+      const response = await api.delete(
+        `/api/admin/event/newEvent/${id}`
       );
 
       if (response?.data?.meta?.status === true) {

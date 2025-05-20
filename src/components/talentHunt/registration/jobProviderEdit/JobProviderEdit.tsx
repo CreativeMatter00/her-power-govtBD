@@ -5,7 +5,7 @@ import Title from "../Title";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
-import { getJobProviderInfo, getUserInfo, url } from "@/api/api";
+import { api, getJobProviderInfo, getUserInfo, url } from "@/api/api";
 import { useCookies } from "next-client-cookies";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -58,8 +58,8 @@ const JobProviderEdit = () => {
     jobProviderData.append("company_type", data.companyType);
     jobProviderData.append("websites_name", data.companyWebsiteUrl);
     try {
-      const response = await axios.post(
-        `${url}/api/job-provider-update/${jobProviderInfo[0].jobprovider_pid}`,
+      const response = await api.post(
+        `/api/job-provider-update/${jobProviderInfo[0].jobprovider_pid}`,
         jobProviderData
       );
       // console.log(response?.data?.meta?.status);

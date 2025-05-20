@@ -75,7 +75,7 @@ const EventCategories = () => {
 					className="w-full"
 				>
 					<CarouselContent className="pt-8">
-						{eventCategories.map((event: IEventCategory, index: number) => (
+						{eventCategories?.map((event: IEventCategory, index: number) => (
 							<CarouselItem key={index} className="basis-1/2 md:basis-1/6">
 								<div>
 									<CategoryEventCard event={event} />

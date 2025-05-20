@@ -1,41 +1,40 @@
 "use client";
-import { TKIcon } from "@/components/ui/icon/EventsIcon";
-import styles from "@/styles/Events.module.css";
-import { useLocale, useTranslations } from "next-intl";
-import { CiCalendar } from "react-icons/ci";
-import { IoMdTime } from "react-icons/io";
-import React, { useEffect, useState } from "react";
-import Countdown from "../../shared/countdown/CountDown";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { url } from "@/api/api";
-import axios from "axios";
-import { useCookies } from "next-client-cookies";
+import { api } from "@/api/api";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TKIcon } from "@/components/ui/icon/EventsIcon";
+import styles from "@/styles/Events.module.css";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CiCalendar } from "react-icons/ci";
+import { IoMdTime } from "react-icons/io";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import Countdown from "../../shared/countdown/CountDown";
 import SuccessModal from "./SuccessModal";
-import { useRouter } from "next/navigation";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogTrigger,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 
 const EventSummary = ({ eventSummary, refetch }: any) => {
   const t = useTranslations("Events");
@@ -63,8 +62,7 @@ const EventSummary = ({ eventSummary, refetch }: any) => {
     }
 
     try {
-      const apiUrl = `${url}/api/admin/event/participant`;
-      const response = await axios.post(apiUrl, {
+      const response = await api.post('/api/admin/event/participant', {
         event_pid: eventSummary.event_pid,
         ticket_pid:
           selectedTicket ||

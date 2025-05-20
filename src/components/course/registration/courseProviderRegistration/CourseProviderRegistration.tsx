@@ -2,29 +2,16 @@
 
 import { useFieldArray, useForm } from "react-hook-form";
 import InputField from "../inputFields/InputField";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
-import { getUserInfo, url } from "../../../../api/api";
+import { api, getUserInfo, url } from "../../../../api/api";
 import { useCookies } from "next-client-cookies";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { studentSchema } from "../schema/studentSchema";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { courseProviderSchema } from "../schema/courseProviderSchema";
 import DateField from "../inputFields/DateField";
 import { useQuery } from "@tanstack/react-query";
-import ScaleLoader from "react-spinners/ScaleLoader";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
@@ -163,8 +150,8 @@ const CourseProviderRegistration = () => {
     };
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/course-provider`,
+      const response = await api.post(
+        `/api/admin/course-provider`,
         formattedData
       );
       if (response?.data?.meta?.status === true) {
@@ -178,7 +165,6 @@ const CourseProviderRegistration = () => {
           progress: undefined,
           theme: "light",
         });
-        console.log("GG",response);
         
         cookies.set("isProvider", "true");
         cookies.set("providor_pid", response?.data?.data?.providor_pid);

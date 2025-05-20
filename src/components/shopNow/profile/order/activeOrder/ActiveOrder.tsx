@@ -1,15 +1,13 @@
 "use client";
-import Link from "next/link";
-import ActiveOrderCard from "./ActiveOrderCard";
-import { useQuery } from "@tanstack/react-query";
-import { getOrderDetails, url } from "@/api/api";
-import { useCookies } from "next-client-cookies";
-import { format } from "date-fns";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { useLocale, useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
+import { api, getOrderDetails } from "@/api/api";
 import { statusColors, statusLabels } from "@/utils/status";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -35,9 +33,9 @@ const ActiveOrder = () => {
 
   const handleProductRemove = async (orderPid: string, productPid: string) => {
     try {
-      const apiUrl = `${url}/api/admin/cancel-order`;
+      const apiUrl = `/api/admin/cancel-order`;
 
-      const response = await axios.post(apiUrl, {
+      const response = await api.post(apiUrl, {
         order_pid: orderPid,
         product_pid: productPid,
       });
@@ -75,8 +73,8 @@ const ActiveOrder = () => {
   const handleCancelOrder = async (orderId: string) => {
     // console.log(orderId);
     try {
-      const cancelOrderUrl = `${url}/api/admin/cancel-whole-order`;
-      const response = await axios.post(cancelOrderUrl, {
+      const cancelOrderUrl = `/api/admin/cancel-whole-order`;
+      const response = await api.post(cancelOrderUrl, {
         order_pid: orderId,
       });
       // console.log(response);

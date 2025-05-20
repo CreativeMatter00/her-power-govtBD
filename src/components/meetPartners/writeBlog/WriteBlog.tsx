@@ -7,7 +7,7 @@ import ImagePart from "./imagePart/ImagePart";
 import TextInput from "./TextInput";
 import schema from "./schema";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -75,7 +75,7 @@ const WriteBlog = () => {
     }
 
     try {
-      await axios.post(`${url}/api/admin/blog-post`, formData).then(() => {
+      await api.post(`/api/admin/blog-post`, formData).then(() => {
         toast.success("Submitted successfully", {
           position: "bottom-left",
           autoClose: 3000,

@@ -1,5 +1,5 @@
 "use client";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import {
   Carousel,
   CarouselApi,
@@ -15,26 +15,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import styles from "@/styles/Product.module.css";
-import axios from "axios";
-import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm, FieldErrors } from "react-hook-form";
-import { FaStar } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import StarRating from "../RenderStars";
-import "react-toastify/dist/ReactToastify.css";
-import { calculateAge } from "../../../utils/calculateAge";
-import { useCookies } from "next-client-cookies";
-import { addToCart } from "@/redux/Reducer/CartSlice";
 import {
   handleCartUpdate,
   handleWishlistUpdate,
 } from "@/redux/Reducer/MainSlice";
-import { addToWishList } from "@/redux/Reducer/WishListSlice";
+import styles from "@/styles/Product.module.css";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { FaStar } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { calculateAge } from "../../../utils/calculateAge";
+import StarRating from "../RenderStars";
 
 // ============= ALL FETCHED DATA DEFINITION ================
 interface IData {
@@ -68,19 +65,19 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
     control,
   } = useForm<any>();
 
-  const [api, setApi] = useState<CarouselApi>();
+  const [carousel, setCarousel] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const age = calculateAge(data?.data?.entrepreneurs?.cre_date);
   const [number, unit] = age.split(" ");
   useEffect(() => {
-    if (!api) {
+    if (!carousel) {
       return;
     }
-    setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
+    setCurrent(carousel.selectedScrollSnap() + 1);
+    carousel.on("select", () => {
+      setCurrent(carousel.selectedScrollSnap() + 1);
     });
-  }, [api]);
+  }, [carousel]);
 
   const [value, setValue] = useState<number>(1);
 
@@ -126,7 +123,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
       formData.append("customer_pid", userData.customer_pid);
       formData.append("product_pid", product.id);
       formData.append("varient_pid", product.variantId);
-      const response = await axios.post(`${url}/api/admin/wishlist`, formData);
+      const response = await api.post(`/api/admin/wishlist`, formData);
       if (response?.data?.meta?.http_status === 201) {
         const wishList = localStorage.getItem("wishlist")
           ? JSON.parse(localStorage.getItem("wishlist") as string)
@@ -230,7 +227,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
               align: "start",
               loop: true,
             }}
-            setApi={setApi}
+            setApi={setCarousel}
           >
             <CarouselContent>
               {data?.data?.attachments.map((product: any, index: number) => (
@@ -264,7 +261,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
                         ? "border border-red-500"
                         : "border border-brandLsPrimary"
                     }`}
-                    onClick={() => api && api.scrollTo(index)}
+                    onClick={() => carousel && carousel.scrollTo(index)}
                   />
                 ))}
               </div>

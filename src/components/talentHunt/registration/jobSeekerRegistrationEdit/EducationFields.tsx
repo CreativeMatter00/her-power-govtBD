@@ -1,10 +1,9 @@
 "use client";
+import { api } from "@/api/api";
 import React, { useEffect, useState } from "react";
 import { UseFormRegister } from "react-hook-form";
 import { LuMinus } from "react-icons/lu";
 import TextArrayInput from "../inputFields/TextArrayInput";
-import axios from "axios";
-import { url } from "@/api/api";
 
 interface IProps {
   jobList: number[];
@@ -36,7 +35,7 @@ const EducationFields: React.FC<IProps> = ({
   const handleDeleteEducation = async () => {
     if (educationPid) {
       try {
-        const response = await axios.delete(`${url}/api/admin/job-edu-delete/${educationPid}`);
+        const response = await api.delete(`/api/admin/job-edu-delete/${educationPid}`);
         // console.log("Response Data:", response);
         if (response?.data?.meta?.status) {
           onRemove;

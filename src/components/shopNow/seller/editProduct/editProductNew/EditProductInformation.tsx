@@ -4,7 +4,7 @@ import InventoryManagement from "../FormPart/InventoryManagement";
 import ProductInformation from "../FormPart/ProductInformation";
 import HeadingPart from "../HeadingPart";
 import { useQuery } from "@tanstack/react-query";
-import { getProductDetails, url } from "@/api/api";
+import { api } from "@/api/api";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -93,8 +93,8 @@ const EditProductInformation = ({
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/update-product/${productId}`,
+      const response = await api.post(
+        `/api/admin/update-product/${productId}`,
         formData
       );
 

@@ -13,7 +13,7 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import axios from "axios";
 import ProductVariants from "./FormPart/ProductVariants";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 interface IFormInput {
@@ -132,8 +132,8 @@ const AddProduct = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/product`,
+      const response = await api.post(
+        `/api/admin/product`,
         productFormData,
         {
           headers: {

@@ -1,16 +1,15 @@
 "use client";
 
-import React, { FC, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { getAllDivisions, url } from "@/api/api";
-import venueSchema from "./venueSchema";
+import { api, getAllDivisions } from "@/api/api";
 import EditInput from "@/components/shared/input/EditInput";
-import { toast } from "react-toastify";
 import SelectInput from "@/components/shared/input/SelectInput";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { toast } from "react-toastify";
+import venueSchema from "./venueSchema";
 
 interface IFormInput {
   venueName: string;
@@ -67,8 +66,8 @@ const VenueEdit: FC<IEditProps> = ({ setEditModalOpen, refetch, editData }) => {
     // console.log("venue data", venueData);
 
     try {
-      const response = await axios.put(
-        `${url}/api/admin/event/venue/${editData.venue_pid}`,
+      const response = await api.put(
+        `/api/admin/event/venue/${editData.venue_pid}`,
         venueData
       );
 

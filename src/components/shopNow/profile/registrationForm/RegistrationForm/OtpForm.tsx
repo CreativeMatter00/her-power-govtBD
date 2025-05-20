@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import OtpTimer from "./OtpTimer";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { useCookies } from "next-client-cookies";
@@ -80,7 +80,7 @@ const OtpForm = ({ email, nid, birthCertificate }: any) => {
       }
       formData.append("otp", "000000");
       try {
-        const response = await axios.post(`${url}/api/customer-registration`, formData, {
+        const response = await api.post(`/api/customer-registration`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -129,7 +129,7 @@ const OtpForm = ({ email, nid, birthCertificate }: any) => {
     } else {
       formData.append("otp", data?.otp);
       try {
-        const response = await axios.post(`${url}/api/otp-verify`, formData, {
+        const response = await api.post(`/api/otp-verify`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

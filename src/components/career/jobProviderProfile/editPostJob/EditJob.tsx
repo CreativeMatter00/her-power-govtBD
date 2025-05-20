@@ -11,7 +11,7 @@ import TextInput from "../inputFields/TextInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { getJobDetailsById, url } from "@/api/api";
+import { api, getJobDetailsById, url } from "@/api/api";
 import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import Schema from "./Schema";
@@ -125,8 +125,8 @@ const EditJob = () => {
       formData.append("banner", jobDetails.file_url);
     }
     try {
-      const response = await axios.post(
-        `${url}/api/job-post-update/${id}`,
+      const response = await api.post(
+        `/api/job-post-update/${id}`,
         formData
       );
       if (response?.data?.meta?.status === true) {

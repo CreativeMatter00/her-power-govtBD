@@ -1,13 +1,12 @@
 "use client";
 
-import React, { FC, useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import speakersSchema from "./speakersSchema";
+import { api } from "@/api/api";
 import InputField from "@/components/shared/input/InputField";
-import { url } from "@/api/api";
-import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import speakersSchema from "./speakersSchema";
 
 interface IFormInput {
   speaker_name: string;
@@ -60,8 +59,8 @@ const SpeakersEdit: FC<ISpeakersEditProps> = ({
     };
 
     try {
-      const response: any = await axios.put(
-        `${url}/api/admin/event/speaker/${editData.speaker_pid}`,
+      const response: any = await api.put(
+        `/api/admin/event/speaker/${editData.speaker_pid}`,
         updatedData
       );
 

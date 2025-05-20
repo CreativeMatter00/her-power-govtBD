@@ -1,23 +1,21 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { api, blogsManagement } from "@/api/api";
 import EventsPagination from "@/components/shared/EventsPagination";
-import { blogsManagement} from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
-import Link from "next/link";
-import axios from "axios";
-import { url } from "@/api/api";
+import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useCookies } from "next-client-cookies";
 export const BlogManagement = () => {
   const t = useTranslations("Blog");
   const cookies = useCookies();
@@ -33,8 +31,8 @@ export const BlogManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/delete-blog-post/${id}/${userID}`
+      const response = await api.delete(
+        `/api/admin/delete-blog-post/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

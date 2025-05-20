@@ -6,7 +6,7 @@ import TextInput from "../inputFields/TextInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { getTaskDetailsById, url } from "@/api/api";
+import { api, getTaskDetailsById, url } from "@/api/api";
 import { useCookies } from "next-client-cookies";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -73,8 +73,8 @@ const EditTask = () => {
       ...data,
     };
     try {
-      const response = await axios.post(
-        `${url}/api/task-update/${id}`,
+      const response = await api.post(
+        `/api/task-update/${id}`,
         newData
       );
       if (response?.data?.meta?.status === true) {

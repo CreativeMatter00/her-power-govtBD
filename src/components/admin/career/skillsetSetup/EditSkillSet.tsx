@@ -1,10 +1,10 @@
-import React from "react";
-import InputField from "./InputField";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { api } from "@/api/api";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { url } from "@/api/api";
+import { toast } from "react-toastify";
+import InputField from "./InputField";
 import SkillsetSchema from "./SkillsetSchema";
 
 interface ISkill {
@@ -49,8 +49,8 @@ const EditSkillSet: React.FC<IProps> = ({ skill, refetch, modalClose }) => {
     // console.log(skillData);
 
     try {
-      const response = await axios.post(
-        `${url}/api/update-skillset/${skill.skill_pid}`,
+      const response = await api.post(
+        `/api/update-skillset/${skill.skill_pid}`,
         skillData
       );
       // console.log(response);

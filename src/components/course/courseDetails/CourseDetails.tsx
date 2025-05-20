@@ -4,7 +4,7 @@ import ImagePart from "./ImagePart";
 import { Banner } from "./Banner";
 import Preliminary from "./Preliminary";
 import { useQuery } from "@tanstack/react-query";
-import { getCourseDetail, getCourseDetailWithStudentId, url } from "@/api/api";
+import { api, getCourseDetail, getCourseDetailWithStudentId, url } from "@/api/api";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import axios from "axios";
@@ -88,8 +88,8 @@ const CourseDetails = () => {
       router.push(`/${locale}/login`);
     } else {
       try {
-        const response = await axios.post(
-          `${url}/api/frontend/student-course-enroll`,
+        const response = await api.post(
+          `/api/frontend/student-course-enroll`,
           submissionData
         );
         if (response?.data?.meta?.status) {

@@ -1,15 +1,14 @@
 "use client";
+import { api } from "@/api/api";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import ProductVariants from "../FormPart/ProductVariants";
-import HeadingPart from "../HeadingPart";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { yupResolver } from "@hookform/resolvers/yup";
+import ProductVariants from "../FormPart/ProductVariants";
+import HeadingPart from "../HeadingPart";
 import { VariantSchema } from "./Schema";
-import { url } from "@/api/api";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
 
 interface AddNewVariantI {
 	refetch: Function;
@@ -36,8 +35,8 @@ const AddNewVariant = ({ refetch, productId }: AddNewVariantI) => {
 			data.disc_pct= roundedPercentage;
 		  }
 		try {
-			const response = await axios.post(
-				`${url}/api/admin/product-variant/${productId}`,
+			const response = await api.post(
+				`/api/admin/product-variant/${productId}`,
 				data
 			);
 

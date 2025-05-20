@@ -1,26 +1,18 @@
 "use client";
 
-import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputField from "../inputFields/InputField";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { studentSchema } from "../schema/studentSchema";
-import DateField from "../inputFields/DateField";
-import { useCookies } from "next-client-cookies";
-import { url } from "../../../../api/api";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useFieldArray, useForm } from "react-hook-form";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { api } from "../../../../api/api";
+import DateField from "../inputFields/DateField";
+import InputField from "../inputFields/InputField";
+import { studentSchema } from "../schema/studentSchema";
 
 interface FormValues {
   student_info: {
@@ -121,8 +113,8 @@ const StudentRegistration = () => {
     };
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/student`,
+      const response = await api.post(
+        `/api/admin/student`,
         formattedData
       );
       if (response?.data?.meta?.status === true) {

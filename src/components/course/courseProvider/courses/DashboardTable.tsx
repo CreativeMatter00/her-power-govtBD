@@ -1,22 +1,21 @@
 "use client";
 
-import { getCoursesByProviderId, url } from "@/api/api";
+import { api, getCoursesByProviderId } from "@/api/api";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { FaUpload } from "react-icons/fa";
 import { MdOutlineEdit, MdRemoveRedEye } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import "react-toastify/dist/ReactToastify.css";
 import RegisteredStudentTable from "./RegisteredStudentTable";
-import { FaUpload } from "react-icons/fa";
 
 const DashboardTable = () => {
 	const t=useTranslations("course")
@@ -33,7 +32,7 @@ const DashboardTable = () => {
 
 	const handleRemove = async (id: string) => {
 		// console.log("remove", id)
-		const response = await axios.delete(`${url}/api/admin/course/${id}`)
+		const response = await api.delete(`/api/admin/course/${id}`)
 		if (response?.data.meta.status) {
 			toast.success("Course deleted successfully!", {
 				position: "bottom-left",

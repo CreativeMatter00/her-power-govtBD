@@ -7,7 +7,7 @@ import ImagePart from "./imagePart/ImagePart";
 import TextInput from "./TextInput";
 import schema from "./schema";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { toast } from "react-toastify";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -74,7 +74,7 @@ const AddChallenge = () => {
       formData.append("thumbnail", fileList[0]);
     }
     try {
-      await axios.post(`${url}/api/admin/challanges`, formData);
+      await api.post(`/api/admin/challanges`, formData);
       toast.success("Submitted successfully", {
         position: "bottom-left",
         autoClose: 3000,

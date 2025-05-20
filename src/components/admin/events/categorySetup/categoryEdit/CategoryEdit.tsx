@@ -1,16 +1,16 @@
 "use client";
-import { useState } from "react";
-import InputField from "./inputFields/InputField";
-import TextInput from "./inputFields/TextInput";
+import { api } from "@/api/api";
 import styles from "@/styles/Events.module.css";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import CategorySchema from "./CategorySchema";
-import { url } from "@/api/api";
-import FileInput from "./inputFields/FileInput";
-import { toast, ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { toast, ToastContainer } from "react-toastify";
+import CategorySchema from "./CategorySchema";
+import FileInput from "./inputFields/FileInput";
+import InputField from "./inputFields/InputField";
+import TextInput from "./inputFields/TextInput";
 
 interface IFormInput {
   category_name: string;
@@ -77,8 +77,8 @@ const CategoryEdit: React.FC<CategoryEditProps> = ({
     printFormData(formData);
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/ew-category/${category.category_pid}?_method=PUT`,
+      const response = await api.post(
+        `/api/admin/ew-category/${category.category_pid}?_method=PUT`,
         formData,
         {
           headers: {

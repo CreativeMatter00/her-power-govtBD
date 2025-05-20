@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import PasswordSchema from "./PasswordSchema";
-import axios from "axios";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslations } from "next-intl";
@@ -53,7 +52,7 @@ const PasswordForm: React.FC<EditPassword> = ({
 
   const onSubmit = async (data: IFormInput) => {
     try {
-      await axios.post(`${url}/api/admin/change-userpw`, {
+      await api.post(`/api/admin/change-userpw`, {
         user_pid: userId,
         old_password: data.oldPassword,
         password: data.newPassword,

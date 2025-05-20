@@ -1,16 +1,15 @@
 'use client'
-import React, { useEffect } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import * as Yup from 'yup';
+import { api, getCourseProviderDetailsById } from '@/api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery } from '@tanstack/react-query';
+import { useCookies } from 'next-client-cookies';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as Yup from 'yup';
 import InputField from '../inputFields/InputField';
-import { FaMinus, FaPlus } from 'react-icons/fa';
-import { useCookies } from 'next-client-cookies';
-import { getCourseProviderDetailsById, url } from '@/api/api';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 const DemoCourseProviderEdit = () => {
     const cookies = useCookies();
@@ -128,8 +127,8 @@ const DemoCourseProviderEdit = () => {
             experience: formData.experience
         }
         try {
-            const response = await axios.put(
-                `${url}/api/admin/course-provider/${provider_pid}`,
+            const response = await api.put(
+                `/api/admin/course-provider/${provider_pid}`,
                 newData,
             );
 

@@ -1,19 +1,18 @@
 "use client";
 
-import { FC, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import styles from "@/styles/Product.module.css";
-import axios from "axios";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
-import EmptyCart from "./EmptyCart";
-import { url } from "@/api/api";
-import { useDispatch, useSelector } from "react-redux";
+import { api } from "@/api/api";
 import { handleCartUpdate } from "@/redux/Reducer/MainSlice";
+import styles from "@/styles/Product.module.css";
 import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { FC, useEffect, useMemo, useState } from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import EmptyCart from "./EmptyCart";
 
 type ICartProps = {
   setActive: any;
@@ -52,8 +51,8 @@ const Cart: FC<ICartProps> = ({ setActive, cartProducts, setCartProducts }) => {
     const fetchCartData = async () => {
       setLoading(true);
       try {
-        const response = await axios.post(
-          `${url}/api/frontend/cart-calculation`,
+        const response = await api.post(
+          `/api/frontend/cart-calculation`,
           apiData
         );
         setCartProducts(response.data);

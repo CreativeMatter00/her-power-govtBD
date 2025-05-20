@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
+  api,
   getAllReviews,
   getProductDetails,
   getProductDetailsChat,
@@ -141,8 +142,8 @@ const ProductDetail = () => {
     };
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/chat-with-seller`,
+      const response = await api.post(
+        `/api/admin/chat-with-seller`,
         chatInfo,
         {
           headers: {

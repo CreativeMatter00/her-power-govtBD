@@ -1,14 +1,10 @@
 "use client";
-import { MdCheckBox, MdCheckBoxOutlineBlank } from "react-icons/md";
 import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io";
 import CreateEventHeading from "../CreateEventHeading";
-import { FaPlus } from "react-icons/fa6";
 import DatePicker from "../inputFields/DatePicker";
 import EventTimePicker from "../inputFields/EventTimePicker";
 import { useEffect, useState } from "react";
-import { BsInfoCircle } from "react-icons/bs";
 import CreateEventInputField from "../inputFields/CreateEventInputField";
-import { AiOutlineDelete } from "react-icons/ai";
 import MultiTimeDate from "./MultiTimeDate";
 import SelectInput from "./SelectInput";
 import { useQuery } from "@tanstack/react-query";
@@ -26,6 +22,7 @@ interface Segment {
 }
 
 const TimeDate = ({ eventData }: { eventData?: any }) => {
+console.log("Check--GG-->",eventData);
 
   const [selectedOption, setSelectedOption] = useState<
     "singleDate" | "multiDate" | "breakDown"
@@ -46,32 +43,28 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
     queryFn: () => getAllSpeakers(),
   });
 
-  const handleOptionChange = (
-    option: "singleDate" | "multiDate" | "breakDown"
-  ) => {
-    setSelectedOption(option);
-    setValue("multiDateOrNot", option === "multiDate");
-    setValue("singleDateOrNot", option === "singleDate");
-    setValue("breakDownOrNot", option === "breakDown");
-  };
+  // const handleOptionChange = (
+  //   option: "singleDate" | "multiDate" | "breakDown"
+  // ) => {
+  //   setSelectedOption(option);
+  //   setValue("multiDateOrNot", option === "multiDate");
+  //   setValue("singleDateOrNot", option === "singleDate");
+  //   setValue("breakDownOrNot", option === "breakDown");
+  // };
 
   useEffect(() => {
-    if (eventData?.event_schedule?.length === 1) {
+    if (eventData?.event_schedule?.[0]?.remarks === "singledate") {
       setSelectedOption("singleDate");
     } else if (
-      eventData?.event_schedule?.length > 1 &&
-      eventData?.event_schedule?.[0]?.segment_name === null
+     eventData?.event_schedule?.[0]?.remarks==="multidate"
     ) {
-      // console.log("Segment Name ----------------===>",eventData?.event_schedule?.[0]?.segment_name)
       setSelectedOption("multiDate");
     } else {
-      // console.log("Segment Name ----------------===>",eventData?.event_schedule?.[0]?.segment_name)
       setSelectedOption("breakDown");
     }
   }, [
     setSelectedOption,
-    eventData?.event_schedule?.length,
-    eventData?.event_schedule?.[0]?.segment_name,
+    eventData?.event_schedule?.[0]?.remarks,
   ]);
 
   useEffect(() => {
@@ -87,25 +80,6 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
     }
   }, [eventData]);
 
-  // const addSegment = () => {
-  //   setSegments([
-  //     ...segments,
-  //     {
-  //       schedule_pid: "",
-  //       id: segments.length + 1,
-  //       start_datetime: "",
-  //       from_time: "",
-  //       end_datetime: "",
-  //       to_time: "",
-  //     },
-  //   ]);
-  // };
-
-  // const deleteSegment = (id: number) => {
-  //   if (segments.length > 1) {
-  //     setSegments(segments.filter((segment) => segment.id !== id));
-  //   }
-  // };
   if (isLoading)
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -123,7 +97,7 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
           {selectedOption === "singleDate" && (
             <button
               type="button"
-              onClick={() => handleOptionChange("singleDate")}
+              // onClick={() => handleOptionChange("singleDate")}
               className="flex items-center gap-2"
             >
               {selectedOption === "singleDate" ? (
@@ -138,7 +112,7 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
           {selectedOption === "multiDate" && (
             <button
               type="button"
-              onClick={() => handleOptionChange("multiDate")}
+              // onClick={() => handleOptionChange("multiDate")}
               className="flex items-center gap-2"
             >
               {selectedOption === "multiDate" ? (
@@ -153,7 +127,7 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
           {selectedOption === "breakDown" && (
             <button
               type="button"
-              onClick={() => handleOptionChange("breakDown")}
+              // onClick={() => handleOptionChange("breakDown")}
               className="flex items-center gap-2"
             >
               {selectedOption === "breakDown" ? (
@@ -203,7 +177,7 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
                       setValue={setValue}
                       name="singleDate.eventStartDate"
                       errors={errors}
-                      defaultValue={schedule.start_datetime}
+                      defaultValue={schedule.start_datetime?.split(" ")[0]}
                     />
                   </div>
                   <div className="w-full">
@@ -224,7 +198,7 @@ const TimeDate = ({ eventData }: { eventData?: any }) => {
                       setValue={setValue}
                       name="singleDate.eventEndDate"
                       errors={errors}
-                      defaultValue={schedule.end_datetime}
+                      defaultValue={schedule.end_datetime?.split(" ")[0]}
                     />
                   </div>
                   <div className="w-full">

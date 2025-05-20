@@ -17,11 +17,10 @@ import UserInformation from "../UserInformation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-
 
 interface IFormInputs {
   portfolio?: string | undefined;
@@ -68,8 +67,8 @@ const JobSeekerRegistration = () => {
   // const experiences = watch("experience") || [];
   // const titles = watch("title") || [];
   // const jobExperiences = watch("jobExperience") || [];
- const router=useRouter();
- const locale = useLocale();
+  const router = useRouter();
+  const locale = useLocale();
   const onSubmit = async (data: any) => {
     // console.log(data);
     // console.log(selectedCV);
@@ -115,8 +114,8 @@ const JobSeekerRegistration = () => {
     // console.log("jobSeekerData:", jobSeekerData, selectedImage);
 
     try {
-      const response = await axios.post(
-        `${url}/api/job-seeker-register`,
+      const response = await api.post(
+        `/api/job-seeker-register`,
         jobSeekerData // Send the JSON object in the request body
       );
 
@@ -135,10 +134,8 @@ const JobSeekerRegistration = () => {
           progress: undefined,
           theme: "light",
         });
+        router.push(`/${locale}/career`);
         reset();
-        setTimeout(()=>{
-          router.push(`${locale}/career`)
-        },3000)
       } else {
         toast.error("Job Seeker registration failed!", {
           position: "bottom-left",

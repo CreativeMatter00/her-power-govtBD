@@ -6,7 +6,7 @@ import InputField from "@/components/shared/input/InputField";
 import ImagePart from "./imagePart/ImagePart";
 import schema from "./schema";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { toast } from "react-toastify";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,7 @@ const AddDocument = () => {
     // };
     // printFormData(formData);
     try {
-      await axios.post(`${url}/api/admin/document`, formData, {
+      await api.post(`/api/admin/document`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -1,5 +1,5 @@
 "use client";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,11 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import axios from "axios";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
@@ -50,7 +48,7 @@ const PostedJobsCard = ({
 
   const handleRemoveJob = async (id: string) => {
     try {
-      const response = await axios.get(`${url}/api/delete-job-post/${id}`);
+      const response = await api.get(`/api/delete-job-post/${id}`);
       if (response?.data?.meta?.status) {
         toast.success("Successfully Deleted Post", {
           position: "bottom-left",

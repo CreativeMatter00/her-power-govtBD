@@ -1,19 +1,19 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import EventsPagination from "@/components/shared/EventsPagination";
+import { useQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
+import { api, getAllStories } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
-import Link from "next/link";
-import axios from "axios";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getAllStories,url } from "@/api/api";
+import axios from "axios";
 import { useCookies } from "next-client-cookies";
+import Link from "next/link";
 
 const StoriesManagement = () => {
   const t = useTranslations("story");
@@ -31,8 +31,8 @@ const StoriesManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/delete-success-stories/${id}/${userID}`
+      const response = await api.delete(
+        `/api/admin/delete-success-stories/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

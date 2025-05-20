@@ -1,18 +1,18 @@
 "use client"
-import { documentsManagement, url } from '@/api/api';
+import { api, documentsManagement } from '@/api/api';
+import EventsPagination from '@/components/shared/EventsPagination';
 import CareerLoader from '@/components/shared/loader/CareerLoader';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useCookies } from 'next-client-cookies';
 import { useTranslations } from 'next-intl';
-import React, { useState } from 'react'
+import { useState } from 'react';
 import DocumentCardManagement from './DocumentCardMangement';
-import EventsPagination from '@/components/shared/EventsPagination';
-import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
-  } from "@/components/ui/dialog";
 const DocumentsManagement = () => {
     const t = useTranslations("resources_Library");
 
@@ -27,8 +27,8 @@ const DocumentsManagement = () => {
     });
     const handleDelete = async (id: string) => {
       try {
-        const response = await axios.delete(
-          `${url}/api/admin/delete-document/${id}/${userID}`
+        const response = await api.delete(
+          `/api/admin/delete-document/${id}/${userID}`
         );
         refetch();
         if (response?.data?.meta?.status === true) {

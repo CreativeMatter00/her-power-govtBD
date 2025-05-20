@@ -1,15 +1,14 @@
 "use client";
-import { useState } from "react";
+import { api } from "@/api/api";
 import styles from "@/styles/Events.module.css";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import CategorySchema from "./CategorySchema";
-import { url } from "@/api/api";
+import FileInput from "./inputFields/FileInput";
 import InputField from "./inputFields/InputField";
 import TextInput from "./inputFields/TextInput";
-import FileInput from "./inputFields/FileInput";
-import ScaleLoader from "react-spinners/ScaleLoader";
 
 interface IFormInput {
   category_name: string;
@@ -63,7 +62,7 @@ const CategoryAdd = ({ refetch, modalClose }: any) => {
     printFormData(formData);
 
     try {
-      await axios.post(`${url}/api/admin/ew-category`, formData);
+      await api.post(`/api/admin/ew-category`, formData);
       // alert("Submitted successfully");
       refetch();
 

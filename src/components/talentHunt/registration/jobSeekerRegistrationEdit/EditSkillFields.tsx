@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 "use client";
-import React, { useEffect, useState } from "react";
-import { LuMinus } from "react-icons/lu";
-import { useForm } from "react-hook-form";
-import SelectInput from "../inputFields/SelectInput";
 import { useQuery } from "@tanstack/react-query";
-import { getSkillBySkillset, url } from "../../../../api/api";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { LuMinus } from "react-icons/lu";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import axios from "axios";
+import { api, getSkillBySkillset } from "../../../../api/api";
+import SelectInput from "../inputFields/SelectInput";
 
 interface IProps {
   index: number;
@@ -91,7 +90,7 @@ const EditSkillFields: React.FC<IProps> = ({
   const handleDeleteSkill = async () => {
     if (skillPid) {
       try {
-        const response = await axios.delete(`${url}/api/admin/job-skill-delete/${skillPid}`);
+        const response = await api.delete(`/api/admin/job-skill-delete/${skillPid}`);
         // console.log("Response Data:", response);
         if (response?.data?.meta?.status) {
           remove(index);

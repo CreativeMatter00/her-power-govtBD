@@ -11,7 +11,7 @@ import { useCookies } from "next-client-cookies";
 import { sellerValidationSchema } from "./Schema";
 import { IEditInfo, SellerFormData } from "./EditProfileFormI";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import { useTranslations } from "next-intl";
 
 
@@ -68,8 +68,8 @@ const EditProfileForm: React.FC<IEditInfo> = ({
     if (vatID) formData.append("vat_id_image", vatID);
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/entrepreneur-info-update/${entrepreneurPid}`,
+      const response = await api.post(
+        `/api/admin/entrepreneur-info-update/${entrepreneurPid}`,
         formData
       );
       

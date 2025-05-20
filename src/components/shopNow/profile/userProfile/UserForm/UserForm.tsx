@@ -1,13 +1,12 @@
 "use client";
 
+import { api } from "@/api/api";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import UserSchema from "./UserSchema";
-import axios from "axios";
-import { url } from "@/api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useTranslations } from "next-intl";
+import UserSchema from "./UserSchema";
 
 // ? Interfaces
 
@@ -60,8 +59,8 @@ const UserForm: React.FC<EditProfile> = ({
       // 	...data,
       // 	user_pid: userId,
       // };
-      const response = await axios.put(
-        `${url}/api/admin/user-info-update/${userId}`,
+      const response = await api.put(
+        `/api/admin/user-info-update/${userId}`,
         data
       );
       // console.log("Response:", response.data);

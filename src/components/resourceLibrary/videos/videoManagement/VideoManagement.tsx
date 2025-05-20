@@ -1,21 +1,19 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import EventsPagination from "@/components/shared/EventsPagination";
+import { useQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
+import { api, videoManagement } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
-import Link from "next/link";
-import axios from "axios";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
-import { videoManagement, url } from "@/api/api";
+import axios from "axios";
 import { useCookies } from "next-client-cookies";
+import Link from "next/link";
 
 export const VideoManagement = () => {
   const t = useTranslations("resources_Library");
@@ -32,8 +30,8 @@ export const VideoManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/delete-video/${id}/${userID}`
+      const response = await api.delete(
+        `/api/admin/delete-video/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

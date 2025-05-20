@@ -12,7 +12,7 @@ import { GoStar } from "react-icons/go";
 import { GoStarFill } from "react-icons/go";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 
 interface ProductReviewProps {
   productData: Record<string, any>;
@@ -94,8 +94,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({
     }
 
     try {
-      const response = await axios.post(
-        `${url}/api/frontend/review-rating`,
+      const response = await api.post(
+        `/api/frontend/review-rating`,
         reviewData,
         {
           headers: {

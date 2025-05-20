@@ -1,5 +1,5 @@
 'use client'
-import { url } from '@/api/api';
+import { api, url } from '@/api/api';
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ const CareerSearch = () => {
         if (searchName) {
             const fetchSearchResults = async () => {
                 try {
-                    const response = await axios.post(`${url}/api/search-job-tasks`, {
+                    const response = await api.post(`/api/search-job-tasks`, {
                         search_term: searchName
                     });
                     // console.log('Search results:', response.data.data);

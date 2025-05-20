@@ -22,7 +22,7 @@ import { format } from "date-fns";
 
 import axios from "axios";
 import NewsFormSchema from "./NewsFormSchema";
-import { token, url } from "@/api/api";
+import { api, url } from "@/api/api";
 
 interface IFormInput {
   news_title: string;
@@ -83,7 +83,7 @@ const LatestNewsForm: FC<IEditProps> = ({ refetch, modalClose }) => {
     // console.log(newsData);
 
     try {
-      const response = await axios.post(`${url}/api/admin/news`, newsData, {
+      const response = await api.post(`${url}/api/admin/news`, newsData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // Authorization: `Bearer ${token}`,

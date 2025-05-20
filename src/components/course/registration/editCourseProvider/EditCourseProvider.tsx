@@ -1,18 +1,17 @@
 'use client'
-import React, { useEffect } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { api, getCourseProviderDetailsById } from '@/api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery } from '@tanstack/react-query';
+import { useCookies } from 'next-client-cookies';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputField from '../inputFields/InputField';
-import { FaMinus, FaPlus } from 'react-icons/fa';
-import { useCookies } from 'next-client-cookies';
-import { getCourseProviderDetailsById, url } from '@/api/api';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { schema } from './Schema';
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 
 const EditCourseProvider = () => {
   const t=useTranslations("providerInfo")
@@ -86,7 +85,7 @@ const EditCourseProvider = () => {
     if (id) {
 
       try {
-        const response = await axios.delete(`${url}/api/admin/education-delete/${id}`);
+        const response = await api.delete(`/api/admin/education-delete/${id}`);
         // console.log("Response Data:", response);
         if (response?.data?.meta?.status) {
           toast.success("Course Provider Education Deleted successfully!", {
@@ -107,7 +106,7 @@ const EditCourseProvider = () => {
   const handleDeleteExperience = async (index: number, id: string | undefined | null) => {
     if (id) {
       try {
-        const response = await axios.delete(`${url}/api/admin/experience-delete/${id}`);
+        const response = await api.delete(`/api/admin/experience-delete/${id}`);
         // console.log("Response Data:", response);
         if (response?.data?.meta?.status) {
           toast.success("Course Provider Experience Deleted successfully!", {
@@ -130,7 +129,7 @@ const EditCourseProvider = () => {
     if (id) {
 
       try {
-        const response = await axios.delete(`${url}/api/admin/branch-delete/${id}`);
+        const response = await api.delete(`/api/admin/branch-delete/${id}`);
         if (response?.data?.meta?.status) {
           toast.success("Course Provider Branch Deleted successfully!", {
             position: "bottom-left",
@@ -172,8 +171,8 @@ const EditCourseProvider = () => {
     }
     // console.log("new data", newData)
     try {
-      const response = await axios.put(
-        `${url}/api/admin/course-provider/${provider_pid}`,
+      const response = await api.put(
+        `/api/admin/course-provider/${provider_pid}`,
         newData,
       );
 

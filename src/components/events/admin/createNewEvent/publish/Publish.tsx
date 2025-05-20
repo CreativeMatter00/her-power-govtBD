@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useCookies } from "next-client-cookies";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
@@ -99,7 +99,7 @@ const Publish = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${url}/api/admin/event/newEvent`, formDataObj, {
+      const response = await api.post(`/api/admin/event/newEvent`, formDataObj, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

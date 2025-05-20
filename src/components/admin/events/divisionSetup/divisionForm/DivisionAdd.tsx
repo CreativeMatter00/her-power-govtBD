@@ -1,11 +1,10 @@
 "use client";
 
-import React, { FC } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import InputField from "@/components/shared/input/InputField";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import divisionSchema from "./divisionSchema";
 
@@ -36,8 +35,8 @@ const DivisionAdd: FC<IDivisionAddProps> = ({ refetch, modalClose }) => {
   const onSubmit = async (data: IFormInput) => {
     // console.log("Form Submitted:", data); // Add this line to check if the form is submitted
     try {
-      const response: any = await axios.post(
-        `${url}/api/admin/geo-division`,
+      const response: any = await api.post(
+        `/api/admin/geo-division`,
         data
       );
 

@@ -1,20 +1,19 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { api, articlesManagement } from "@/api/api";
 import EventsPagination from "@/components/shared/EventsPagination";
-import { articlesManagement, url } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
-import Link from "next/link";
-import axios from "axios";
+import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useState } from "react";
 
 export const ArticleManagement = () => {
   const t = useTranslations("resources_Library");
@@ -31,8 +30,8 @@ export const ArticleManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/delete-article/${id}/${userID}`
+      const response = await api.delete(
+        `/api/admin/delete-article/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

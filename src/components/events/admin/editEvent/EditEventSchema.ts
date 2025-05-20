@@ -1,21 +1,20 @@
+import { SUPPORTED_FORMATS } from "@/utils/constand";
 import * as yup from "yup";
-
-const EditEventSchema = yup.object().shape({
+const FILE_SIZE = 10 * 1024 * 1024;
+export const EditEventSchema = yup.object().shape({
   eventTitle: yup
     .string()
-    // .required("Event title is required")
     .min(2, "Event title must be at least 2 characters long"),
-
+  featuredOrNot: yup.boolean().notRequired(),
   eventCategory: yup
     .string()
-    // .required("Event Category is required")
     .test(
       "is-valid-category",
       "Please select a valid Category",
       (value) => value !== "Select Category"
     ),
 
-  // description: yup.string().required("Description is required"),
+  description: yup.string().required("Description is required"),
   virtualEvent: yup.boolean(),
 
   locationVenue: yup.string().when("virtualEvent", {
@@ -23,7 +22,6 @@ const EditEventSchema = yup.object().shape({
     then: () =>
       yup
         .string()
-        // .required("Location is required")
         .test(
           "is-valid-category",
           "Please select a valid Venue",
@@ -32,24 +30,18 @@ const EditEventSchema = yup.object().shape({
     otherwise: (schema) => schema.nullable().notRequired(),
   }),
 
-  // tags: yup.string().required("Tags is required"),
-
   notificationType: yup
     .string()
-    // .required("Notification Type is required")
     .test(
       "is-valid-notification",
       "Please select a valid Notification Type",
       (value) => value !== "Notification Type"
     ),
 
-  notificationSchedule: yup
-    .string(),
-    // .required("Notification Schedule is required"),
+  notificationSchedule: yup.string(),
 
   ticket_type: yup
     .string()
-    // .required("Ticket Type is required")
     .oneOf(["P", "F"], "Ticket type must be either 'P' (Paid) or 'F' (Free)"),
 
   tickets: yup.array().when("ticket_type", {
@@ -59,18 +51,15 @@ const EditEventSchema = yup.object().shape({
         yup.object().shape({
           ticket_name: yup
             .string()
-            // .required("Ticket name is required")
             .min(2, "Ticket name must be at least 2 characters long"),
           ticket_price: yup
             .number()
-            // .required("Ticket price is required")
             .transform((value, originalValue) =>
               String(originalValue).trim() === "" ? undefined : value
             )
             .min(0, "Ticket price cannot be negative"),
           Facilities: yup
             .string()
-            // .required("Facilities description is required")
             .min(
               10,
               "Facilities description must be at least 10 characters long"
@@ -80,30 +69,34 @@ const EditEventSchema = yup.object().shape({
     otherwise: () => yup.array().notRequired(),
   }),
   thumbnail: yup
-    .mixed()
-    .test("fileType", "Unsupported file format", (value) => {
-      if (!value) return true; // Allow empty values
-      if (typeof value === 'string') return true; // Allow string URLs
-      const file = value as File;
-      return ["image/jpg", "image/png"].includes(file.type);
+    .mixed<File | string>()
+    .required("Please upload a thumbnail.")
+    .test("fileOrUrl", "thumbnail is required", (value) => {
+      return value !== null && !!value;
     })
-    .test("fileSize", "File size is too large (max 5MB)", (value) => {
-      if (!value || typeof value === 'string') return true; // Skip validation for strings
-      const file = value as File;
-      return file.size <= 5 * 1024 * 1024;
+    .test("fileValidation", "Invalid file format or size", (value) => {
+      if (!value || typeof value === "string") return true;
+      return (
+        value instanceof File &&
+        value.size <= FILE_SIZE &&
+        SUPPORTED_FORMATS.includes(value.type)
+      );
     }),
   eventBanner: yup
-    .mixed()
-    .test("fileType", "Unsupported file format", (value) => {
-      if (!value) return true;
-      if (typeof value === 'string') return true;
-      const file = value as File;
-      return ["image/jpg", "image/png"].includes(file.type);
+    .mixed<File | string>()
+    .required("Please upload a banner.")
+    .test("fileOrUrl", "Banner is required", (value) => {
+      return value !== null && !!value;
     })
-    .test("fileSize", "File size is too large (max 5MB)", (value) => {
-      if (!value || typeof value === 'string') return true;
-      const file = value as File;
-      return file.size <= 5 * 1024 * 1024;
+    .test("fileValidation", "Invalid file format or size", (value) => {
+      if (!value || typeof value === "string") return true;
+
+      // If it's a file, check size and format
+      return (
+        value instanceof File &&
+        value.size <= FILE_SIZE &&
+        SUPPORTED_FORMATS.includes(value.type)
+      );
     }),
   // New fields for event date and time
   singleDateOrNot: yup.boolean(),
@@ -116,12 +109,13 @@ const EditEventSchema = yup.object().shape({
       yup
         .object()
         .shape({
-          schedule_pid:yup.string(),
+          schedule_pid: yup.string(),
           eventStartDate: yup.string(), //.required("Start date is required"),
           eventStartTime: yup.string(), //.required("Start time is required"),
           eventEndDate: yup.string(), //.required("End date is required"),
           eventEndTime: yup.string(), //.required("End time is required"),
-        }).test(
+        })
+        .test(
           "is-start-before-end",
           "Event start date and time must be before end date and time",
           function (value) {
@@ -148,7 +142,7 @@ const EditEventSchema = yup.object().shape({
           yup
             .object()
             .shape({
-              schedule_pid:yup.string(),
+              schedule_pid: yup.string(),
               startDate: yup.string(), //.required("Start date is required"),
               startTime: yup.string(), //.required("Start time is required"),
               endDate: yup.string(), //.required("End date is required"),
@@ -158,12 +152,7 @@ const EditEventSchema = yup.object().shape({
               "is-start-before-end",
               "Event start date and time must be before end date and time",
               function (value) {
-                const {
-                  startDate,
-                  startTime,
-                  endDate,
-                  endTime,
-                } = value;
+                const { startDate, startTime, endDate, endTime } = value;
                 const startDateTime = `${startDate}T${startTime}`;
                 const endDateTime = `${endDate}T${endTime}`;
                 const isValid = new Date(startDateTime) < new Date(endDateTime);
@@ -177,40 +166,37 @@ const EditEventSchema = yup.object().shape({
   segments: yup.array().when("breakDownOrNot", {
     is: true,
     then: () =>
-      yup
-        .array()
-        .of(
-          yup
-            .object()
-            .shape({
-              schedule_pid:yup.string(),
-              segmentName:yup.string(), //.required("Segment Name is required"),
-              speaker:yup.string().optional(),
-              breakDownEventStartDate: yup.string(), //.required("Start date is required"),
-              breakDownEventStartTime: yup.string(), //.required("Start time is required"),
-              breakDownEventEndDate: yup.string(), //.required("End date is required"),
-              breakDownEventEndTime: yup.string(), //.required("End time is required"),
-            })
-            .test(
-              "is-start-before-end",
-              "Event start date and time must be before end date and time",
-              function (value) {
-                const {
-                  breakDownEventStartDate,
-                  breakDownEventStartTime,
-                  breakDownEventEndDate,
-                  breakDownEventEndTime,
-                } = value;
+      yup.array().of(
+        yup
+          .object()
+          .shape({
+            schedule_pid: yup.string(),
+            segmentName: yup.string(), //.required("Segment Name is required"),
+            speaker: yup.string().optional(),
+            breakDownEventStartDate: yup.string(), //.required("Start date is required"),
+            breakDownEventStartTime: yup.string(), //.required("Start time is required"),
+            breakDownEventEndDate: yup.string(), //.required("End date is required"),
+            breakDownEventEndTime: yup.string(), //.required("End time is required"),
+          })
+          .test(
+            "is-start-before-end",
+            "Event start date and time must be before end date and time",
+            function (value) {
+              const {
+                breakDownEventStartDate,
+                breakDownEventStartTime,
+                breakDownEventEndDate,
+                breakDownEventEndTime,
+              } = value;
 
-                const startDateTime = `${breakDownEventStartDate}T${breakDownEventStartTime}`;
-                const endDateTime = `${breakDownEventEndDate}T${breakDownEventEndTime}`;
-                const isValid = new Date(startDateTime) < new Date(endDateTime);
-                return isValid;
-              }
-            )
-        ),
+              const startDateTime = `${breakDownEventStartDate}T${breakDownEventStartTime}`;
+              const endDateTime = `${breakDownEventEndDate}T${breakDownEventEndTime}`;
+              const isValid = new Date(startDateTime) < new Date(endDateTime);
+              return isValid;
+            }
+          )
+      ),
     otherwise: (schema) => schema.nullable().notRequired(), // Skip validation if `singleDateOrNot` is `false`
   }),
 });
-
-export default EditEventSchema;
+export type IEditEvent = yup.InferType<typeof EditEventSchema>;

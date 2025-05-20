@@ -1,7 +1,9 @@
 "use client";
 
-import { getSellerAllProducts, placeholderImage, url } from "@/api/api";
+import { api, getSellerAllProducts, placeholderImage } from "@/api/api";
 import FilterDiv from "@/components/admin/table/FilterDiv";
+import PaginationDiv from "@/components/admin/table/PaginationDiv";
+import TableModel from "@/components/admin/table/TableModel";
 import { useQuery } from "@tanstack/react-query";
 import {
   getCoreRowModel,
@@ -11,17 +13,14 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useMemo, useState } from "react";
-import { MdOutlineEdit,MdDelete} from "react-icons/md";
-import TableModel from "@/components/admin/table/TableModel";
-import PaginationDiv from "@/components/admin/table/PaginationDiv";
-import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import axios from "axios";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { MdDelete, MdOutlineEdit } from "react-icons/md";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AllProduct = () => {
   const t = useTranslations("talentHunt");
@@ -70,8 +69,8 @@ const AllProduct = () => {
   };
   const handleDelete=async (category: any)=>{
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/product/${category?.product_pid}`
+      const response = await api.delete(
+        `/api/admin/product/${category?.product_pid}`
       );
         toast.success("Product Deleted Successfully!", {
           position: "bottom-left",

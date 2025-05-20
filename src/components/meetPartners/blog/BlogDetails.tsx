@@ -1,5 +1,5 @@
 "use client";
-import { getBlogById, url } from "@/api/api";
+import { api, getBlogById, url } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
 import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
 import { useQuery } from "@tanstack/react-query";
@@ -60,7 +60,7 @@ const BlogDetails = () => {
     formData.append("active_status", "1");
     formData.append("parent_comment_pid", "");
     try {
-      await axios.post(`${url}/api/admin/blog-comment/${id}`, formData);
+      await api.post(`/api/admin/blog-comment/${id}`, formData);
       toast.success("Submitted successfully", {
         position: "bottom-left",
         autoClose: 3000,

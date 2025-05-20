@@ -7,7 +7,7 @@ import ImagePart from "./imagePart/ImagePart";
 import TextInput from "./TextInput";
 import schema from "./schema";
 import axios from "axios";
-import { getChallengeById, url } from "@/api/api";
+import { api, getChallengeById, url } from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -15,9 +15,9 @@ import { toast } from "react-toastify";
 import { useCookies } from "next-client-cookies";
 interface IFormInput {
   title: string;
-  banner?: any;
+  banner: any;
   des: string;
-  thumbnail?: any;
+  thumbnail: any;
 }
 
 const EditChallenge = () => {
@@ -100,7 +100,7 @@ const EditChallenge = () => {
       formData.append("thumbnail", fileList[0]);
     }
     try {
-      await axios.post(`${url}/api/admin/challange-update/${id}`, formData);
+      await api.post(`/api/admin/challange-update/${id}`, formData);
       toast.success("Submitted successfully", {
         position: "bottom-left",
         autoClose: 3000,
@@ -181,6 +181,7 @@ const EditChallenge = () => {
             setSelectedImage={handleImageChangeBanner}
             errors={errors}
             register={register}
+            setValue={setValue}
           />
           <ImagePart
             id="thumbnail"
@@ -189,6 +190,7 @@ const EditChallenge = () => {
             setSelectedImage={handleImageChangeThumbnail}
             errors={errors}
             register={register}
+             setValue={setValue}
           />
         </div>
         <TextInput

@@ -1,14 +1,11 @@
 "use client";
 
-import { getSellerBasicInfo, url } from "@/api/api";
+import { api, getSellerBasicInfo } from "@/api/api";
 import StarRating from "@/components/shared/RenderStars";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React from "react";
-import { BiSolidPlusCircle } from "react-icons/bi";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast } from "react-toastify";
@@ -59,8 +56,8 @@ const ProfileHero = ({ sellerId }: ProfileHeroProps) => {
 			// console.log(followInfo);
 
 			try {
-				const response = await axios.post(
-					`${url}/api/admin/follower`,
+				const response = await api.post(
+					`/api/admin/follower`,
 					followInfo
 				);
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { SubmitHandler, useFormContext } from "react-hook-form";
-import axios from "axios";
+
 import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 // import ScaleLoader from "react-spinners/ScaleLoader";
 import { useCookies } from "next-client-cookies";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
@@ -18,7 +18,7 @@ const Publish = ({ eventId, formData }: { eventId: string; formData: any }) => {
   const local = useLocale();
   const router = useRouter();
 
-  console.log("Form Data------------->", formData);
+  // console.log("Form Data------------->", formData);
   // alert(JSON.stringify(formData));
 
   const {
@@ -34,9 +34,9 @@ const Publish = ({ eventId, formData }: { eventId: string; formData: any }) => {
 
   const onSubmit: SubmitHandler<any> = async () => {
     const data = formData;
-    // console.log("Data------------->", data);
-    
     const { multiDateOrNot, singleDateOrNot, breakDownOrNot } = data;
+    console.log("Rocks",multiDateOrNot,singleDateOrNot,breakDownOrNot);
+    
     const formDataObj = new FormData();
 
     safeAppend(formDataObj, "org_pid", organizerPid);
@@ -67,7 +67,7 @@ const Publish = ({ eventId, formData }: { eventId: string; formData: any }) => {
 
     if (singleDateOrNot) {
       formDataObj.append(
-        "singleDate",
+        "singleday",
         JSON.stringify({
           schedule_pid:data.singleDate?.schedule_pid,
           start_datetime: data?.singleDate?.eventStartDate,
@@ -131,8 +131,8 @@ const Publish = ({ eventId, formData }: { eventId: string; formData: any }) => {
     formDataObj.append("remarks", data?.description);
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/event/newEvent-update/${eventId}`,
+      const response = await api.post(
+        `/api/admin/event/newEvent-update/${eventId}`,
         formDataObj,
         {
           headers: {

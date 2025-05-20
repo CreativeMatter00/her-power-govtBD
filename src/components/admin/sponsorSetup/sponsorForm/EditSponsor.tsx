@@ -1,20 +1,18 @@
 "use client";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
-import axios from "axios";
 // import { useSelector } from "react-redux";
 // import { RootState } from "@/redux/Reducer/MainSlice";
 
-import SponsorSchema from "./SponsorSchema";
-import InputField from "@/components/shared/input/InputField";
+import { api } from "@/api/api";
 import ImageInput from "@/components/shared/input/ImageInput";
-import { url } from "@/api/api";
+import InputField from "@/components/shared/input/InputField";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
+import SponsorSchema from "./SponsorSchema";
 // import Image from "next/image";
 
 interface IFormInput {
@@ -99,8 +97,8 @@ const EditSponsor: FC<IEditProps> = ({
     // printFormData(sponsorData);
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/event/sponsor-update/${editData.sponsor_pid}`,
+      const response = await api.post(
+        `/api/admin/event/sponsor-update/${editData.sponsor_pid}`,
         sponsorData,
         {
           headers: {

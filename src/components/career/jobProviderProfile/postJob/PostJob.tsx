@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Schema from "./Schema";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
@@ -76,7 +76,7 @@ const PostJob = () => {
       formData.append("banner", fileList[0]);
     }
     try {
-      const response = await axios.post(`${url}/api/job-post-store`, formData);
+      const response = await api.post(`/api/job-post-store`, formData);
       if (response?.data?.meta?.status === true) {
         toast.success("Job Posted Successfully!", {
           position: "bottom-left",
@@ -91,7 +91,7 @@ const PostJob = () => {
 
         reset();
         setTimeout(()=>{
-          router.push(`/${locale}/career/`);
+          router.push(`/${locale}/career`);
         },3000)
       } else {
         toast.error("Job Posting failed! Please try again.", {

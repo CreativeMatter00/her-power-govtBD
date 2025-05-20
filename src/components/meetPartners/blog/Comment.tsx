@@ -1,15 +1,14 @@
 "use client";
-import { getCommentById, getUserInfo, url } from "@/api/api";
+import { api, getCommentById, getUserInfo } from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "next-client-cookies";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import axios from "axios";
-import Input from "./Input";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useCookies } from "next-client-cookies";
-import { useTranslations } from "next-intl";
 import "react-toastify/dist/ReactToastify.css";
+import Input from "./Input";
 
 const Comment = ({ data, ownerId, refetch }: any) => {
   const cookies = useCookies();
@@ -62,7 +61,7 @@ const Comment = ({ data, ownerId, refetch }: any) => {
     formData.append("active_status", "1");
     formData.append("parent_comment_pid", data?.comment_pid);
     try {
-      await axios.post(`${url}/api/admin/blog-comment/${id}`, formData);
+      await api.post(`/api/admin/blog-comment/${id}`, formData);
       refetch();
       replyRefetch();
       setCom("");
@@ -87,8 +86,8 @@ const Comment = ({ data, ownerId, refetch }: any) => {
       formData.append("comm_text", inputRef.current.innerText);
     if (user_pid) formData.append("user_pid", user_pid);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/blog-comment-update/${data?.comment_pid}`,
+      const response = await api.post(
+        `/api/admin/blog-comment-update/${data?.comment_pid}`,
         formData
       );
       if (response?.data?.meta?.status === true) {
@@ -132,8 +131,8 @@ const Comment = ({ data, ownerId, refetch }: any) => {
   };
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/delete-comment/${data?.comment_pid}`
+      const response = await api.delete(
+        `/api/admin/delete-comment/${data?.comment_pid}`
       );
       refetch();
       replyRefetch();

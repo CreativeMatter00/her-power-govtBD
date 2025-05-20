@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import InputField from "@/components/shared/input/InputField";
 import venueSchema from "./venueSchema";
-import { getAllDivisions, url } from "@/api/api";
+import { api, getAllDivisions, url } from "@/api/api";
 import { toast } from "react-toastify";
 import SelectInput from "@/components/shared/input/SelectInput";
 import { useQuery } from "@tanstack/react-query";
@@ -64,8 +64,8 @@ const VenueAdd: FC<IEditProps> = ({ refetch, modalClose }) => {
 
     // console.log(venueData);
     try {
-      const response = await axios.post(
-        `${url}/api/admin/event/venue`,
+      const response = await api.post(
+        `/api/admin/event/venue`,
         venueData
       );
       // console.log(response);

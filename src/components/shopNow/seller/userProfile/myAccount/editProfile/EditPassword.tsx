@@ -1,6 +1,6 @@
 "use client";
 
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import PasswordSchema from "@/components/shopNow/profile/userProfile/passwordForm/PasswordSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -66,7 +66,7 @@ const EditPassword: React.FC<IPassword> = ({
           theme: "light",
         });
       } else {
-        const response = await axios.post(`${url}/api/admin/change-userpw`, {
+        const response = await api.post(`/api/admin/change-userpw`, {
           user_pid: userId,
           old_password: data.oldPassword,
           password: data.newPassword,

@@ -7,7 +7,7 @@ import ImagePart from "./imagePart/ImagePart";
 import TextInput from "./TextInput";
 import schema from "./schema";
 import axios from "axios";
-import { url } from "@/api/api";
+import { api, url } from "@/api/api";
 import { getArticleById } from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
@@ -16,9 +16,9 @@ import { toast } from "react-toastify";
 import { useCookies } from "next-client-cookies";
 interface IFormInput {
   title: string;
-  banner?: any;
+  banner: any;
   des: string;
-  thumbnail?: any;
+  thumbnail: any;
 }
 
 const EditArticle = () => {
@@ -84,7 +84,6 @@ const cookies = useCookies();
   };
 
   const onSubmit = async (data: IFormInput) => {
-    console.log(data);
     setIsLoading(true);
     const formData = new FormData();
     if(user_pid) formData.append("user_pid", user_pid);
@@ -116,7 +115,7 @@ const cookies = useCookies();
 
     // printFormData(formData);
     try {
-      await axios.post(`${url}/api/admin/article-update/${id}`, formData);
+      await api.post(`/api/admin/article-update/${id}`, formData);
       toast.success("Submitted successfully", {
         position: "bottom-left",
         autoClose: 3000,
@@ -199,6 +198,7 @@ const cookies = useCookies();
             setSelectedImage={handleImageChangeBanner}
             errors={errors}
             register={register}
+            setValue={setValue}
           />
           <ImagePart
             id="thumbnail"
@@ -207,6 +207,7 @@ const cookies = useCookies();
             setSelectedImage={handleImageChangeThumbnail}
             errors={errors}
             register={register}
+            setValue={setValue}
           />
         </div>
         <TextInput

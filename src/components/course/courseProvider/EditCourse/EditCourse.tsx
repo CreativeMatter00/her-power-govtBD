@@ -5,7 +5,7 @@ import TextInput from "./inputField/TextInput";
 import ImageInput from "./inputField/ImageInput";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getBranchList, getCourseDetail, url } from "@/api/api";
+import { api, getBranchList, getCourseDetail, url } from "@/api/api";
 import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { toast, ToastContainer } from "react-toastify";
@@ -140,8 +140,8 @@ const EditCourse = () => {
       formData.image = selectBannerImage;
     }
     try {
-      const response = await axios.post(
-        `${url}/api/admin/course/${id}?_method=put`,
+      const response = await api.post(
+        `/api/admin/course/${id}?_method=put`,
         formData,
         {
           headers: {

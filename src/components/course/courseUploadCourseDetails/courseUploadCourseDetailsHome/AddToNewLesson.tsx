@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "next/navigation";
 import TextInput from "./TextInput";
 import VideoInput from "./videoPart/VideoInput";
-import { addNewLesson, url } from "@/api/api";
+import { addNewLesson, api, url } from "@/api/api";
 import schema from "./schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
@@ -57,8 +57,8 @@ export default function AddToNewLesson() {
     mutationFn: async (data: any) => {
       abortControllerRef.current = new AbortController();
       try {
-        const response = await axios.post(
-          `${url}/api/admin/course-lessons`,
+        const response = await api.post(
+          `/api/admin/course-lessons`,
           data,
           {
             headers: {

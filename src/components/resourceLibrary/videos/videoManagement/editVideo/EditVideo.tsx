@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { AiOutlineUpload } from "react-icons/ai";
 import { useCookies } from "next-client-cookies";
 import axios from "axios";
-import { getVideoById, url } from "@/api/api";
+import { api, getVideoById, url } from "@/api/api";
 import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import schema from "./schema";
@@ -83,7 +83,7 @@ const abortControllerRef = useRef<AbortController | null>(null);
     abortControllerRef.current = new AbortController();
     try {
       setIsUploading(true);
-      await axios.post(`${url}/api/admin/video-update/${id}`, formData, {
+      await api.post(`/api/admin/video-update/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -22,6 +22,7 @@ interface IFiles {
   divHeight?: string;
   errors: FieldErrors<any>;
   register: UseFormRegister<any>;
+  setValue?:any;
 }
 
 const FileInput: React.FC<IFiles> = ({
@@ -32,6 +33,7 @@ const FileInput: React.FC<IFiles> = ({
   divHeight = "h-[100px]",
   errors,
   register,
+  setValue
 }) => {
   const t = useTranslations("ImagePart");
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -93,6 +95,9 @@ const FileInput: React.FC<IFiles> = ({
   const removeSelectedImage = () => {
     setSelectedImage(null);
     setImageSrc(null);
+       if (setValue) {
+    setValue(name.toLowerCase(), null); 
+       }
   };
 
   return (

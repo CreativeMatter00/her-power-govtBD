@@ -1,4 +1,4 @@
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -10,11 +10,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
-import axios from "axios";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
-import React from "react";
+import { usePathname } from "next/navigation";
 import { CgDetailsMore } from "react-icons/cg";
 import { FaClock } from "react-icons/fa";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -39,7 +37,7 @@ const PostedTaskCard = ({
   const locale = useLocale();
   const pathName = usePathname();
   const handleRemoveTask = async (id: string) => {
-    const response = await axios.get(`${url}/api/delete-task-post/${id}`);
+    const response = await api.get(`/api/delete-task-post/${id}`);
     // console.log("response", response?.data.meta.status);
     if (response?.data.meta.status) {
       refetch();

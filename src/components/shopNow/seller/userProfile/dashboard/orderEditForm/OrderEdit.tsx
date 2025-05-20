@@ -1,13 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import EditInput from "./EditInput";
-import toast, { Toaster } from 'react-hot-toast';
-import "react-toastify/dist/ReactToastify.css";
-import { sellerOrderDetails, url } from "../../../../../../api/api";
 import Image from "next/image";
+import toast, { Toaster } from 'react-hot-toast';
 import ScaleLoader from "react-spinners/ScaleLoader";
+import "react-toastify/dist/ReactToastify.css";
+import { api, sellerOrderDetails } from "../../../../../../api/api";
+import EditInput from "./EditInput";
 
 interface IEditProps {
 	editData: any;
@@ -64,7 +63,7 @@ const OrderEdit: React.FC<IEditProps> = ({
 	) => {
 		// console.log("New Status:", order_pid, product_pid, newStatus);
 		try {
-			const response = await axios.put(`${url}/api/admin/order/${order_pid}`, {
+			const response = await api.put(`/api/admin/order/${order_pid}`, {
 				order_status: Number(newStatus),
 				product_pid: product_pid,
 			});

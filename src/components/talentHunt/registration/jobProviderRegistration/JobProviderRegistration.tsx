@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import JobProviderSchema from "./JobProviderSchema";
 import { useQuery } from "@tanstack/react-query";
-import { getUserInfo, url } from "@/api/api";
+import { api, getUserInfo, url } from "@/api/api";
 import { useCookies } from "next-client-cookies";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -59,8 +59,8 @@ const JobProviderRegistration = () => {
     jobProviderData.append("company_type", data.companyType);
     jobProviderData.append("websites_name", data.companyWebsiteUrl);
     try {
-      const response = await axios.post(
-        `${url}/api/job-provider-register`,
+      const response = await api.post(
+        `/api/job-provider-register`,
         jobProviderData
       );
       if (response?.data?.meta?.status === true) {

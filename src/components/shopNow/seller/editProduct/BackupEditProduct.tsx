@@ -1,12 +1,13 @@
 "use client";
 import { useParams } from "next/navigation";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import axios from "axios";
+import { api, getProductDetails } from "@/api/api";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InventoryManagement from "../editProduct/FormPart/InventoryManagement";
@@ -14,11 +15,6 @@ import OtherSetting from "../editProduct/FormPart/OtherSetting";
 import ProductInformation from "../editProduct/FormPart/ProductInformation";
 import ProductVariants from "../editProduct/FormPart/ProductVariants";
 import HeadingPart from "../editProduct/HeadingPart";
-import ProductSchema from "../editProduct/ProductSchema";
-import { useQuery } from "@tanstack/react-query";
-import { getProductDetails, url } from "@/api/api";
-import { type } from "os";
-import ScaleLoader from "react-spinners/ScaleLoader";
 
 interface IVariant {
 	varient_name: string;
@@ -175,8 +171,8 @@ const EditProduct = () => {
 
 		setIsLoading(true);
 		try {
-			const response = await axios.post(
-				`${url}/api/admin/update-product/${productId}`,
+			const response = await api.post(
+				`/api/admin/update-product/${productId}`,
 				formattedData,
 				{
 					headers: {

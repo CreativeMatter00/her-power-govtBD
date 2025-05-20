@@ -1,12 +1,11 @@
+import { api } from "@/api/api";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
 import React from "react";
 import { useForm } from "react-hook-form";
-import ReplyInput from "./ReplyInput";
-import Image from "next/image";
-import { FaArrowRight, FaQuestion } from "react-icons/fa";
-import { placeholderImage, url } from "@/api/api";
-import axios from "axios";
+import { FaArrowRight } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useTranslations } from "next-intl";
+import ReplyInput from "./ReplyInput";
 
 interface ReplyModalProps {
 	question: any;
@@ -30,8 +29,8 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
 
 	const onSubmit = async (data: any) => {
 		try {
-			const response: any = await axios.put(
-				`${url}/api/admin/chat-with-seller/${question.chat_pid}`,
+			const response: any = await api.put(
+				`/api/admin/chat-with-seller/${question.chat_pid}`,
 				data
 			);
 

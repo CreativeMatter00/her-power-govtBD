@@ -1,13 +1,12 @@
 "use client";
 
-import React, { FC } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import InputField from "@/components/shared/input/InputField";
-import speakersSchema from "./speakersSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import speakersSchema from "./speakersSchema";
 
 interface IFormInput {
   speaker_name: string;
@@ -28,7 +27,6 @@ interface ISpeakersAddProps {
 const SpeakersAdd: FC<ISpeakersAddProps> = ({ refetch, modalClose }) => {
   // ================ RESOLVER ====================
   const resolver = yupResolver(speakersSchema);
-
   // ======================== USE FORM ========================
   const {
     register,
@@ -41,8 +39,8 @@ const SpeakersAdd: FC<ISpeakersAddProps> = ({ refetch, modalClose }) => {
   const onSubmit = async (data: IFormInput) => {
     // console.log("Form Submitted:", data); // Add this line to check if the form is submitted
     try {
-      const response: any = await axios.post(
-        `${url}/api/admin/event/speaker`,
+      const response: any = await api.post(
+        `/api/admin/event/speaker`,
         data
       );
 

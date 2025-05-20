@@ -1,5 +1,5 @@
 "use client";
-import { fetchData, url } from "@/api/api";
+import { api, fetchData } from "@/api/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -163,8 +163,8 @@ const JobSeekerRegistrationEdit = () => {
       //   console.log(`${pair[0]}:`, pair[1]);
       // }
 
-      const response = await axios.post(
-        `${url}/api/job-seeker-update/${
+      const response = await api.post(
+        `/api/job-seeker-update/${
           jobSeekEditData && jobSeekEditData?.profile_pid
         }`,
         formData,

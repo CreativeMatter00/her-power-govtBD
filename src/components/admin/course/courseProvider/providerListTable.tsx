@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { getAllProviders, getAllUsers, getAllVenue } from "@/api/api";
-import { useQuery } from "@tanstack/react-query";
+import { courseApprove, getAllProviders } from "@/api/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CellContext,
   getCoreRowModel,
@@ -12,23 +12,23 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useMemo, useState } from "react";
-import { MdOutlineEdit } from "react-icons/md";
+import { useMemo, useState } from "react";
 import FilterDiv from "../../table/FilterDiv";
 // import TableModel from "../../table/TableModel";
-import PaginationDiv from "../../table/PaginationDiv";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import PaginationDiv from "../../table/PaginationDiv";
 // import VenueAdd from "./venueForm/VenueAdd";
 // import VenueEdit from "./venueForm/VenueEdit";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
+import { Button } from "@/components/ui/button";
 import { rowValue } from "@/redux/Reducer/MainSlice";
-import { LuEye } from "react-icons/lu";
+import { Check, CircleCheck, X } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import TableModel from "../../table/TableModel";
 // import VeiwVenue from "./viewVenue/VeiwVenue";
-
+import { useCookies } from "next-client-cookies";
 const ProviderListTable = () => {
   // ============ DATA FETCHING ============
   const {
@@ -40,7 +40,15 @@ const ProviderListTable = () => {
     queryKey: ["getAllProviders"],
     queryFn: () => getAllProviders(),
   });
-
+  const queryClient = useQueryClient();
+const { mutateAsync, isPending } = useMutation({
+    mutationFn: ({ course_pid, data }: { course_pid: string | null; data: any }) =>
+      courseApprove(course_pid, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllProviders"] });
+    },
+    
+  });
   // console.log("all venue", allVenue)
 
   const dispatch = useDispatch();
@@ -50,20 +58,26 @@ const ProviderListTable = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
-
+  const [sellerFlag, setSellerFlag] = useState<string | null>("");
+  const [courseId, setCourseId] = useState<string | null>("");
   const handleEdit = (rowData: any) => {
     // console.log("rowData", rowData);
     setEditData(rowData); // Set the data to edit
     setEditModalOpen(true); // Open the Edit Dialog
   };
-
+  const cookies = useCookies();
+  const user_pid = cookies.get("user_pid");
   const handleView = (rowData: any) => {
     // console.log("rowData", rowData);
     dispatch(rowValue(rowData)); // Dispatching the action to update Redux store
     setViewData(rowData); // Set the data to edit
     setViewModalOpen(true); // Open the Edit Dialog
   };
-
+  const handleApproveStatus = (courseInfo: any, flag: string) => {
+    setSellerFlag(flag);
+    setCourseId(courseInfo?.providor_pid)
+    setViewModalOpen(true);
+  };
   // Close the Add modal
   const handleCloseAdd = () => {
     setAddModalOpen(false);
@@ -136,6 +150,62 @@ const ProviderListTable = () => {
     // 		</div>
     // 	),
     // },
+    {
+      header: "Approve Status",
+      accessorKey: "approve_flag",
+      cell: (row: any) => {
+        const flag = () => {
+          // f -> constant flag
+          const f = row?.row?.original?.approve_flag?.toLowerCase();
+          if (f === "y") return "Approved";
+          if (f === "c") return "Rejected";
+          if (f === "n") return "Pending";
+        };
+        return <div>{flag()}</div>;
+      },
+    },
+    {
+      header: "Approve Sellers",
+      accessorKey: "approve_flag",
+      enableSorting: false,
+      cell: (row: any) => {
+        console.log(row?.row?.original?.approve_flag)
+        // f -> constant flag
+        const f = row?.row?.original?.approve_flag?.toLowerCase();
+        const isDisable = () => {
+          if (f === "y") return true;
+          if (f === "c") return true;
+          if (f === "n") return false;
+        };
+        const disable = isDisable();
+        return (
+          <div className="flex justify-center items-center gap-3">
+            <button
+              disabled={disable}
+              onClick={() => handleApproveStatus(row?.row?.original, 'c')}
+              className={`bg-[#c9332e] text-[#FEFCFF] font-medium text-sm p-2 px-4 rounded flex items-center gap-1 ${
+                disable ? "opacity-25" : "opacity-100"
+              }`}
+            >
+              <X className="w-4 h-4 text-[#FEFCFF]" />
+              Cancel
+            </button>
+            <button
+              disabled={disable}
+              onClick={() =>
+                handleApproveStatus(row?.row?.original, 'y')
+              }
+              className={`bg-[#288d57] text-[#FEFCFF] font-medium text-sm p-2 px-4 rounded flex items-center gap-1 ${
+                disable ? "opacity-25" : "opacity-100"
+              }`}
+            >
+              <Check className="w-4 h-4 text-[#FEFCFF]" />
+              Approve
+            </button>
+          </div>
+        );
+      },
+    },
   ];
 
   // ================= MEMOIZATION ================
@@ -163,6 +233,18 @@ const ProviderListTable = () => {
     onGlobalFilterChange: setFiltering,
     onColumnVisibilityChange: setColumnVisibility,
   });
+  const handleApproveSubmit = (flag: string | null) => {
+      if (!flag) return;
+      const formData = new FormData()
+      if(user_pid) formData.append('user_pid', user_pid)
+      formData.append('approve_status', flag?.toUpperCase())
+      mutateAsync({course_pid: courseId, data: formData }).then((res) => {
+        if (res?.meta?.status === true) {
+          toast.success(res?.meta?.message);
+        }
+        setViewModalOpen(false)
+      })
+    };
 
   // console.log(table.getHeaderGroups());
   if (isLoading)
@@ -199,7 +281,37 @@ const ProviderListTable = () => {
           )}
 
           {!isLoading && <PaginationDiv table={table} />}
+<Dialog
+            open={viewModalOpen}
+            onOpenChange={() => setViewModalOpen(false)}
+          >
+            <DialogContent className="sm:max-w-[425px] bg-white py-10">
+              {sellerFlag === "c" ? (
+                <X className="w-8 h-8 text-[#c9332e] mx-auto" />
+              ) : (
+                <CircleCheck className="w-8 h-8 text-[#288d57] mx-auto" />
+              )}
+              <DialogTitle className="text-center">Are you sure?</DialogTitle>
+              <DialogDescription className="text-center">
+                Do you want to {sellerFlag === "c" ? "Cancel" : "Approve"} these
+                course records?
+              </DialogDescription>
 
+              <DialogFooter>
+                <Button
+                
+                  type="submit"
+                  className={`bg-${
+                    sellerFlag === "c" ? "[#c9332e]" : "[#288d57]"
+                  } text-white px-3 py-2`}
+                  onClick={() => handleApproveSubmit(sellerFlag)}
+                >
+                  {isPending ? "Loading..":"Yes"}
+                  
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           {/* <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
 						<DialogContent className="bg-white w-[80vw]">
 							<VenueEdit

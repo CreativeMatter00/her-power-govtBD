@@ -1,8 +1,7 @@
 "use client";
 
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import StarRating from "@/components/shared/RenderStars";
-import axios from "axios";
 import { useCookies } from "next-client-cookies";
 import { useLocale } from "next-intl";
 import Link from "next/link";
@@ -34,8 +33,8 @@ const FollowedStoresCard = (props: IFollowedStoresCard) => {
 
   const handleUnfollow = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/follower/${customerId},${props.entrepreneurId}`
+      const response = await api.delete(
+        `/api/admin/follower/${customerId},${props.entrepreneurId}`
       );
       // console.log("Response:", response?.data);
       // console.log("Response:", response?.data?.meta?.status);

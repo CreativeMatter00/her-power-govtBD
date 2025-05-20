@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import CategorySchema from "./CategorySchema";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { url } from "../../../../../../api/api";
+import { api, url } from "../../../../../../api/api";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 interface IFormInput {
@@ -65,7 +65,7 @@ const CategoryAdd = ({ refetch, modalClose }: any) => {
     };
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${url}/api/admin/category`,
         formattedData,
         {

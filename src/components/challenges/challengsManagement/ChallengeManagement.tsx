@@ -1,20 +1,18 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import BreadCrumb from "@/components/ui/breadcrumb/BreadCrumb";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { api, getAllChallenges } from "@/api/api";
 import EventsPagination from "@/components/shared/EventsPagination";
-import {  getAllChallenges } from "@/api/api";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
-import Link from "next/link";
-import axios from "axios";
-import { url } from "@/api/api";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useState } from "react";
 
 export const ChallengeManagement = () => {
   const t = useTranslations("challenges");
@@ -32,8 +30,8 @@ export const ChallengeManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/challanges/${id}/${userID}`
+      const response = await api.delete(
+        `/api/admin/challanges/${id}/${userID}`
       );
       refetch();
       if (response?.data?.meta?.status === true) {

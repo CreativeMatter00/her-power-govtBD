@@ -37,7 +37,7 @@ const TaskDetail = () => {
 					<ScaleLoader color="#421957" height={70} radius={8} width={10} />
 				</div>
 			) : (
-				<div className="py-4 overflow-hidden">
+				<div className="py-4 overflow-hidden break-words">
 					<p className="text-black text-2xl font-bold">{data.jobtitle}</p>
 					<div className="py-4 overflow-hidden">
 						<p dangerouslySetInnerHTML={{ __html: data.jobdescription }}></p>

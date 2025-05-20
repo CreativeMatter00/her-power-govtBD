@@ -1,20 +1,20 @@
 "use client";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import { format, parseISO } from "date-fns";
-import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputField from "../inputFields/InputField";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import DateField from "../inputFields/DateField";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { format } from "date-fns";
 import { useCookies } from "next-client-cookies";
-import { getStudentInfo, url } from "../../../../api/api";
+import { useTranslations } from "next-intl";
+import { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useTranslations } from "next-intl";
+import * as Yup from "yup";
+import { api, getStudentInfo } from "../../../../api/api";
+import DateField from "../inputFields/DateField";
+import InputField from "../inputFields/InputField";
 
 const EditStudent = () => {
   const t = useTranslations("course");
@@ -118,8 +118,8 @@ const EditStudent = () => {
     };
 
     try {
-      const response = await axios.put(
-        `${url}/api/admin/student/${studentId}`,
+      const response = await api.put(
+        `/api/admin/student/${studentId}`,
         formattedData
       );
 

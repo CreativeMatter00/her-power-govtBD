@@ -13,7 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import ImageInput from "../EditCourse/inputField/ImageInput";
 import TextInput from "../EditCourse/inputField/TextInput";
 import axios from "axios";
-import { getBranchList, url } from "../../../../api/api";
+import { api, getBranchList, url } from "../../../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useQuery } from "@tanstack/react-query";
@@ -112,7 +112,7 @@ const AddNewCourse = () => {
     };
 
     try {
-      const response = await axios.post(`${url}/api/admin/course`, formData, {
+      const response = await api.post(`/api/admin/course`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

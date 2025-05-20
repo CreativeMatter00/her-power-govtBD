@@ -1,32 +1,15 @@
 "use client";
 import React, { FC, useState } from "react";
 // import DateInput from "./inputFields/DateInput";
-import FileInput from "./inputFields/FileInput";
-import InputField from "./inputFields/InputField";
-import TextInput from "./inputFields/TextInput";
-import styles from "@/styles/Events.module.css";
-import { RxCross2 } from "react-icons/rx";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import DateInput from "./inputFields/DateInput";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
 
-import axios from "axios";
-import NewsFormSchema from "./NewsFormSchema";
-import { useSelector } from "react-redux";
+import { api } from "@/api/api";
 import { RootState } from "@/redux/Reducer/MainSlice";
-import EditInput from "./inputFields/EditInput";
-import { token, url } from "@/api/api";
+import { useSelector } from "react-redux";
 import EditFileInput from "./inputFields/EditFileInput";
+import EditInput from "./inputFields/EditInput";
+import NewsFormSchema from "./NewsFormSchema";
 
 interface IFormInput {
   news_title: string;
@@ -89,13 +72,12 @@ const EditLatesNewsForm: FC<IEditProps> = ({ setEditModalOpen, refetch }) => {
     }
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/news/${editData.news_pid}?_method=PUT`,
+      const response = await api.post(
+        `/api/admin/news/${editData.news_pid}?_method=PUT`,
         newsData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
           },
         }
       );

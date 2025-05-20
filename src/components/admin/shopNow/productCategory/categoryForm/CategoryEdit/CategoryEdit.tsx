@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import CategorySchema from "./CategorySchema";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { url } from "../../../../../../api/api";
+import { api, url } from "../../../../../../api/api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../../redux/Reducer/MainSlice";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -84,8 +84,8 @@ const CategoryEdit: React.FC<CategoryEditProps> = ({
     });
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/category/${category.category_pid}?_method=PUT`,
+      const response = await api.post(
+        `/api/admin/category/${category.category_pid}?_method=PUT`,
         formData,
         {
           headers: {

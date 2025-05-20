@@ -1,15 +1,14 @@
 "use client";
-import { useForm } from "react-hook-form";
-import ProductVariants from "../FormPart/ProductVariants";
-import HeadingPart from "../HeadingPart";
-import axios from "axios";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { api } from "@/api/api";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { VariantSchema } from "./Schema";
-import { url } from "@/api/api";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProductVariants from "../FormPart/ProductVariants";
+import HeadingPart from "../HeadingPart";
+import { VariantSchema } from "./Schema";
 
 interface Variant {
   varient_id: number;
@@ -72,8 +71,8 @@ const VariantForm = ({ variant, refetch, index, totalVariants }: VariantI) => {
     }
 
     try {
-      const response = await axios.post(
-        `${url}/api/admin/product-variant-update/${variant?.varient_pid}`,
+      const response = await api.post(
+        `/api/admin/product-variant-update/${variant?.varient_pid}`,
         formData
       );
 
@@ -108,8 +107,8 @@ const VariantForm = ({ variant, refetch, index, totalVariants }: VariantI) => {
 
   const handleDeleteVariant = async () => {
     try {
-      const response = await axios.delete(
-        `${url}/api/admin/product-variant/${variant?.varient_pid}`
+      const response = await api.delete(
+        `/api/admin/product-variant/${variant?.varient_pid}`
       );
 
       // console.log("Response:", response.data);

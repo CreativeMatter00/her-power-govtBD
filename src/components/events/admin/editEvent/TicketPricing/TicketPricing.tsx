@@ -17,7 +17,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
   useEffect(() => {
     if(eventData){
       setEventFreeOrPaid(eventData.ticket_type === "P" ? "Paid" : "Free");
-      console.log("Event Data----------------->", eventData);
+      // console.log("Event Data----------------->", eventData);
     }
     if(eventData?.tricket_info){
       setSections(eventData.tricket_info);
@@ -92,7 +92,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
             </button>
           </div>
 
-          {eventFreeOrPaid === "Paid" && (
+          {/* {eventFreeOrPaid === "Paid" && (
             <button
               type="button"
               onClick={addSection}
@@ -100,7 +100,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
             >
               <FaPlus className="text-bgPrimary p-2 w-10 h-10" />
             </button>
-          )}
+          )} */}
         </div>
 
         {eventFreeOrPaid === "Paid" &&
@@ -145,7 +145,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
                           </p>
                         )}
                     </div>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={() => removeSection(section.id)}
                       disabled={sections.length === 1}
@@ -156,7 +156,7 @@ const TicketPricing = ({eventData}:{eventData?:any}) => {
                       } h-fit`}
                     >
                       <FaMinus className="text-bgPrimary p-2 w-10 h-10" />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

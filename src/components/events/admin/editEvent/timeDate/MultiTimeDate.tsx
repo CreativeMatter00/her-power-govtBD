@@ -53,7 +53,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
               <div className="flex max-lg:flex-col items-center max-md:gap-3 gap-6">
                 {/* ================================ START SCHEDULE ================================ */}
 
-                <CreateEventInputField
+                {/* <CreateEventInputField
                   inputType="hidden"
                   placeholderText=""
                   label=""
@@ -62,7 +62,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
                   register={register}
                   required={true}
                   defaultValue={row?.schedule_pid}
-                />
+                /> */}
 
                 <div className="w-full">
                   <DatePicker
@@ -70,7 +70,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
                     watch={watch}
                     setValue={setValue}
                     name={`multiDates[${index}].startDate`}
-                    defaultValue={row?.start_datetime && row?.start_datetime}
+                    defaultValue={row?.start_datetime?.split(" ")[0]}
                   />
                 </div>
                 <div className="w-full">
@@ -79,7 +79,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
                     watch={watch}
                     setValue={setValue}
                     name={`multiDates[${index}].startTime`}
-                    defaultValue={row?.from_time && row?.from_time}
+                    defaultValue={row?.from_time}
                   />
                 </div>
 
@@ -93,7 +93,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
                     watch={watch}
                     setValue={setValue}
                     name={`multiDates[${index}].endDate`}
-                    defaultValue={row?.end_datetime && row?.end_datetime}
+                    defaultValue={row?.end_datetime?.split(" ")[0]}
                   />
                 </div>
                 <div className="w-full">
@@ -102,7 +102,7 @@ const MultiTimeDate = ({ multiSchedule }: { multiSchedule?: any }) => {
                     watch={watch}
                     setValue={setValue}
                     name={`multiDates[${index}].endTime`}
-                    defaultValue={row?.to_time && row?.to_time}
+                    defaultValue={row?.to_time}
                   />
                 </div>
 

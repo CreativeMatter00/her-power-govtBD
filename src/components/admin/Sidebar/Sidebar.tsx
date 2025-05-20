@@ -1,19 +1,16 @@
-import { RiDashboardFill, RiClipboardFill } from "react-icons/ri";
-import { SiHomeassistantcommunitystore } from "react-icons/si";
-import { FaGraduationCap } from "react-icons/fa";
-import { VscStarFull } from "react-icons/vsc";
-import { FaHandshake } from "react-icons/fa6";
-import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
-import { CgListTree } from "react-icons/cg";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
-import { HiSpeakerphone } from "react-icons/hi";
-import { HiOutlineSpeakerphone } from "react-icons/hi";
-import { useState } from "react";
-import "./sidebar.css";
-import Link from "next/link";
 import { useLocale } from "next-intl";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaHandshakeSimple } from "react-icons/fa6";
+import { useState } from "react";
+import { CgListTree } from "react-icons/cg";
+import { FaGraduationCap } from "react-icons/fa";
+import { FaHandshake, FaHandshakeSimple } from "react-icons/fa6";
+import { HiSpeakerphone } from "react-icons/hi";
+import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { RiClipboardFill, RiDashboardFill } from "react-icons/ri";
+import { SiHomeassistantcommunitystore } from "react-icons/si";
+import { VscStarFull } from "react-icons/vsc";
+import "./sidebar.css";
 
 const Sidebar = () => {
 	const locale = useLocale();
@@ -496,6 +493,78 @@ const Sidebar = () => {
 											>
 												<CgListTree className="text-brandDs w-5 h-5" />{" "}
 												<h1>Students</h1>
+											</div>
+										</Link>
+									</div>
+								) : null}
+							</div>
+							<div>
+								<div
+									onClick={() => handleToggle(8)}
+									className="flex justify-between items-center gap-3 hover:font-bold hover:cursor-pointer group"
+								>
+									<div
+										className={`flex items-center gap-3 ${
+											openIndex === 8 && "font-bold"
+										}`}
+									>
+										<RiClipboardFill className="text-brandDs w-5 h-5" />
+										<h1>Job Provider</h1>
+									</div>
+									{openIndex === 8 ? (
+										<IoIosArrowDown className="text-brandDs" />
+									) : (
+										<IoIosArrowForward className="group-hover:text-brandDs" />
+									)}
+								</div>
+								{openIndex === 8 ? (
+									<div className="mt-4 flex flex-col gap-3 text-sm text-[#444444] animation">
+										<Link href={`/${locale}/admin/job/job-provider`}>
+											<div
+												className={`flex items-center gap-3 hover:bg-[#F2F2F2] ${
+													pathName === `/${locale}/admin/job/job-provider`
+														? "bg-[#f2f2f2]"
+														: "bg-transparent"
+												}  px-1 py-3 cursor-pointer`}
+											>
+												<CgListTree className="text-brandDs w-5 h-5" />{" "}
+												<h1>Job Provider</h1>
+											</div>
+										</Link>
+									</div>
+								) : null}
+							</div>
+							<div>
+								<div
+									onClick={() => handleToggle(9)}
+									className="flex justify-between items-center gap-3 hover:font-bold hover:cursor-pointer group"
+								>
+									<div
+										className={`flex items-center gap-3 ${
+											openIndex === 9 && "font-bold"
+										}`}
+									>
+										<RiClipboardFill className="text-brandDs w-5 h-5" />
+										<h1>Organizer</h1>
+									</div>
+									{openIndex === 9 ? (
+										<IoIosArrowDown className="text-brandDs" />
+									) : (
+										<IoIosArrowForward className="group-hover:text-brandDs" />
+									)}
+								</div>
+								{openIndex === 9 ? (
+									<div className="mt-4 flex flex-col gap-3 text-sm text-[#444444] animation">
+										<Link href={`/${locale}/admin/organizer/organizer-provider`}>
+											<div
+												className={`flex items-center gap-3 hover:bg-[#F2F2F2] ${
+													pathName === `/${locale}/admin/organizer/organizer-provider`
+														? "bg-[#f2f2f2]"
+														: "bg-transparent"
+												}  px-1 py-3 cursor-pointer`}
+											>
+												<CgListTree className="text-brandDs w-5 h-5" />{" "}
+												<h1>Organizer Provider</h1>
 											</div>
 										</Link>
 									</div>
