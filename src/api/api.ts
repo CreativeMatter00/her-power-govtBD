@@ -1295,7 +1295,7 @@ export const getBlogs = async () => {
 };
 export const approveBlogProvider = async (blog_provider_pid: string|null, data:any) => {
   try {
-    const response = await api.post(`/api/admin/organizer-approve/${blog_provider_pid}`, data, {
+    const response = await api.post(`/api/admin/blog-approve/${blog_provider_pid}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
