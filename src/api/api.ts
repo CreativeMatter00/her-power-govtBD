@@ -1283,7 +1283,28 @@ export const getAllBlogs = async (page: number) => {
     console.log(error);
   }
 };
-
+export const getBlogs = async () => {
+  try {
+    const response = await api.get(
+      `/api/admin/admin-blog-post`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const approveBlogProvider = async (blog_provider_pid: string|null, data:any) => {
+  try {
+    const response = await api.post(`/api/admin/organizer-approve/${blog_provider_pid}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    return response?.data;
+  } catch (error:any) {
+    throw new Error(error?.response?.data?.meta?.message || "something went wrong")
+  }
+};
 export const blogsManagement = async (page: number,userID:string) => {
   try {
     const response = await api.get(

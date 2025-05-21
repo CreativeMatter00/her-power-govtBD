@@ -18,10 +18,11 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import PaginationDiv from "../../table/PaginationDiv";
 // import VenueAdd from "./venueForm/VenueAdd";
 // import VenueEdit from "./venueForm/VenueEdit";
+import { View } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { approveOrganizerProvider, getOrganizerProviders } from "@/api/api";
+import { approveBlogProvider, getBlogs } from "@/api/api";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,43 +32,39 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Check, CircleCheck, View, X } from "lucide-react";
+import { Check, CircleCheck, X } from "lucide-react";
 import { useCookies } from "next-client-cookies";
 import Image from "next/image";
 import TableModel from "../../table/TableModel";
 // import VeiwVenue from "./viewVenue/VeiwVenue";
 
-const OrganizerProviderListTable = () => {
+const BlogListTable = () => {
   // ============ DATA FETCHING ============
   const queryClient = useQueryClient();
-  const { isLoading, data: allOrganizerProviders } = useQuery({
-    queryKey: ["allOrganizerProviders"],
-    queryFn: () => getOrganizerProviders(),
+  const { isLoading, data: allBlogs } = useQuery({
+    queryKey: ["allBlogs"],
+    queryFn: () => getBlogs(),
   });
-  const { mutateAsync, isPending, isError } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: ({
-      organizerProvider_pid,
+      blog_pid: blog_pid,
       data,
     }: {
-      organizerProvider_pid: string | null;
+      blog_pid: string | null;
       data: any;
-    }) => approveOrganizerProvider(organizerProvider_pid, data),
+    }) => approveBlogProvider(blog_pid, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["allOrganizerProviders"] });
+      queryClient.invalidateQueries({ queryKey: ["allBlogs"] });
     },
   });
-  console.log("allOrganizerProviders", allOrganizerProviders);
+  console.log("allBlogs", allBlogs);
 
-  const [organizerProviderFlag, setOrganizerProviderFlag] = useState<
-    string | null
-  >("");
-  const [organizerProviderId, setOrganizerProviderId] = useState<string | null>(
-    ""
-  );
+  const [blogFlag, setBlogFlag] = useState<string | null>("");
+  const [blogId, setBlogId] = useState<string | null>("");
   const [viewData, setViewData] = useState<any | null>(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [addModalOpen, setAddModalOpen] = useState(false);
   const [approveModalOpen, setApproveModalOpen] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const cookies = useCookies();
   const user_pid = cookies.get("user_pid");
   // const handleEdit = (rowData: any) => {
@@ -77,29 +74,22 @@ const OrganizerProviderListTable = () => {
   // };
 
   const handleView = (rowData: any) => {
-    setViewData(rowData);
-    setViewModalOpen(true);
+    // console.log("rowData", rowData);
+    setViewData(rowData); // Set the data to edit
+    setViewModalOpen(true); // Open the Edit Dialog
   };
 
-  const handleApproveStatus = (organizerProviderInfo: any, flag: string) => {
-    setOrganizerProviderFlag(flag);
-    setOrganizerProviderId(organizerProviderInfo?.org_pid);
+  const handleApproveStatus = (blogInfo: any, flag: string) => {
+    setBlogFlag(flag);
+    setBlogId(blogInfo?.bpost_pid);
     setApproveModalOpen(true);
   };
 
   // Close the Add modal
-  // const handleCloseAdd = () => {
-  //   setAddModalOpen(false);
-  // };
+  const handleCloseAdd = () => {
+    setAddModalOpen(false);
+  };
   // ================ DEFINING COLUMN ===============
-  // {
-  //           "org_pid": "ORG240800000001",
-  //           "org_name": "ati",
-  //           "org_address": "Uttara",
-  //           "designation": "admin",
-  //           "org_type": "1",
-  //           "org_website": "www"
-  //       },
   const COLUMNS = [
     {
       header: "ID",
@@ -109,17 +99,17 @@ const OrganizerProviderListTable = () => {
       cell: (info: CellContext<any, any>) => info.row.index + 1,
     },
     {
-      header: "Organizer Name",
-      accessorKey: "org_name",
+      header: "Title",
+      accessorKey: "title",
     },
     {
-      header: "Designation",
-      accessorKey: "designation",
+      header: "Description",
+      accessorKey: "description",
+      cell: (row: any) => {
+        return <p className="line-clamp-2" dangerouslySetInnerHTML={{ __html: row?.row?.original?.description }}></p>;
+      },
     },
-    // {
-    //   header: "Address",
-    //   accessorKey: "address_line",
-    // },
+
     {
       header: "Approve Status",
       accessorKey: "approve_flag",
@@ -135,7 +125,7 @@ const OrganizerProviderListTable = () => {
       },
     },
     {
-      header: "Approve Organizer Providers",
+      header: "Approve Blogs",
       accessorKey: "approve_flag",
       enableSorting: false,
       cell: (row: any) => {
@@ -192,7 +182,8 @@ const OrganizerProviderListTable = () => {
 
   // ================= MEMOIZATION ================
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => allOrganizerProviders, [allOrganizerProviders]);
+  const data = useMemo(() => allBlogs, [allBlogs]);
+
   // ================ TABLE FUNCITONALITY ===============
   const [sorting, setSorting] = useState<SortingState>([]);
   const [filtering, setFiltering] = useState("");
@@ -215,22 +206,18 @@ const OrganizerProviderListTable = () => {
     onGlobalFilterChange: setFiltering,
     onColumnVisibilityChange: setColumnVisibility,
   });
-
+  
   const handleApproveSubmit = (flag: string | null) => {
     if (!flag) return;
     const formData = new FormData();
     if (user_pid) formData.append("user_pid", user_pid);
     formData.append("approve_status", flag?.toUpperCase());
-    mutateAsync({ organizerProvider_pid: organizerProviderId, data: formData })
-      .then((res) => {
-        if (res?.meta?.status === true) {
-          toast.success(res?.meta?.message);
-        }
-        setApproveModalOpen(false);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    mutateAsync({ blog_pid: blogId, data: formData }).then((res) => {
+      if (res?.meta?.status === true) {
+        toast.success(res?.meta?.message);
+      }
+      setApproveModalOpen(false);
+    });
   };
   if (isLoading)
     return (
@@ -238,66 +225,64 @@ const OrganizerProviderListTable = () => {
         <ScaleLoader color="#421957" height={70} radius={8} width={10} />
       </div>
     );
-
   const viewTableData = ({
-        title,
-        value,
-        flag,
-        img
-      }: {
-        title: string;
-        value?: string | null | undefined;
-        flag?: boolean;
-        img?: string
-      }) => {
-        const isFlag = (flag: string | null | undefined) => {
-          if (!flag) return;
-          // f -> constant flag
-          const f = flag.toLowerCase();
-          if (f === "y") return "Approved";
-          if (f === "c") return "Rejected";
-          if (f === "n") return "Pending";
-        };
-    
-        return (
-          <div className="border p-2 grid grid-cols-2 rounded-md">
-            <h2 className="text-base capitalize font-medium">{title}</h2>
-            {<p className="border-l pl-2 text-sm">
-              {" "}
-              {flag ? isFlag(value) : value || "-"}
-              {img && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Image
-                  src={img}
-                  alt="Image preview"
-                  width={60}
-                  height={40}
-                  className="cursor-pointer rounded hover:scale-105 transition border"
-                />
-              </DialogTrigger>
-              <DialogContent className="max-w-[500px] bg-gray-100  border">
-                <Image
-                  src={img}
-                  alt="Zoomed image"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto rounded object-contain"
-                />
-              </DialogContent>
-            </Dialog>
-          )}
-            </p>}
-          </div>
-        );
+      title,
+      value,
+      flag,
+      img
+    }: {
+      title: string;
+      value?: string | null | undefined;
+      flag?: boolean;
+      img?: string
+    }) => {
+      const isFlag = (flag: string | null | undefined) => {
+        if (!flag) return;
+        // f -> constant flag
+        const f = flag.toLowerCase();
+        if (f === "y") return "Approved";
+        if (f === "c") return "Rejected";
+        if (f === "n") return "Pending";
       };
-  
-  return (
-    <>
+      
+      return (
+        <div className="border p-2 grid grid-cols-2 rounded-md">
+          <h2 className="text-base capitalize font-medium">{title}</h2>
+          {<p className="border-l pl-2 text-sm">
+            {" "}
+            {flag ? isFlag(value) : value || "-"}
+            {img && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Image
+                src={img}
+                alt="Image preview"
+                width={60}
+                height={40}
+                className="cursor-pointer rounded hover:scale-105 transition border"
+              />
+            </DialogTrigger>
+            <DialogContent className="max-w-[500px] bg-gray-100  border">
+              <Image
+                src={img}
+                alt="Zoomed image"
+                width={300}
+                height={200}
+                className="w-full h-auto rounded object-contain"
+              />
+            </DialogContent>
+          </Dialog>
+        )}
+          </p>}
+        </div>
+      );
+    };
+    return (
+      <>
       <ToastContainer />
       <section className="">
         <div className="text-3xl p-4 border-b-2 border-[#989898]">
-          Organizer Provider List
+          Blog List
         </div>
         <div className="p-6">
           <FilterDiv
@@ -305,11 +290,11 @@ const OrganizerProviderListTable = () => {
             setFiltering={setFiltering}
             data={data}
             table={table}
-            title={"Add OrganizerProvider"}
+            title={"Add Blog"}
             open={addModalOpen}
             onOpenChange={setAddModalOpen}
             buttonEnable={false}
-          >
+            >
             {/* <VenueAdd refetch={refetch} modalClose={handleCloseAdd} /> */}
           </FilterDiv>
 
@@ -318,34 +303,22 @@ const OrganizerProviderListTable = () => {
           ) : (
             <TableModel table={table} />
           )}
-
           {!isLoading && <PaginationDiv table={table} />}
           <Dialog
             open={viewModalOpen}
             onOpenChange={() => setViewModalOpen(false)}
           >
             <DialogTrigger asChild>
-              <Button variant="outline">View Organizer Details</Button>
+              <Button variant="outline">View Blog Details</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[525px] bg-white py-5">
-              <DialogTitle className="">View Organizer Details</DialogTitle>
+            <DialogContent className="sm:max-w-[525px] max-h-[80vh]  overflow-y-scroll bg-white py-5">
+              <DialogTitle className="">View Blog Details</DialogTitle>
               <div className="grid grid-cols-1 gap-1">
-                
-                {viewTableData({ title: "Organizer Name", value: viewData?.org_name })}
-                {viewTableData({ title: "Email", value: viewData?.email })}
-                {viewTableData({
-                  title: "Mobile no",
-                  value: viewData?.phone_no,
-                })}
-                {viewTableData({
-                  title: "organizer address",
-                  value: viewData?.org_address,
-                })}
-                {viewTableData({
-                  title: "designation",
-                  value: viewData?.designation,
-                })} 
-                               
+                {viewTableData({title:"Title", value:viewData?.title})}
+                {viewTableData({title:"Description", value:viewData?.description})}
+                {viewTableData({title:"Banner", img: viewData?.banner_file_url})}
+                {viewTableData({title:"Banner", img: viewData?.thumbnail_file_url})}
+                {viewTableData({title:"Approve", value:viewData?.approve_flag, flag: true})}
               </div>
             </DialogContent>
           </Dialog>
@@ -354,25 +327,24 @@ const OrganizerProviderListTable = () => {
             onOpenChange={() => setApproveModalOpen(false)}
           >
             <DialogContent className="sm:max-w-[425px] bg-white py-10">
-              {organizerProviderFlag === "c" ? (
+              {blogFlag === "c" ? (
                 <X className="w-8 h-8 text-[#c9332e] mx-auto" />
               ) : (
                 <CircleCheck className="w-8 h-8 text-[#288d57] mx-auto" />
               )}
               <DialogTitle className="text-center">Are you sure?</DialogTitle>
               <DialogDescription className="text-center">
-                Do you want to{" "}
-                {organizerProviderFlag === "c" ? "Cancel" : "Approve"} these
-                Organizer provider records?
+                Do you want to {blogFlag === "c" ? "Cancel" : "Approve"} these
+                Blog records?
               </DialogDescription>
 
               <DialogFooter>
                 <Button
                   type="submit"
                   className={`bg-${
-                    organizerProviderFlag === "c" ? "[#c9332e]" : "[#288d57]"
+                    blogFlag === "c" ? "[#c9332e]" : "[#288d57]"
                   } text-white px-3 py-2`}
-                  onClick={() => handleApproveSubmit(organizerProviderFlag)}
+                  onClick={() => handleApproveSubmit(blogFlag)}
                 >
                   {isPending ? "Loading.." : "Yes"}
                 </Button>
@@ -386,4 +358,4 @@ const OrganizerProviderListTable = () => {
   );
 };
 
-export default OrganizerProviderListTable;
+export default BlogListTable;

@@ -570,6 +570,42 @@ const Sidebar = () => {
 									</div>
 								) : null}
 							</div>
+							<div>
+								<div
+									onClick={() => handleToggle(10)}
+									className="flex justify-between items-center gap-3 hover:font-bold hover:cursor-pointer group"
+								>
+									<div
+										className={`flex items-center gap-3 ${
+											openIndex === 10 && "font-bold"
+										}`}
+									>
+										<RiClipboardFill className="text-brandDs w-5 h-5" />
+										<h1>Blogs</h1>
+									</div>
+									{openIndex === 10 ? (
+										<IoIosArrowDown className="text-brandDs" />
+									) : (
+										<IoIosArrowForward className="group-hover:text-brandDs" />
+									)}
+								</div>
+								{openIndex === 10 ? (
+									<div className="mt-4 flex flex-col gap-3 text-sm text-[#444444] animation">
+										<Link href={`/${locale}/admin/blogs/blog-list`}>
+											<div
+												className={`flex items-center gap-3 hover:bg-[#F2F2F2] ${
+													pathName === `/${locale}/admin/blogs/blog-list`
+														? "bg-[#f2f2f2]"
+														: "bg-transparent"
+												}  px-1 py-3 cursor-pointer`}
+											>
+												<CgListTree className="text-brandDs w-5 h-5" />{" "}
+												<h1>Blogs List</h1>
+											</div>
+										</Link>
+									</div>
+								) : null}
+							</div>
 						</div>
 					</main>
 				</aside>
