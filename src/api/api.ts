@@ -587,7 +587,7 @@ export const getAllSellers = async () => {
   try {
     const response = await api.get(`/api/admin/get-allseller`);
     // console.log(response?.data)
-    return response?.data;
+    return response?.data?.data;
   } catch (error) {
     console.log(error);
   }

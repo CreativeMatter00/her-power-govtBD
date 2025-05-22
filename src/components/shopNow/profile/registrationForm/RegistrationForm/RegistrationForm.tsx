@@ -1,20 +1,20 @@
 "use client";
-import { useState } from "react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
-import UserProfileSchema from "../UserProfileSchema/UserProfileSchema";
-import ImagePart from "../imagePart/ImagePart";
-import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useCookies } from "next-client-cookies";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import { url } from "@/api/api";
 import InputField from "@/components/shared/input/InputField";
 import PasswordField from "@/components/talentHunt/registration/inputFields/PasswordField";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { url } from "@/api/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import UserProfileSchema from "../UserProfileSchema/UserProfileSchema";
+import ImagePart from "../imagePart/ImagePart";
 
 interface RegFormInput {
   fname: string;
@@ -55,7 +55,7 @@ const RegistrationForm = ({ setVerifyEmail, setEmail,setBirthCertificate,setNid 
     setValue,
     trigger,
   } = useForm<RegFormInput>({ resolver });
-
+// console.log()
   const onSubmit: SubmitHandler<RegFormInput> = (data) => {
     const registrationData = new FormData();
     registrationData.append("fname", data.fname);
@@ -70,11 +70,10 @@ const RegistrationForm = ({ setVerifyEmail, setEmail,setBirthCertificate,setNid 
     registrationData.append("zip_postal_code", data.zip_postal_code.toString());
     registrationData.append("password", data.password);
     registrationData.append("confirm_password", data.confirm_password);
-    if (data.nid){
+    if (selectedOption === 'nid' && data.nid){
       registrationData.append("nid", data.nid);
       setNid(data.nid);
-    } 
-    if (data.birthCertificate){
+    }else  if (selectedOption !== 'nid' && data.birthCertificate){
       registrationData.append("birth_reg_no", data.birthCertificate);
       setBirthCertificate(data.birthCertificate);
     }
