@@ -1,11 +1,11 @@
 "use client";
+import { getHomeBlogs } from "@/api/api";
+import CareerLoader from "@/components/shared/loader/CareerLoader";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
 import BlogCard from "../meetPartneresComponents/BlogCard";
-import { useQuery } from "@tanstack/react-query";
-import { getHomeBlogs } from "@/api/api";
-import CareerLoader from "@/components/shared/loader/CareerLoader";
-import { useTranslations } from "next-intl";
 function BlogPosts() {
   const { isLoading, data, error } = useQuery({
     queryKey: ["getHomeBlogs"],
@@ -48,7 +48,7 @@ function BlogPosts() {
       ) : (
         <>
           {Array.isArray(data?.data) && data?.data?.length>0 ? (
-            <div className="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 lg:gap-x-4 gap-y-8 my-6">
+            <div className="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-x-4 lg:gap-x-4 gap-y-3 lg:gap-y-8 my-6">
               {
                 data?.data?.map((blogPost: any) => (
                   <div key={blogPost.bpost_pid}>

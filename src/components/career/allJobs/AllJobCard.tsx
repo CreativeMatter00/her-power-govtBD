@@ -27,10 +27,10 @@ const AllJobCard = ({
 
   return (
     <div className="py-2 px-5 bg-brandLsSecondary rounded-md h-full">
-      <p className="font-bold text-2xl pb-5"> {title} </p>
+      <p className="font-bold text-lg lg:text-2xl pb-5"> {title} </p>
 
       <div className="mb-5">
-        <p className="font-bold text-base"> {companyName}</p>
+        <p className="font-bold text-sm lg:text-base"> {companyName}</p>
         <p
           className="line-clamp-2"
           dangerouslySetInnerHTML={{ __html: description }}
@@ -42,7 +42,7 @@ const AllJobCard = ({
           <div className="text-brandPrimary">
             <GrLocation />
           </div>
-          <p className="line-clamp-1"> {location} </p>
+          <p className="line-clamp-1 text-sm"> {location} </p>
         </div>
 
         <div className="flex items-center gap-2">

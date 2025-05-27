@@ -11,7 +11,7 @@ const CourseCategory = () => {
 
 			<SearchCourse />
 
-			<div className="transition-opacity duration-300 ease-in-out py-10 container">
+			<div className="transition-opacity duration-300 ease-in-out py-5 lg:py-10 container">
 				<div className="grid p-4 xl:gap-20 lg:gap-12 gap-8 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
 					<CourseCatCard
 						category="online-courses"

@@ -233,7 +233,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
               {data?.data?.attachments.map((product: any, index: number) => (
                 <CarouselItem
                   key={index}
-                  className="h-[660px] w-[450px] flex items-center justify-center"
+                  className="h-[380px] lg:h-[660px] w-[450px] flex items-center justify-center"
                 >
                   <Image
                     src={product.file_url}
@@ -256,7 +256,7 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
                     height={200}
                     width={75}
                     alt="image"
-                    className={`mx-auto max-h-[100px] max-w-[70px] w-auto object-contain ${
+                    className={`mx-auto h-[70px] lg:max-h-[100px] w-[50px] max-w-[70px] w-auto object-contain ${
                       index + 1 === current
                         ? "border border-red-500"
                         : "border border-brandLsPrimary"
@@ -270,15 +270,15 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
 
           <div>
             <div>
-              <p className="text-5xl text-brandPrimary mb-4">
+              <p className="text-xl lg:text-5xl text-brandPrimary lg:mb-4">
                 {data?.data?.product_name}
               </p>
-              <div className="flex items-center gap-2 mb-10"></div>
+              <div className="flex items-center gap-2 mb-5 lg:mb-10"></div>
             </div>
 
             <div className="flex gap-10 items-end mb-2">
               <p className="text-brandDs"> {t("price")} </p>
-              <p className="text-brandPrimary font-bold text-4xl">
+              <p className="text-brandPrimary font-bold text-xl lg:text-4xl">
                 {selectedVariant?.mrp} Tk
               </p>
             </div>
@@ -457,17 +457,17 @@ const InitialInformation: React.FC<IData> = ({ data, scrollToRatings }) => {
             )}
 
             {isSeller !== "true" && (
-              <div className="flex flex-col md:flex-row items-center gap-4">
+              <div className="flex flex-row items-center gap-4">
                 <button
                   type="submit"
-                  className="px-10 py-4 bg-brandPrimary border border-brandPrimary text-white font-medium rounded-full"
+                  className="px-5 lg:px-10 py-2 lg:py-4 bg-brandPrimary border border-brandPrimary text-white font-medium rounded-full"
                   onClick={() => handleAddToCart()}
                 >
                   {t("addToCart")}
                 </button>
 
                 <button
-                  className="px-10 py-4 bg-transparent text-brandPrimary border border-brandPrimary font-medium rounded-full"
+                  className="px-5 lg:px-10 py-2 lg:py-4 bg-transparent text-brandPrimary border border-brandPrimary font-medium rounded-full"
                   onClick={() => addToWishlist()}
                 >
                   {t("addToWishlist")}

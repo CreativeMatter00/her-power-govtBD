@@ -20,6 +20,7 @@ const VideoDetails = () => {
     queryKey: ["getVideoById", id],
     queryFn: () => getVideoById(id as string),
   });
+  console.log(data)
   return (
     <>
       {isLoading ? (
@@ -46,7 +47,7 @@ const VideoDetails = () => {
           <div className="border-b border-brandLsPrimary w-full my-6"></div>
           <div className="flex justify-between  gap-2 ">
             <h1 className="text-3xl text-admin_Text2 font-bold ">
-              {data.title}
+              {data?.title}
             </h1>
             <div className="flex items-center gap-2">
               <SlCalender className="text-admin_Text2" />

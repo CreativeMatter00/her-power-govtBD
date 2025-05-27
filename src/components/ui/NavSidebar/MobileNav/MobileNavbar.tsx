@@ -1,10 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
 import LocalSwitcher from "../LocalSwitcher";
-import LoginNav from "../LoginNav";
-import Image from "next/image";
 
 const MobileNavbar = () => {
   const t = useTranslations("Navbar");
@@ -20,7 +19,7 @@ const MobileNavbar = () => {
                 width={70}
                 height={50}
                 alt="ICT Logo"
-                className="h-auto "
+                className="h-auto mx-auto"
                 priority
               />
               {/* <Image
@@ -99,9 +98,14 @@ const MobileNavbar = () => {
             >
               {t("contact")}
             </Link>
+            <Link
+              href={`/${locale}/login`}
+              className="text-center hover:underline underline-offset-8 decoration-brandDs decoration-2 transition-all hover:text-brandDs"
+            >
+              {t("login")}
+            </Link>
           </div>
         </div>
-
         <div className="">
           <LocalSwitcher />
           {/* <LoginNav /> */}

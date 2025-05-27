@@ -48,7 +48,7 @@ const JobDetail = () => {
         </div>
       ) : (
         <div className="container px-4 py-8 divide-y divide-[#DCDCDC] ">
-          <div className="pb-5 flex justify-center">
+          <div className="pb-5 flex justify-center pt-20 lg:pt-0">
                <Image
                           src={`${data.file_url}`}
                           alt="Job details image"

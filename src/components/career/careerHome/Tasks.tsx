@@ -1,13 +1,12 @@
 "use client";
 
+import { getLatestTasks } from "@/api/api";
+import CareerLoader from "@/components/shared/loader/CareerLoader";
+import { useQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { IoMdArrowForward } from "react-icons/io";
 import TaskCard from "./TaskCard";
-import { useLocale, useTranslations } from "next-intl";
-import { getLatestTasks } from "@/api/api";
-import { useQuery } from "@tanstack/react-query";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import CareerLoader from "@/components/shared/loader/CareerLoader";
 
 const Tasks = () => {
   const locale = useLocale();
@@ -42,7 +41,7 @@ const Tasks = () => {
           ))}
         </div>
       ) : (
-        <div className="w-full grid grid-cols-2 gap-5 mt-5">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
           {data.map((task: any, index: number) => (
             <TaskCard
               key={index}

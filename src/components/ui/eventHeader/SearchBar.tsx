@@ -44,7 +44,7 @@ const SearchBar = () => {
 					<div className=" ">
 						<button
 							type="submit"
-							className="w-48 bg-brandPrimary text-white py-2 rounded-r-full font-medium text-lg hover:bg-brandHover"
+							className="w-20 lg:w-48 bg-brandPrimary text-white py-2 rounded-r-full font-medium text-lg hover:bg-brandHover"
 						>
 							{t("Search")}
 						</button>

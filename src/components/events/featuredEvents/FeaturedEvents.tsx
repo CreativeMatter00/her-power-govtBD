@@ -1,10 +1,10 @@
 "use client";
-import MyEventCard from "../eventComponents/eventCards/MyEventCard";
 import { getAllFeaturedEvents } from "@/api/api";
-import { useQuery } from "@tanstack/react-query";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import { useState } from "react";
 import EventsPagination from "@/components/shared/EventsPagination";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import MyEventCard from "../eventComponents/eventCards/MyEventCard";
 
 const FeaturedEvents = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +45,7 @@ const FeaturedEvents = () => {
     <>
       <section className="container p-4">
         <main className="pt-24">
-          <p className="text-3xl text-brandPrimary">Featured Events</p>
+          <p className="text-3xl text-brandPrimary">Featured Events </p>
           <div className="mt-4">
             {allFeaturedEvents?.data?.events.map(
               (event: any, index: number) => (

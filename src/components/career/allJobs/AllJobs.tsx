@@ -1,13 +1,12 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import AllJobCard from "./AllJobCard";
 import { getAllJobs } from "@/api/api";
-import ScaleLoader from "react-spinners/ScaleLoader";
 import EventsPagination from "@/components/shared/EventsPagination";
-import { useState } from "react";
 import CareerLoader from "@/components/shared/loader/CareerLoader";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import AllJobCard from "./AllJobCard";
 
 const AllJobs = () => {
 	const t = useTranslations("career");
@@ -46,7 +45,7 @@ const AllJobs = () => {
 
         <div className="pt-10">
           {isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {Array.from({ length: 8 }).map((_, index) => (
                 <div key={index} className="mx-auto">
                   <CareerLoader />
@@ -55,7 +54,7 @@ const AllJobs = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {data.data.jobs.map((job: any, index: number) => (
                   <div key={index}>
                     <AllJobCard

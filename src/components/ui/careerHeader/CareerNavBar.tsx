@@ -1,11 +1,11 @@
 "use client";
+import RegistrationCard from "@/components/course/CourseHome/RegistrationCard";
 import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "../dialog";
 import { Button } from "../button";
-import RegistrationCard from "@/components/course/CourseHome/RegistrationCard";
+import { Dialog, DialogContent, DialogTrigger } from "../dialog";
 
 const navItems = [
   { navItem: "Find Jobs", link: "career/all-jobs" },
@@ -27,7 +27,7 @@ const CareerNavBar = () => {
   const closeDialog = () => setIsDialogOpen(false);
 
   return (
-    <ul className="flex justify-evenly items-center gap-6 max-md:text-sm text-base text-bgPrimary font-normal h-full">
+    <ul className="flex flex-wrap justify-evenly items-center gap-2 lg:gap-6 max-md:text-sm text-base text-bgPrimary font-normal h-full">
       <Link
         href={`/${locale}/career`}
         className="cursor-pointer hover:underline underline-offset-8 decoration-2"

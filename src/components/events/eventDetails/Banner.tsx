@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 // ******************************** BANNER INFO TYPE DEFINITION =======================
 interface IBannerInfo {
@@ -39,7 +38,7 @@ const Banner = ({ bannerEventInfo }: Props) => {
             <div className="text-bgPrimary font-bold text-3xl"></div>
             <div className="text-bgPrimary text-xl"></div>
           </div>
-          <div className="mt-4 grid grid-cols-3 gap-8">
+          <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="text-bgPrimary mt-8">
               <div className="flex flex-col gap-12">
                 <div>

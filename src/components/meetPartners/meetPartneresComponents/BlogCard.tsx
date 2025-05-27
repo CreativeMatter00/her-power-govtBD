@@ -1,10 +1,9 @@
 import { getUserInfo } from "@/api/api";
+import styles from "@/styles/Events.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import styles from "@/styles/Events.module.css";
 import Link from "next/link";
-import React from "react";
 
 type blogProps = {
   title: string;
@@ -40,7 +39,7 @@ function BlogCard({
   const truncatedDescription = truncateText(description, 43);
   return (
     <Link href={`/${locale}/meet-partners/blogs/${id}`}>
-      <div className="min-h-[439px]">
+      <div className="h-[380px] lg:h-[439px] min-h-[439px]">
         <div
           className={`flex flex-col gap-2 bg-cardColor ${styles.cardShadowHover} p-3 group cursor-pointer rounded h-full`}
         >

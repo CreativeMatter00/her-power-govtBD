@@ -1,6 +1,13 @@
-import { useEffect, useState } from "react";
+import { getUserInfo } from "@/api/api";
+import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
-import { IoMenuOutline, IoClose } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { FiShoppingCart } from "react-icons/fi";
+import { IoClose, IoMenuOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import Logo from "../../logo/Logo";
 import {
   NavigationMenu,
@@ -10,12 +17,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../../navigation-menu";
-import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
 import LocalSwitcher from "../LocalSwitcher";
-import { useQuery } from "@tanstack/react-query";
-import { useCookies } from "next-client-cookies";
-import { getUserInfo } from "@/api/api";
 
 interface TopNavInfo {
   mobileNav: boolean;
@@ -24,16 +26,15 @@ interface TopNavInfo {
 
 const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   const t = useTranslations("Navbar");
+  const tt = useTranslations("ShopNavbar");
   const locale = useLocale();
   const cookies = useCookies();
-  const [userInfo, setUserInfo] = useState<any>(null);
+  const cart = useSelector((state: any) => state.Initial.cartUpdate);
   const [userType, setUserType] = useState<boolean | null>(null);
   const userPid = cookies.get("user_pid");
   const isSeller = cookies.get("isSeller");
-
+  const [storedCartData, setStoredCartData] = useState<number>(0);
   const {
-    isLoading: isUserLoading,
-    error: userError,
     data: userData,
   } = useQuery({
     queryKey: ["userInfo", userPid],
@@ -42,12 +43,21 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   useEffect(() => {
     if (typeof window !== "undefined" && localStorage?.loginDetails) {
       const loginDetails = JSON.parse(localStorage?.loginDetails);
-      setUserInfo(loginDetails);
       setUserType(loginDetails?.isSeller);
     }
   }, []);
-  // console.log("Check",userInfo,userType);
+  const getCartLength = () => {
+    const numberOfProduct = JSON.parse(
+      localStorage.getItem("cart") as string
+    ) || {
+      products: [],
+    };
+    setStoredCartData(numberOfProduct?.products?.length);
+  };
 
+  useEffect(() => {
+      getCartLength();
+    }, [cart]);
   const handleMobileSidebar = () => {
     setMobileNav(!mobileNav);
   };
@@ -78,6 +88,7 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
             textWidth="w-auto"
           />
         </Link>
+        
       </div>
 
       <div className="flex justify-center gap-6 text-[#252525] text-lg font-medium py-1.5 max-lg:hidden">
@@ -209,6 +220,21 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
           priority
         />
       </div>
+      <Link href={`/${locale}/shop-now/profile/cart`} className="lg:hidden">
+                    <div className=" flex justify-center items-center gap-2 text-black group hover:underline underline-offset-8 decoration-bgPrimary decoration-2 cursor-pointer relative">
+                      {storedCartData > 0 && (
+                        <div className="absolute w-6 h-6 flex justify-center items-center bg-[#763B90] text-white  text-xs font-bold rounded-full -top-3 -right-3">
+                          {storedCartData}
+                        </div>
+                      )}
+
+                      {tt("cart")}
+                      <FiShoppingCart
+                        fontSize={24}
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  </Link>
     </div>
   );
 };

@@ -181,7 +181,7 @@ const ProductDetail = () => {
       {/*-----------PRODUCT DESCRIPTION----------- */}
       <div className="container mx-auto px-4 py-6">
         <div
-          className="py-8"
+          className="py-4 lg:py-8"
           dangerouslySetInnerHTML={{
             __html: productDetailData?.data?.description,
           }}

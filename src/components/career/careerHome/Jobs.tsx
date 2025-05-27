@@ -1,14 +1,12 @@
 "use client";
 
+import { getLatestJobs } from "@/api/api";
+import CareerLoader from "@/components/shared/loader/CareerLoader";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { IoMdArrowForward } from "react-icons/io";
 import JobsCard from "./JobsCard";
-import { useQuery } from "@tanstack/react-query";
-import { getLatestJobs } from "@/api/api";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import CourseLoader from "@/components/shared/loader/CourseLoader";
-import CareerLoader from "@/components/shared/loader/CareerLoader";
 
 const Jobs = () => {
   const t = useTranslations("career");
@@ -45,7 +43,7 @@ const Jobs = () => {
           ))}
         </div>
       ) : (
-        <div className="w-full grid grid-cols-3 gap-5 mt-5">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
           {data.map((job: any, index: number) => (
             <JobsCard
               key={index}

@@ -2,17 +2,15 @@
 
 "use client";
 
+import { api } from "@/api/api";
+import { format } from "date-fns";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FaStar } from "react-icons/fa";
-import { useLocale, useTranslations } from "next-intl";
-import { format } from "date-fns";
-import ImageInput from "./input/ImageInput";
-import { GoStar } from "react-icons/go";
-import { GoStarFill } from "react-icons/go";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { api, url } from "@/api/api";
+import { FaStar } from "react-icons/fa";
+import { GoStar, GoStarFill } from "react-icons/go";
+import ImageInput from "./input/ImageInput";
 
 interface ProductReviewProps {
   productData: Record<string, any>;
@@ -140,7 +138,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
 
       {/* ============================= POST REVIEW =========================== */}
       {productData?.data?.eligible_for_review && (
-        <div className="mr-16 ">
+        <div className="md:mr-16 ">
           {/* ======================== REVIEW FORM ======================= */}
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -173,8 +171,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({
             )}
 
             {/* ====================== TEXT REVIEW ========================= */}
-            <div className="flex gap-8 w-full">
-              <div className="w-1/2">
+            <div className="flex flex-col md:flex-row gap-8 w-full">
+              <div className="w-full md:w-1/2">
                 <label className="text-sm font-normal pb-2 pl-3 text-brandPrimary">
                   Review:
                 </label>
@@ -186,7 +184,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
                 />
               </div>
               {/* =============================  REVIEW IMAGE ====================== */}
-              <div className="h-52 w-1/2">
+              <div className="h-52 w-full md:w-1/2">
                 <ImageInput
                   labelName="Select Image"
                   selectedImages={selectedImages}

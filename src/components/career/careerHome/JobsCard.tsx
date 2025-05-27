@@ -1,8 +1,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import React from "react";
 import { FaCalendarAlt } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
 
 interface IJobCartProps {
@@ -29,9 +27,9 @@ const JobsCard = ({
   const locale = useLocale();
   return (
     <div className="col-span-1 bg-brandLsSecondary p-8  flex flex-col justify-between gap-5">
-      <div className="">
-        <p className="text-black font-bold text-2xl">{title}</p>
-        <p className="font-bold mt-1">{companyName}</p>
+      <div>
+        <p className="text-black font-bold text-lg lg:text-2xl">{title}</p>
+        <p className="font-bold mt-1 text-sm lg:text-base">{companyName}</p>
         <p
           className="line-clamp-4 md:line-clamp-3 text-opacity-80 mt-2"
           dangerouslySetInnerHTML={{

@@ -1,26 +1,18 @@
 "use client";
 
+import { getWishlistProducts } from "@/api/api";
 import styles from "@/styles/NavSidebar.module.css";
+import { useQuery } from "@tanstack/react-query";
+import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
-import { MdLogin } from "react-icons/md";
-import LocalSwitcher from "../LocalSwitcher";
-import { IoMenuOutline } from "react-icons/io5";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import MobileNavbar from "../MobileNav/MobileNavbar";
-import LoginNav from "../LoginNav";
-import WishlistNav from "../WishlistNav";
-import ShoppingCartNav from "../ShoppingCartNav";
-import HomeNavbar from "../HomeNavbar/HomeNavbar";
-import TopNav from "../HomeNavbar/TopNav";
 import { useSelector } from "react-redux";
-import { useCookies } from "next-client-cookies";
-import { useQuery } from "@tanstack/react-query";
-import { getWishlistProducts } from "@/api/api";
+import TopNav from "../HomeNavbar/TopNav";
+import MobileNavbar from "../MobileNav/MobileNavbar";
 
 const ShopNavbar = () => {
   const [mobileNav, setMobileNav] = useState<boolean>(false);
@@ -36,10 +28,7 @@ const ShopNavbar = () => {
   const [storedWishListData, setStoredWishListData] = useState<number>(0);
 
   const {
-    isLoading,
-    error,
-    data: WishListData,
-    refetch,
+    data: WishListData
   } = useQuery({
     queryKey: ["getWishlistProducts"],
     queryFn: () => getWishlistProducts(customerId),

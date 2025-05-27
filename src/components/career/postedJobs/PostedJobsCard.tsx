@@ -92,9 +92,9 @@ const PostedJobsCard = ({
     <>
       <div className="col-span-1 bg-brandLsSecondary p-8 flex flex-col justify-between gap-5">
         <div className="space-y-3">
-          <p className="text-black font-bold text-2xl">{title}</p>
+          <p className="text-black font-bold text-lg lg:text-2xl">{title}</p>
           <div className="space-y-1">
-            <p className="line-clamp-4 md:line-clamp-3 font-bold">{companyName}</p>
+            <p className="line-clamp-4 md:line-clamp-3 font-bold text-sm lg:text-base">{companyName}</p>
             <p
               className="line-clamp-4 md:line-clamp-3"
               dangerouslySetInnerHTML={{

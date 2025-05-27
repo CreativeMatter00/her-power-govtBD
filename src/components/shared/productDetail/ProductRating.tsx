@@ -17,8 +17,8 @@ const ProductRating: React.FC<IData> = ({ data }) => {
 			<div className="mb-10">
 				<p className="font-bold text-xl text-brandDs mb-6"> {t("ratings")} </p>
 
-				<div className="flex">
-					<div className="flex items-center py-8 pr-6 gap-8 border-r border-brandLsPrimary">
+				<div className="flex flex-col md:flex-row">
+					<div className="flex items-center py-8 pr-3 lg:pr-6 gap-8 border-r border-brandLsPrimary">
 						<p className="text-5xl text-brandPrimary">
 							{" "}
 							{data?.data?.avg_rating}{" "}
@@ -28,7 +28,7 @@ const ProductRating: React.FC<IData> = ({ data }) => {
 						</p>
 					</div>
 
-					<div className="pl-10">
+					<div className="pl-5 lg:pl-10">
 						<div className="flex items-center gap-2">
 							<p className="text-grey"> 5 </p>
 							<p className="text-grey">

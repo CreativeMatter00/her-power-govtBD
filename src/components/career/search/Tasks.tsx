@@ -23,7 +23,7 @@ const Tasks = ({
         </div>
       ) : (
         <div className="mt-10">
-          <div className="w-full grid grid-cols-2 gap-5 mt-5">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
             {data.map((task: any, index: number) => (
               <TaskCard
                 key={index}
