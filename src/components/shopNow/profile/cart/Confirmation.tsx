@@ -1,7 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 
 // Define the Product type
@@ -152,7 +152,7 @@ const Confirmation: FC<ICartProps> = ({
             {t("Shipping_Details")}
           </p>
           <div className="py-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <p className="text-brandDs mb-1"> {t("Customer_Detail")} </p>
                 <p>

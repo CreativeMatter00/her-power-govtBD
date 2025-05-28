@@ -1,13 +1,28 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+
+import { useCookies } from "next-client-cookies";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import LocalSwitcher from "../LocalSwitcher";
 
 const MobileNavbar = () => {
+  const cookies = useCookies();
   const t = useTranslations("Navbar");
   const locale = useLocale();
+  const userId = cookies.get("user_pid");
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.clear();
+    // cookies.remove("");
+    document.cookie.split(";").forEach((cookie) => {
+      const cookieName = cookie.split("=")[0].trim();
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    });
+    router.push("/");
+  };
   return (
     <div className="flex justify-center items-center h-full -mt-0.5">
       <div className=" bg-[#FBF5FD] flex flex-col justify-between border-t w-full  h-full">
@@ -98,12 +113,19 @@ const MobileNavbar = () => {
             >
               {t("contact")}
             </Link>
-            <Link
+            {userId ? <div className="flex items-center justify-center">
+              <button
+                  className="px-8 py-2 rounded-3xl text-black text-center unerline-offset-8 text-base"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+            </div> : <Link
               href={`/${locale}/login`}
               className="text-center hover:underline underline-offset-8 decoration-brandDs decoration-2 transition-all hover:text-brandDs"
             >
               {t("login")}
-            </Link>
+            </Link>}
           </div>
         </div>
         <div className="">

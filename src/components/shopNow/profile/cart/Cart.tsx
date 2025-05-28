@@ -213,7 +213,7 @@ const Cart: FC<ICartProps> = ({ setActive, cartProducts, setCartProducts }) => {
                 </div>
               </div>
 
-              <div className="py-4 px-10 border border-brandLsPrimary rounded-md hidden md:block ">
+              <div className="py-4 px-10 border border-brandLsPrimary rounded-md overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="text-brandHover text-center border-b border-brandLsPrimary">
