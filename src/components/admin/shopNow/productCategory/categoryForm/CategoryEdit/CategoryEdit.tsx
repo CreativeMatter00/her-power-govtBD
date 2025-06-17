@@ -1,18 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import styles from "@/styles/Events.module.css";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { api } from "../../../../../../api/api";
+import CategorySchema from "./CategorySchema";
 import FileInput from "./inputFields/FileInput";
 import InputField from "./inputFields/InputField";
 import TextInput from "./inputFields/TextInput";
-import styles from "@/styles/Events.module.css";
-import { RxCross2 } from "react-icons/rx";
-import { yupResolver } from "@hookform/resolvers/yup";
-import CategorySchema from "./CategorySchema";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { api, url } from "../../../../../../api/api";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../../../redux/Reducer/MainSlice";
-import ScaleLoader from "react-spinners/ScaleLoader";
 
 // interface for form inputs
 interface IFormInput {

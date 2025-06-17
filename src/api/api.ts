@@ -269,6 +269,7 @@ export const getAllSponsers = async () => {
   }
 };
 
+
 // ? Get seller basic info
 
 export const getSellerBasicInfo = async (id: string) => {
@@ -701,6 +702,16 @@ export const getAllEvents = async (page: number) => {
   }
 };
 
+
+export const deleteEvent = async (eventPid: string|null) => {
+  try {
+    const response = await api.delete(`/api/admin/event/newEvent/${eventPid}`);
+    return response?.data;
+  } catch (error:any) {
+    throw new Error(error?.response?.data?.meta?.message || "something went wrong")
+  }
+};
+
 // ? Get All Events
 
 export const getAllEventsBackend = async () => {
@@ -749,7 +760,16 @@ export const getSearchEvents = async (query: string) => {
 };
 
 // ? Get search events
-
+export const getEvents = async () => {
+  try {
+    const response = await api.get(
+      `/api/admin/get-all-events`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getEventsByOrganizer = async (id: string) => {
   try {
     const response = await api.get(
@@ -1293,6 +1313,7 @@ export const getBlogs = async () => {
     console.log(error);
   }
 };
+
 export const approveBlogProvider = async (blog_provider_pid: string|null, data:any) => {
   try {
     const response = await api.post(`/api/admin/blog-approve/${blog_provider_pid}`, data, {

@@ -1,22 +1,21 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useState } from "react";
-import { FaRegEye } from "react-icons/fa";
-import { FaRegEyeSlash } from "react-icons/fa";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCookies } from "next-client-cookies";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import BeatLoader from "react-spinners/BeatLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import BeatLoader from "react-spinners/BeatLoader";
-import Logo from "../../../../components/ui/logo/Logo";
 import adminLogin from "../../../../../public/assets/admin-login.json";
+import Logo from "../../../../components/ui/logo/Logo";
 // import adminLogin from "../../../public/assets/admin-login.json";
 // import Logo from "../ui/logo/Logo";
-import { url } from "@/api/api";
+import { api } from "@/api/api";
 import Lottie from "lottie-react";
 
 const Login = () => {
@@ -44,25 +43,22 @@ const Login = () => {
   } = useForm<UserLoginInput>();
 
   //   const onSubmit: SubmitHandler<UserLoginInput> = (data) => console.log(data);
-  const onSubmit: SubmitHandler<UserLoginInput> = (data) => {
+  const onSubmit: SubmitHandler<UserLoginInput> = async (data) => {
     if (data) {
       // console.log(data);
     }
 
     setIsLoading(true);
-    fetch(`${url}/api/user-login`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        // console.log("res", res);
-        return res.json();
-      })
+    // fetch(`${api}/api/user-login`, {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    await api.post('/api/user-login', data)
       .then((data) => {
-        if (data?.success) {
+        if (data?.data?.success) {
           // console.log({data})
           // cookies.remove("");
           document.cookie.split(";").forEach((cookie) => {

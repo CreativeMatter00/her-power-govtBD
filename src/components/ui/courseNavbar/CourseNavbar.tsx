@@ -1,12 +1,12 @@
 "use client";
 
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import RegistrationCard from "@/components/course/CourseHome/RegistrationCard";
-import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useCookies } from "next-client-cookies";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useState } from "react";
 
 const CourseNavbar = () => {
   const locale = useLocale();
@@ -24,8 +24,8 @@ const CourseNavbar = () => {
     <>
       <div className="w-full">
         <div className="transition-all container text-base font-medium text-bgPrimary bg-[#763B90] py-3  fixed  z-[9999] min-w-full">
-          <div className="container flex justify-between">
-            <div className="flex gap-6 items-center">
+          <div className="container flex flex-col lg:flex-row justify-between">
+            <div className="flex flex-wrap gap-3 lg:gap-6 items-center">
               <Link href={`/${locale}/course`}>
                 <button
                   className={`text-center  hover:underline underline-offset-8 decoration-2 duration-300`}

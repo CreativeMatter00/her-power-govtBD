@@ -373,6 +373,30 @@ const Sidebar = () => {
 												<h1>Division Setup </h1>
 											</div>
 										</Link>
+										<Link href={`/${locale}/admin/events/event-list`}>
+											<div
+												className={`flex items-center gap-3 hover:bg-[#F2F2F2] ${
+													pathName === `/${locale}/admin/events/event-list`
+														? "bg-[#f2f2f2]"
+														: "bg-transparent"
+												}  px-1 py-3 cursor-pointer`}
+											>
+												<CgListTree className="text-brandDs w-5 h-5" />{" "}
+												<h1>Event List</h1>
+											</div>
+										</Link>
+										<Link href={`/${locale}/admin/events/organizer-list`}>
+											<div
+												className={`flex items-center gap-3 hover:bg-[#F2F2F2] ${
+													pathName === `/${locale}/admin/events/organizer-list`
+														? "bg-[#f2f2f2]"
+														: "bg-transparent"
+												}  px-1 py-3 cursor-pointer`}
+											>
+												<CgListTree className="text-brandDs w-5 h-5" />{" "}
+												<h1>Organizer List</h1>
+											</div>
+										</Link>
 									</div>
 								) : null}
 							</div>
@@ -534,7 +558,7 @@ const Sidebar = () => {
 									</div>
 								) : null}
 							</div>
-							<div>
+							{/* <div>
 								<div
 									onClick={() => handleToggle(9)}
 									className="flex justify-between items-center gap-3 hover:font-bold hover:cursor-pointer group"
@@ -569,7 +593,7 @@ const Sidebar = () => {
 										</Link>
 									</div>
 								) : null}
-							</div>
+							</div> */}
 							<div>
 								<div
 									onClick={() => handleToggle(10)}

@@ -1,10 +1,9 @@
 "use client"
-import { getCourseLessons, getCourseLessonById, getCourseDetailsById } from "@/api/api";
+import { getCourseDetailsById, getCourseLessonById, getCourseLessons } from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { IoPlayOutline } from "react-icons/io5";
-import ReactPlayer from "react-player";
 import { useParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 
 interface ICourseLesson {
@@ -49,17 +48,17 @@ const Video = () => {
   // console.log(loading)
   return (
     <div className="bg-white">
-      <div className="container mx-auto grid grid-cols-4 gap-8 py-8">
-        <div className="col-span-3 h-96 flex flex-col gap-2 w-full">
+      <div className="container flex flex-col lg:flex-row gap-8 py-3 lg:py-8 pt-20">
+        <div className="w-full lg:w-3/4 lg:h-96 flex flex-col gap-2">
           <div className="w-full text-start font-bold text-xl">
             {data?.course_title||"Title"}
           </div>
-          {loading ? <div className="w-full h-96  animate-pulse bg-slate-50"> </div> : <div className="flex-1 w-full h-96 overflow-hidden rounded-[10px] relative">
+          {loading ? <div className="w-full lg:h-96  animate-pulse bg-slate-50"> </div> : <div className="flex-1 w-full lg:h-96 overflow-hidden rounded-[10px] relative">
             {courseData && courseData[0] && <ReactPlayer url={courseData[0]?.video_url} controls width="100%" height="100%" />}
           </div>}
         </div>
 
-        <div className="col-span-1 w-full h-96 rounded-[10px] flex flex-col border-[0.5px] border-[#252525] mb-1">
+        <div className="w-full lg:w-1/4 h-96 rounded-[10px] flex flex-col border-[0.5px] border-[#252525] mb-1">
           <div className="w-full p-3 bg-brandLsSecondary rounded-t-[10px]">
             Lessons
           </div>

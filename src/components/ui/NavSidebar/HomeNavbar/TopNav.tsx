@@ -4,6 +4,7 @@ import { useCookies } from "next-client-cookies";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoClose, IoMenuOutline } from "react-icons/io5";
@@ -29,14 +30,13 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   const tt = useTranslations("ShopNavbar");
   const locale = useLocale();
   const cookies = useCookies();
+  const pathname = usePathname();
   const cart = useSelector((state: any) => state.Initial.cartUpdate);
   const [userType, setUserType] = useState<boolean | null>(null);
   const userPid = cookies.get("user_pid");
   const isSeller = cookies.get("isSeller");
   const [storedCartData, setStoredCartData] = useState<number>(0);
-  const {
-    data: userData,
-  } = useQuery({
+  const { data: userData } = useQuery({
     queryKey: ["userInfo", userPid],
     queryFn: () => getUserInfo(userPid as string),
   });
@@ -56,14 +56,14 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
   };
 
   useEffect(() => {
-      getCartLength();
-    }, [cart]);
+    getCartLength();
+  }, [cart]);
   const handleMobileSidebar = () => {
     setMobileNav(!mobileNav);
   };
-  // console.log("DD",userInfo)
+
   return (
-    <div className="flex justify-between items-center gap-3">
+    <div className="flex justify-between items-center lg:gap-3">
       <div className="flex items-center gap-3">
         {mobileNav ? (
           <IoClose
@@ -88,7 +88,6 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
             textWidth="w-auto"
           />
         </Link>
-        
       </div>
 
       <div className="flex justify-center gap-6 text-[#252525] text-lg font-medium py-1.5 max-lg:hidden">
@@ -220,21 +219,20 @@ const TopNav: React.FC<TopNavInfo> = ({ mobileNav, setMobileNav }) => {
           priority
         />
       </div>
-      <Link href={`/${locale}/shop-now/profile/cart`} className="lg:hidden">
-                    <div className=" flex justify-center items-center gap-2 text-black group hover:underline underline-offset-8 decoration-bgPrimary decoration-2 cursor-pointer relative">
-                      {storedCartData > 0 && (
-                        <div className="absolute w-6 h-6 flex justify-center items-center bg-[#763B90] text-white  text-xs font-bold rounded-full -top-3 -right-3">
-                          {storedCartData}
-                        </div>
-                      )}
+      {pathname.startsWith("/en/shop-now") && (
+        <Link href={`/${locale}/shop-now/profile/cart`} className="lg:hidden">
+          <div className=" flex justify-center items-center gap-2 text-black group hover:underline underline-offset-8 decoration-bgPrimary decoration-2 cursor-pointer relative">
+            {storedCartData > 0 && (
+              <div className="absolute w-6 h-6 flex justify-center items-center bg-[#763B90] text-white  text-xs font-bold rounded-full -top-3 -right-3">
+                {storedCartData}
+              </div>
+            )}
 
-                      {tt("cart")}
-                      <FiShoppingCart
-                        fontSize={24}
-                        className="cursor-pointer"
-                      />
-                    </div>
-                  </Link>
+            {tt("cart")}
+            <FiShoppingCart fontSize={24} className="cursor-pointer" />
+          </div>
+        </Link>
+      )}
     </div>
   );
 };
